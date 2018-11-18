@@ -1,1 +1,139 @@
-/* You can add global styles to this file, and also import other style files */
+html, body {
+	margin: 0; 
+	width:100%; 
+	height: 100%; 
+	overflow: hidden
+}
+
+.menuButtonText {
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	line-height: normal;
+	font-size: 25px;
+	text-align: center;
+	color: #FFFFFF;
+}
+
+.blueBackground {
+	background: #4596E8;
+}
+
+.menuButton {
+	position: relative;
+	width: 60%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+
+	background: #4596E8;
+	border: 1px solid #4596E8;
+	box-sizing: border-box;
+	border-radius: 20px;
+	padding: 7.5px 0;
+}
+
+.menuButtonOutline {
+	position: relative;
+	width: 60%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	background: #CFCFCF;
+	border: 1px solid #4596E8;
+	box-sizing: border-box;
+	border-radius: 20px;
+	padding: 7.5px 0;
+
+}
+
+.menuButtonTextOutline {
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: 200;
+	line-height: normal;
+	font-size: 25px;
+	text-align: center;
+	color: #6f6e6e;
+}
+
+div[data-placeholder]:empty:before {
+	content: attr(data-placeholder);
+	color: #b3b3b3;
+}
+
+.menuHeader {
+	position: relative;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	line-height: normal;
+	font-size: 40px;
+	text-align: center;
+	text-transform: uppercase;
+	color: #000000;
+}
+
+.menuButtonHeader {
+	font-family: Montserrat; 
+	text-align: left;
+	font-style: normal;
+	font-weight: normal;
+	line-height: normal;
+	font-size: 18px;
+	color: #000000;
+}
+
+.divCorner {
+	width: 20%; 
+	height:15%; 
+	float: left;
+}
+
+.logoInCorner {
+	position: absolute;
+	width: 10%;
+	left: 20px;
+	top: 20px;
+	border-radius: 25px;
+}
+
+.OuterBox {
+	display: flex; 
+	justify-content: center; 
+	align-items: center; 
+	width:100%; 
+	height: 100%;
+}
+
+.CenterBox {
+	overflow: auto; 
+	border-color: #C4C4C4;
+	border-style:solid; 
+	border-bottom-width: 20px; 
+	border-top-width: 20px;
+	border-radius: 50px; 	
+	width: 50%; 
+	max-height:70%; 
+	float: left; 
+	background: #C4C4C4; 
+	text-align: center; 
+	vertical-align: middle;
+}
+
+
+/*TODO Try Delete*/
+.Col {
+	display: table-cell;
+
+	/* optional */
+	height: 75pt;
+	width: 150pt;
+	border:  1pt solid black;
+	background-color: #99ff99;
+}
+.MiddleCenter {
+	text-align: center;
+	align-items: center;
+	vertical-align: middle;
+}
