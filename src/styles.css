@@ -5,7 +5,26 @@ html, body {
 	overflow: hidden
 }
 
-.menuButtonText {
+.blueBackground {
+	background: #4596E8;
+}
+
+.button {
+	position: relative;
+	width: 60%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	cursor: pointer;
+
+	background: #4596E8;
+	border: 1px solid #4596E8;
+	box-sizing: border-box;
+	border-radius: 20px;
+	padding: 7.5px 0;
+}
+
+.buttonText {
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
@@ -15,25 +34,7 @@ html, body {
 	color: #FFFFFF;
 }
 
-.blueBackground {
-	background: #4596E8;
-}
-
-.menuButton {
-	position: relative;
-	width: 60%;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-
-	background: #4596E8;
-	border: 1px solid #4596E8;
-	box-sizing: border-box;
-	border-radius: 20px;
-	padding: 7.5px 0;
-}
-
-.menuButtonOutline {
+.buttonOutline {
 	position: relative;
 	width: 60%;
 	display: block;
@@ -44,10 +45,9 @@ html, body {
 	box-sizing: border-box;
 	border-radius: 20px;
 	padding: 7.5px 0;
-
 }
 
-.menuButtonTextOutline {
+.buttonOutlineText {
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: 200;
@@ -62,7 +62,7 @@ div[data-placeholder]:empty:before {
 	color: #b3b3b3;
 }
 
-.menuHeader {
+.headerText {
 	position: relative;
 	font-family: Montserrat;
 	font-style: normal;
@@ -74,7 +74,7 @@ div[data-placeholder]:empty:before {
 	color: #000000;
 }
 
-.menuButtonHeader {
+.buttonHeader {
 	font-family: Montserrat; 
 	text-align: left;
 	font-style: normal;
@@ -122,11 +122,10 @@ div[data-placeholder]:empty:before {
 }
 
 
-/*TODO Try Delete*/
+/*TODO Try Delete
 .Col {
 	display: table-cell;
 
-	/* optional */
 	height: 75pt;
 	width: 150pt;
 	border:  1pt solid black;
@@ -137,3 +136,5 @@ div[data-placeholder]:empty:before {
 	align-items: center;
 	vertical-align: middle;
 }
+
+*/

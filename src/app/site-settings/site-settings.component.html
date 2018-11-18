@@ -3,14 +3,9 @@
 
   <div class="OuterBox blueBackground">
     <div class="CenterBox">
-      <div style="width: 25%; float: left; top:7px; position:relative">
-        <span style="font-family: Montserrat;font-style: normal;font-weight: normal;line-height: normal;font-size: 26px;line-height: 32px;vertical-align: middle;display: inline-flex;">
-          <i class="material-icons" style=" line-height: 32px;font-size: 32px;">chevron_left</i>
-          Back
-        </span>
-      </div>
+        <app-button-back></app-button-back>
       <div style="width: 50%; float: left;">
-        <span class="menuHeader">Settings</span>
+        <span class="headerText">Settings</span>
       </div>
               
       <div style='clear: both;'>
@@ -18,29 +13,23 @@
       
       <br>
       <div>
-        <span class="menuButtonHeader">Primary Language</span>
-        <div class="menuButtonOutline">
-          <div class="menuButtonTextOutline" contenteditable="true" spellcheck="false" data-placeholder="Primary Language" id="PrimaryLanguage"></div>
+        <span class="buttonHeader">Primary Language</span>
+        <div class="buttonOutline">
+          <div class="buttonOutlineText" contenteditable="true" spellcheck="false"><app-var-primary-language #VarPrimaryLanguage></app-var-primary-language></div>
         </div>
       </div>
       <br>
       <div>
-        <span class="menuButtonHeader">Secondary Language</span>
-        <div class="menuButtonOutline">
-          <div class="menuButtonTextOutline" contenteditable="true" spellcheck="false" data-placeholder="Secondary Language"></div>
+        <span class="buttonHeader">Secondary Language</span>
+        <div class="buttonOutline">
+          <div class="buttonOutlineText" contenteditable="true" spellcheck="false"><app-var-secondary-language #VarSecondaryLanguage></app-var-secondary-language></div>
         </div>
       </div>
       <br>
       <br>
-      <div class="menuButton">
-        <span class="menuButtonText">
-          Log out
-        </span>
-      </div>
-      <br>
-      <div class="menuButton">
-        <span class="menuButtonText">
-          Delete Account
+      <div class="button" (click)="saveButtonPressed()">
+        <span class="buttonText">
+          Save
         </span>
       </div>
     

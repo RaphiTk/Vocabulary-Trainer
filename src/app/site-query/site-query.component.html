@@ -2,14 +2,9 @@
 
   <div class="OuterBox blueBackground">
     <div class="CenterBox">
-      <div style="width: 25%; float: left; top:7px; position:relative">
-        <span style="font-family: Montserrat;font-style: normal;font-weight: normal;line-height: normal;font-size: 26px;line-height: 32px;vertical-align: middle;display: inline-flex;">
-          <i class="material-icons" style=" line-height: 32px;font-size: 32px;">chevron_left</i>
-          Back
-        </span>
-      </div>
+      <app-button-back></app-button-back>
       <div style="width: 50%; float: left;">
-        <span class="menuHeader">Query</span>
+        <span class="headerText">Query</span>
       </div>
               
       <div style='clear: both;'>
@@ -17,22 +12,22 @@
       
       <br>
       <div>
-        <span class="menuButtonHeader">Word on Primary Language erstetzen durch var:</span>
-        <div style="top: 10%" class="menuButtonOutline">
-          <div class="menuButtonTextOutline" spellcheck="false" data-placeholder="(Word on Primary Language) komplett erstetzen"></div>
+        <span class="buttonHeader"><app-var-primary-language></app-var-primary-language>:</span>
+        <div style="top: 10%" class="buttonOutline">
+          <div class="buttonOutlineText" spellcheck="false" data-placeholder="(Word on Primary Language) komplett erstetzen"></div>
         </div>
       </div>
       
       <br>
       <div>
-        <span class="menuButtonHeader">Word on Secondary Language (erstetzen durch var):</span>
-        <div style="top: 15%;" class="menuButtonOutline">
-          <div class="menuButtonTextOutline" contenteditable="true" spellcheck="false" data-placeholder="(Word on Primary Language) komplett erstetzen in (Secondary Language) erstetzen durch var" id="SecondaryLanguage"></div>
+        <span class="buttonHeader">Word on Secondary Language (erstetzen durch var):</span>
+        <div style="top: 15%;" class="buttonOutline">
+          <div class="buttonOutlineText" contenteditable="true" spellcheck="false" data-placeholder="(Word on Primary Language) komplett erstetzen in (Secondary Language) erstetzen durch var" id="SecondaryLanguage"></div>
         </div>
       </div>
       <br>
-      <div class="menuButton">
-        <span class="menuButtonText">
+      <div class="button">
+        <span class="buttonText">
           Check
         </span>
       </div>
