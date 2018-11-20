@@ -76,7 +76,25 @@ export class VocabularyService {
     };*/
   }
 
-  getElements(clas: string, unit:string): Promise<any> {
+  getAllVocs(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let objectStore = VocabularyService.db.transaction("vocabulary").objectStore("vocabulary");
+      let vars: Vocabulary[] = new Array();
+
+      objectStore.openCursor().onsuccess = function(event) {
+        let cursor = event.target.result;
+        if (cursor) {
+          vars.push(cursor.value)
+          cursor.continue();
+        }
+        else {
+          resolve(vars);
+        }
+      };
+    });
+  }
+
+  getVocsByClasAndUnit(clas: string, unit:string): Promise<any> {
     return new Promise((resolve, reject) => {
       let objectStore = VocabularyService.db.transaction("vocabulary").objectStore("vocabulary");
       let vars: Vocabulary[] = new Array();
