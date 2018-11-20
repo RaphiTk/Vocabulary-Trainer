@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: 'menu', component: SiteMenuComponent},
   { path: 'query', component: SiteQueryComponent},
   { path: 'search', component: SiteSearchComponent},
-  { path: 'change', component: SiteChangeComponent},
+  { path: 'change/:clas/:unit', component: SiteChangeComponent},
   { path: 'settings', component: SiteSettingsComponent },
   
   { path: '', redirectTo: '/menu', pathMatch: 'full'}];

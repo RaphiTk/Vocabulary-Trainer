@@ -13,6 +13,7 @@ export class AppComponent {
 
   newUpdate: boolean = false;
   constructor(update: SwUpdate, private restApi: RestApiService) {
+    
     update.available.subscribe(event => {
       this.newUpdate = true;
       update.activateUpdate().then(() => document.location.reload());

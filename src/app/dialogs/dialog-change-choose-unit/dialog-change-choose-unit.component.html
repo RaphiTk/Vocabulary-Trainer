@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Choose Class and Unit</h1>
+<div mat-dialog-content>
+  <p>Which class you want to edit?</p>
+  <mat-form-field>
+    <input required matInput [(ngModel)]="data.clas" cdkFocusInitial>
+  </mat-form-field>
+  <br>
+  <p>Which unit you want to edit?</p>
+  <mat-form-field>
+    <input required matInput [(ngModel)]="data.unit" cdkFocusInitial>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="cancelClicked()">Cancel</button>
+  <button mat-button (click)="okClicked()" >Ok</button>
+</div>
+

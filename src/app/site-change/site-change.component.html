@@ -6,7 +6,7 @@
 			<div style="width: 50%; float: left;">
 				<span class="headerText">Change</span>
 			</div>
-			<div style="width: 25%; float: left;  top:7px; position:relative">
+			<div (click)="addClicked()" style="cursor: pointer; width: 25%; float: left;  top:7px; position:relative">
 				<span style="font-family: Montserrat;font-style: normal;font-weight: normal;line-height: normal;font-size: 26px;line-height: 32px;vertical-align: middle;display: inline-flex;">
 					Add
 					<i class="material-icons" style=" line-height: 32px;font-size: 32px;">add</i>
@@ -21,55 +21,15 @@
 				<thead>
 					<tr>
 					  <th scope="col">#</th>
-					  <th scope="col">Primary Language ersetzen durch var</th>
-					  <th scope="col">Secondary Language</th>
+					  <th scope="col"><app-var-primary-language></app-var-primary-language></th>
+					  <th scope="col"><app-var-secondary-language></app-var-secondary-language></th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-					  <th scope="row">1</th>
-					  <td>Mark</td>
-					  <td>Otto</td>
-					</tr>
-					<tr>
-					  <th scope="row">2</th>
-					  <td>Jacob</td>
-					  <td>Thornton</td>
-					</tr>
-					<tr>
-					  <th scope="row">3</th>
-					  <td>Larry</td>
-					  <td>the Bird</td>
-					</tr>
-					<tr>
-					  <th scope="row">1</th>
-					  <td>Mark</td>
-					  <td>Otto</td>
-					</tr>
-					<tr>
-					  <th scope="row">2</th>
-					  <td>Jacob</td>
-					  <td>Thornton</td>
-					</tr>
-					<tr>
-					  <th scope="row">3</th>
-					  <td>Larry</td>
-					  <td>the Bird</td>
-					</tr>
-					<tr>
-					  <th scope="row">1</th>
-					  <td>Mark</td>
-					  <td>Otto</td>
-					</tr>
-					<tr>
-					  <th scope="row">2</th>
-					  <td>Jacob</td>
-					  <td>Thornton</td>
-					</tr>
-					<tr>
-					  <th scope="row">3</th>
-					  <td>Larry</td>
-					  <td>the Bird</td>
+					<tr *ngFor="let voc of vocs">
+					  <th scope="row">{{voc.key}}</th>
+					  <td>{{voc.primaryLanguage}}</td>
+					  <td>{{voc.secondaryLanguage}}</td>
 					</tr>
 				</tbody>
 			</table>
