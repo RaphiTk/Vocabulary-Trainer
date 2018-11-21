@@ -118,6 +118,7 @@ div[data-placeholder]:empty:before {
 
 .logoInCorner {
 	position: absolute;
+	cursor: pointer;
 	width: 10%;
 	left: 20px;
 	top: 20px;
