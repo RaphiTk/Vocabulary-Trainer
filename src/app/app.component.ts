@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import {RestApiService} from './rest-api.service';
+import {RestApiService} from './services/rest-api.service';
 
 @Component({
   selector: 'app-root',

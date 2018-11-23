@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SiteSettingsComponent } from './site-settings/site-settings.component';
-import { SiteMenuComponent } from './site-menu/site-menu.component';
-import { SiteQueryComponent } from './site-query/site-query.component';
-import { SiteSearchComponent } from './site-search/site-search.component';
-import { SiteChangeComponent } from './site-change/site-change.component';
+import { SiteSearchComponent } from './sites/search/search.component';
+import { SiteMenuComponent } from './sites/menu/menu.component';
+import { SiteQueryComponent } from './sites/query/query.component';
+import { SiteChangeComponent } from './sites/change/change.component';
+import { SiteSettingsComponent } from './sites/settings/settings.component';
 
 const routes: Routes = [
   { path: 'menu', component: SiteMenuComponent},

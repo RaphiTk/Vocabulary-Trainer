@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { VarPrimaryLanguageComponent } from '../var-primary-language/var-primary-language.component';
-import { LocalStorageNamespace } from '../local-storage.namespace';
+import { VarPrimaryLanguageComponent } from '../../frames/var-primary-language/var-primary-language.component';
+import { LocalStorageNamespace } from '../../services/local-storage.namespace';
 
 @Component({
   selector: 'app-site-settings',
-  templateUrl: './site-settings.component.html',
-  styleUrls: ['./site-settings.component.css']
+  templateUrl: './settings.component.html',
+  styleUrls: ['./settings.component.css']
 })
 export class SiteSettingsComponent implements OnInit {
   @ViewChild("VarPrimaryLanguage") varPrimaryLanguageComponent;

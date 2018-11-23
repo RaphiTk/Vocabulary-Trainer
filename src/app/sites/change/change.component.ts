@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { VocabularyService } from '../vocabulary.service';
-import { Vocabulary } from '../interfaces/vocabulary';
+import { VocabularyService } from '../../services/vocabulary.service';
+import { Vocabulary } from '../../interfaces/vocabulary';
 import {MatDialog} from '@angular/material';
-import { DialogAddVocabularyComponent } from "../dialogs/dialog-add-vocabulary/dialog-add-vocabulary.component";
-import { VocabularyWithOutKey } from 'src/app/interfaces/vocabulary';
+import { DialogAddVocabularyComponent } from "../../dialogs/dialog-add-vocabulary/dialog-add-vocabulary.component";
 
 
 @Component({
   selector: 'app-site-change',
-  templateUrl: './site-change.component.html',
-  styleUrls: ['./site-change.component.css']
+  templateUrl: './change.component.html',
+  styleUrls: ['./change.component.css']
 })
 export class SiteChangeComponent implements OnInit {
   unit: string;
@@ -40,7 +39,7 @@ export class SiteChangeComponent implements OnInit {
   }
 
   addClicked() {
-    let voc = {} as VocabularyWithOutKey;
+    let voc = {} as Vocabulary;
     voc.unit = this.unit;
     voc.clas = this.clas;
     voc.failuresCount = 0;
@@ -53,7 +52,7 @@ export class SiteChangeComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.vocService.addElement(result).then((thenresult) => this.vocs.push(thenresult));
+      this.vocService.addVocabulary(result).then((newVocs) => this.vocs.push(newVocs[0])/*console.log(newId)this.vocService.getVocabularybyId(newId).then((newVoc) => this.vocs.push(newVoc))*/);
     });
     
   }

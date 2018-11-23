@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { VocabularyService } from '../vocabulary.service';
-import { Vocabulary } from '../interfaces/vocabulary';
+import { VocabularyService } from '../../services/vocabulary.service';
+import { Vocabulary } from '../../interfaces/vocabulary';
 
 @Component({
   selector: 'app-site-search',
-  templateUrl: './site-search.component.html',
-  styleUrls: ['./site-search.component.css']
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.css']
 })
 export class SiteSearchComponent implements OnInit {
   vocs: Vocabulary[];
@@ -31,7 +31,7 @@ export class SiteSearchComponent implements OnInit {
     let searchText = document.getElementById("SearchText").innerHTML;
     console.log(searchText);
     console.log(this.vocs);
-    if (searchText === "") {
+    if (searchText === "" || searchText === "<br>") {
       this.filteredVocs = this.vocs;
       return;
     }

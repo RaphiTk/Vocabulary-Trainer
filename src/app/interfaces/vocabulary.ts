@@ -1,5 +1,5 @@
 export interface Vocabulary {
-    key;
+    id?;
     tries;
     failuresCount;
     
@@ -9,6 +9,7 @@ export interface Vocabulary {
     secondaryLanguage;
 }
 
+/*
 export interface VocabularyWithOutKey {
     tries;
     failuresCount;
@@ -17,5 +18,4 @@ export interface VocabularyWithOutKey {
     unit;
     primaryLanguage;
     secondaryLanguage;
-}
-
+}*/

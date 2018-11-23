@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalStorageNamespace} from '../local-storage.namespace';
+import { LocalStorageNamespace} from '../../services/local-storage.namespace';
 
 
 @Component({

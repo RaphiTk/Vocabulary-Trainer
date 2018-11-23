@@ -9,52 +9,21 @@ import { environment } from '../environments/environment';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatAutocompleteModule,
-  MatBadgeModule,
-  MatBottomSheetModule,
-  MatButtonToggleModule,
-  MatCardModule,
-  MatChipsModule,
-  MatDatepickerModule,
-  MatDialogModule,
-  MatDividerModule,
-  MatExpansionModule,
-  MatGridListModule,
-  MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatMenuModule,
-  MatNativeDateModule,
-  MatPaginatorModule,
-  MatProgressBarModule,
-  MatProgressSpinnerModule,
-  MatRadioModule,
-  MatRippleModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatSliderModule,
-  MatSlideToggleModule,
-  MatSnackBarModule,
-  MatSortModule,
-  MatStepperModule,
-  MatTableModule,
-  MatTabsModule,
-  MatToolbarModule,
-  MatTooltipModule,
-  MatTreeModule,} from '@angular/material';
-import {RestApiService} from './rest-api.service';
-import { SiteSearchComponent } from './site-search/site-search.component';
-import { SiteMenuComponent } from './site-menu/site-menu.component';
-import { SiteQueryComponent } from './site-query/site-query.component';
-import { SiteChangeComponent } from './site-change/site-change.component';
-import { SiteSettingsComponent } from './site-settings/site-settings.component';
-import { LogoInCornerComponent } from './logo-in-corner/logo-in-corner.component';
-import { ButtonBackComponent } from './button-back/button-back.component';
-import { VarPrimaryLanguageComponent } from './var-primary-language/var-primary-language.component';
-import { VarSecondaryLanguageComponent } from './var-secondary-language/var-secondary-language.component';
+import {MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatAutocompleteModule,  MatBadgeModule,  MatBottomSheetModule,  MatButtonToggleModule,  MatCardModule,  MatChipsModule,  MatDatepickerModule,  MatDialogModule,  MatDividerModule,  MatExpansionModule,  MatGridListModule,  MatIconModule,  MatInputModule,  MatListModule,  MatMenuModule,  MatNativeDateModule,  MatPaginatorModule,  MatProgressBarModule,  MatProgressSpinnerModule,  MatRadioModule,  MatRippleModule,  MatSelectModule,  MatSidenavModule,  MatSliderModule,  MatSlideToggleModule,  MatSnackBarModule,  MatSortModule,  MatStepperModule,  MatTableModule,  MatTabsModule,  MatToolbarModule,  MatTooltipModule,  MatTreeModule,} from '@angular/material';
+
+import { RestApiService } from './services/rest-api.service';
+import { SiteSearchComponent } from './sites/search/search.component';
+import { SiteMenuComponent } from './sites/menu/menu.component';
+import { SiteQueryComponent } from './sites/query/query.component';
+import { SiteChangeComponent } from './sites/change/change.component';
+import { SiteSettingsComponent } from './sites/settings/settings.component';
+import { LogoInCornerComponent } from './frames/logo-in-corner/logo-in-corner.component';
+import { ButtonBackComponent } from './frames/button-back/button-back.component';
+import { VarPrimaryLanguageComponent } from './frames/var-primary-language/var-primary-language.component';
+import { VarSecondaryLanguageComponent } from './frames/var-secondary-language/var-secondary-language.component';
 import { DialogChangeChooseUnitComponent } from './dialogs/dialog-change-choose-unit/dialog-change-choose-unit.component';
 import { DialogAddVocabularyComponent } from './dialogs/dialog-add-vocabulary/dialog-add-vocabulary.component';
-import { InitVocabularyService } from './vocabulary.service';
+//import { InitVocabularyService } from './services/vocabulary.service';
 
 @NgModule({
   imports: [
@@ -118,12 +87,12 @@ import { InitVocabularyService } from './vocabulary.service';
     DialogChangeChooseUnitComponent,
     DialogAddVocabularyComponent
   ],
-  providers: [RestApiService, {
+  providers: [RestApiService/*, {
     provide: APP_INITIALIZER,
     useFactory: InitVocabularyService,
     multi: true,
-    deps: [/* your dependencies */]
-}],
+    deps: [ ]
+}*/],
   bootstrap: [AppComponent],
   entryComponents: [DialogChangeChooseUnitComponent, DialogAddVocabularyComponent]
 })
