@@ -25,10 +25,10 @@ export class SiteMenuComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      const link = ['../change', result.clas, result.unit ];
-      //const link = ['../search']
-      this.router.navigate(link);
+      if (result != null) {
+        const link = ['../change', result.clas, result.unit ];
+        this.router.navigate(link);
+      }
     });
 
   }

@@ -7,9 +7,9 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
   styleUrls: ['./dialog-add-vocabulary.component.css']
 })
 export class DialogAddVocabularyComponent {
-  
 
-  constructor(public dialogRef: MatDialogRef<DialogAddVocabularyComponent>, @Inject(MAT_DIALOG_DATA) public data) {  }
+  constructor(public dialogRef: MatDialogRef<DialogAddVocabularyComponent>, @Inject(MAT_DIALOG_DATA) public data) { 
+  }
 
   cancelClicked(): void {
     this.dialogRef.close();

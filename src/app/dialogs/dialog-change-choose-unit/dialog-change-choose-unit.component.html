@@ -2,16 +2,22 @@
 <div mat-dialog-content>
   <p>Which class you want to edit?</p>
   <mat-form-field>
-    <input required matInput [(ngModel)]="data.clas" cdkFocusInitial>
+    <input required matInput [(ngModel)]="data.clas" [matAutocomplete]="autoClas" (ngModelChange)="clasChanged()" cdkFocusInitial>
   </mat-form-field>
+  <mat-autocomplete #autoClas="matAutocomplete">
+    <mat-option *ngFor="let option of clasOptions" [value]="option.clas">{{option.clas}}</mat-option>
+  </mat-autocomplete>
   <br>
   <p>Which unit you want to edit?</p>
   <mat-form-field>
-    <input required matInput [(ngModel)]="data.unit" cdkFocusInitial>
+    <input required matInput [(ngModel)]="data.unit" [matAutocomplete]="autoUnit">
   </mat-form-field>
+  <mat-autocomplete #autoUnit="matAutocomplete">
+    <mat-option *ngFor="let option2 of unitOptions" [value]="option2.unit">{{option2.unit}}</mat-option>
+  </mat-autocomplete>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="cancelClicked()">Cancel</button>
-  <button mat-button (click)="okClicked()" >Ok</button>
+  <button mat-button (click)="okClicked()">Ok</button>
 </div>
 

@@ -21,12 +21,20 @@ export class VocabularyService extends BaseService {
     });
   }
 
+  getClases() {
+    return this.connection.select({ from: this.tableName, groupBy: this.colClas, order: {by: this.colClas, type: "asc"}});
+  }
+
+  getUnits(clas: String) {
+    return this.connection.select({from: this.tableName, where: {clas: clas}, groupBy: this.colUnit, order: {by: this.colUnit, type: "asc"}})
+  }
+
   getVocabularybyId(id: Number) {
     return this.connection.select({from: this.tableName, where: {id: id}})
   }
 
   getAllVocs(): Promise<any> {
-    return this.connection.select({ from: this.tableName, order: {by: this.colPrimaryLanguage, type: "ASC" }});
+    return this.connection.select({ from: this.tableName, order: {by: this.colPrimaryLanguage, type: "asc" }, ignoreCase: true});
   }
 
   getVocsByClasAndUnit(clas: string, unit:string): Promise<any> {

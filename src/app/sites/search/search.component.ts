@@ -15,6 +15,7 @@ export class SiteSearchComponent implements OnInit {
 
   ngOnInit() {
     this.vocService.getAllVocs().then((result) => {
+      console.log(result);
       this.vocs = result; this.filteredVocs = result});
     
       let editable = document.getElementById("SearchText");
