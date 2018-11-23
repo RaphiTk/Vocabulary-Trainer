@@ -30,16 +30,14 @@
 <div class="OuterBox">
     <div class="CenterBox">
       <span class="headerText">MENU</span>
-  
       <br>
       <br>
-      <a routerLink="/query" style="text-decoration:none;">
-        <div class="button">
-          <span class="buttonText">
-            Query
-          </span>
-        </div>
-      </a>
+
+      <div class="button" (click)="queryButtonPressed()">
+        <span class="buttonText">
+          Query
+        </span>
+      </div>
       <br>
   
         <a routerLink="/search" style="text-decoration:none;">

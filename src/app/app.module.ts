@@ -23,6 +23,7 @@ import { VarPrimaryLanguageComponent } from './frames/var-primary-language/var-p
 import { VarSecondaryLanguageComponent } from './frames/var-secondary-language/var-secondary-language.component';
 import { DialogChangeChooseUnitComponent } from './dialogs/dialog-change-choose-unit/dialog-change-choose-unit.component';
 import { DialogAddVocabularyComponent } from './dialogs/dialog-add-vocabulary/dialog-add-vocabulary.component';
+import { DialogQueryChooseUnitComponent } from './dialogs/dialog-query-choose-unit/dialog-query-choose-unit.component';
 //import { InitVocabularyService } from './services/vocabulary.service';
 
 @NgModule({
@@ -85,7 +86,8 @@ import { DialogAddVocabularyComponent } from './dialogs/dialog-add-vocabulary/di
     VarPrimaryLanguageComponent,
     VarSecondaryLanguageComponent,
     DialogChangeChooseUnitComponent,
-    DialogAddVocabularyComponent
+    DialogAddVocabularyComponent,
+    DialogQueryChooseUnitComponent
   ],
   providers: [RestApiService/*, {
     provide: APP_INITIALIZER,
@@ -94,6 +96,6 @@ import { DialogAddVocabularyComponent } from './dialogs/dialog-add-vocabulary/di
     deps: [ ]
 }*/],
   bootstrap: [AppComponent],
-  entryComponents: [DialogChangeChooseUnitComponent, DialogAddVocabularyComponent]
+  entryComponents: [DialogChangeChooseUnitComponent, DialogAddVocabularyComponent, DialogQueryChooseUnitComponent]
 })
 export class AppModule { }

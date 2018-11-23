@@ -1,0 +1,26 @@
+
+<h1 mat-dialog-title>Which unit you want to train?</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-select placeholder="Class to train" [(value)]="data.clas" (selectionChange)="clasChanged()">
+      <mat-option *ngFor="let option of clasOptions" [value]="option.clas">
+        {{option.clas}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+    <mat-select placeholder="Unit to train" [disabled]="!allowUnitChange" [(value)]="data.unit">
+        <mat-option>None</mat-option>
+        <mat-option *ngFor="let option of unitOptions" [value]="option.unit">
+          {{option.unit}}
+        </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="cancelClicked()">Cancel</button>
+  <button mat-button (click)="okClicked()">Ok</button>
+</div>
+
+  
