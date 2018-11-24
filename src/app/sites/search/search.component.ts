@@ -15,27 +15,30 @@ export class SiteSearchComponent implements OnInit {
 
   ngOnInit() {
     this.vocService.getAllVocs().then((result) => {
-      console.log(result);
-      this.vocs = result; this.filteredVocs = result});
-    
-      let editable = document.getElementById("SearchText");
+      console.log(JSON.stringify(result));
+      this.vocs = result; this.filteredVocs = result
+    });
+  
+    let editable = document.getElementById("SearchText");
 
-      if (editable.addEventListener) {
-          editable.addEventListener("input", evt => this.filterItems(evt), false);
-          //editable.addEventListener("DOMNodeInserted", this.filterItems, false);
-          //editable.addEventListener("DOMNodeRemoved", this.filterItems, false);
-          //editable.addEventListener("DOMCharacterDataModified", this.filterItems, false);
-      }
+    if (editable.addEventListener) {
+      editable.addEventListener("input", evt => this.filterItems(evt), false);
+    }
   }
 
-  filterItems(evt) {
+  filterItems(evt): void {
     let searchText = document.getElementById("SearchText").innerHTML;
-    console.log(searchText);
-    console.log(this.vocs);
-    if (searchText === "" || searchText === "<br>") {
+    
+    //Firefox Bug Fix
+    if (searchText.includes("<br>")) {
+      searchText = searchText.replace("<br>", "");
+    }
+
+    if (searchText === "") {
       this.filteredVocs = this.vocs;
       return;
     }
+
     let newFilteredVocs: Vocabulary[] = new Array();
     searchText = searchText.toUpperCase();
     for (let voc of this.vocs) {
