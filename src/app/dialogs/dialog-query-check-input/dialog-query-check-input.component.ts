@@ -19,11 +19,11 @@ export class DialogQueryCheckInputComponent {
        }
     }
 
-  private okClicked(): void {
+  okClicked(): void {
     this.dialogRef.close(this.correct);
   }
 
-  private correctClicked() : void {
+  correctClicked() : void {
     this.dialogRef.close(true);
   }
 

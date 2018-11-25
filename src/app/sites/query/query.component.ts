@@ -15,10 +15,10 @@ export class SiteQueryComponent implements OnInit {
   private clas: string;
   private unit: string;
   private unitSetted: boolean = true;
-  private vocsToQuery: IVocabulary[] = [{primaryLanguage: "", tries:0, clas:"", unit:"", secondaryLanguage: "", failuresCount:0}];
+  public vocsToQuery: IVocabulary[] = [{primaryLanguage: "", tries:0, clas:"", unit:"", secondaryLanguage: "", failuresCount:0}];
   private correct: number = 0;
   private failures: number = 0;
-  private index:number = 0;
+  public index:number = 0;
 
   constructor(public vocService: VocabularyService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog) { 
     this.route.params.forEach((params: Params) => {

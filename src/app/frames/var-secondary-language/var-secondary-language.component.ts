@@ -8,7 +8,7 @@ import { LocalStorageNamespace} from '../../services/local-storage.namespace';
   styleUrls: ['./var-secondary-language.component.css']
 })
 export class VarSecondaryLanguageComponent implements OnInit {
-  private secondaryLanguage: string;
+  secondaryLanguage: string;
 
   constructor() { }
 

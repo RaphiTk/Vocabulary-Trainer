@@ -15,7 +15,7 @@ export class DialogQueryFinalResultComponent {
       this.resultMessage = this.calculateResultMessage();
     }
 
-  private okClicked(): void {
+  okClicked(): void {
     this.dialogRef.close();
   }
 

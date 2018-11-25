@@ -9,8 +9,8 @@ import { VocabularyService } from 'src/app/services/vocabulary.service';
   styleUrls: ['./dialog-change-choose-unit.component.css']
 })
 export class DialogChangeChooseUnitComponent {
-  private clasOptions = [{}];
-  private unitOptions = [{}];
+  clasOptions = [{}];
+  unitOptions = [{}];
 
   constructor(
     public dialogRef: MatDialogRef<DialogChangeChooseUnitComponent>,
@@ -22,15 +22,15 @@ export class DialogChangeChooseUnitComponent {
       }).catch(err => console.log("ERR", err));
     }
 
-  private cancelClicked(): void {
+  cancelClicked(): void {
     this.dialogRef.close();
   }
 
-  private okClicked(): void {
+  okClicked(): void {
     this.dialogRef.close(this.data);
   }
 
-  private clasChanged(): void {
+  clasChanged(): void {
     this.vocService.getUnits(this.data.clas).then((units) => {
       this.unitOptions = units;
     }).catch(err => console.log("ERR", err));

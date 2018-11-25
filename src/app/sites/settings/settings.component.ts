@@ -26,11 +26,11 @@ export class SiteSettingsComponent implements OnInit {
     LocalStorageNamespace.newSecondaryLanguage(newSecondaryLanguage);
   }
 
-  private getFile() {
+  getFile() {
     document.getElementById("readFile").click();
   }
 
-  private readFile(event)  {
+  readFile(event)  {
     const dataType = (<any>document.getElementById("readFile")).files.item(0).type;
     if (dataType === "application/json") {
       let fr = new FileReader();
