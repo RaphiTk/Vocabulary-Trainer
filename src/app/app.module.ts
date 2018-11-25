@@ -25,6 +25,7 @@ import { DialogChangeChooseUnitComponent } from './dialogs/dialog-change-choose-
 import { DialogAddVocabularyComponent } from './dialogs/dialog-add-vocabulary/dialog-add-vocabulary.component';
 import { DialogQueryChooseUnitComponent } from './dialogs/dialog-query-choose-unit/dialog-query-choose-unit.component';
 import { DialogQueryCheckInputComponent } from './dialogs/dialog-query-check-input/dialog-query-check-input.component';
+import { DialogQueryFinalResultComponent } from './dialogs/dialog-query-final-result/dialog-query-final-result.component';
 //import { InitVocabularyService } from './services/vocabulary.service';
 
 @NgModule({
@@ -89,7 +90,8 @@ import { DialogQueryCheckInputComponent } from './dialogs/dialog-query-check-inp
     DialogChangeChooseUnitComponent,
     DialogAddVocabularyComponent,
     DialogQueryChooseUnitComponent,
-    DialogQueryCheckInputComponent
+    DialogQueryCheckInputComponent,
+    DialogQueryFinalResultComponent
   ],
   providers: [RestApiService/*, {
     provide: APP_INITIALIZER,
@@ -98,6 +100,6 @@ import { DialogQueryCheckInputComponent } from './dialogs/dialog-query-check-inp
     deps: [ ]
 }*/],
   bootstrap: [AppComponent],
-  entryComponents: [DialogChangeChooseUnitComponent, DialogAddVocabularyComponent, DialogQueryChooseUnitComponent, DialogQueryCheckInputComponent]
+  entryComponents: [DialogChangeChooseUnitComponent, DialogAddVocabularyComponent, DialogQueryChooseUnitComponent, DialogQueryCheckInputComponent, DialogQueryFinalResultComponent]
 })
 export class AppModule { }

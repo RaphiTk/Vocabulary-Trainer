@@ -1,8 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { ChoosenUnit } from '../../interfaces/choosen-unit';
-import { VocabularyService } from 'src/app/services/vocabulary.service';
-
 
 @Component({
   selector: 'app-dialog-query-check-input',
@@ -16,8 +13,7 @@ export class DialogQueryCheckInputComponent {
 
   constructor(
     public dialogRef: MatDialogRef<DialogQueryCheckInputComponent>,
-    @Inject(MAT_DIALOG_DATA) public data,
-     private vocService: VocabularyService) {
+    @Inject(MAT_DIALOG_DATA) public data) {
        if(this.checkUserInput(data)) {
          this.correct = true;
         this.resultMessage = "Your information was correct, congratulations";

@@ -4,6 +4,7 @@ import { VocabularyService } from '../../services/vocabulary.service';
 import { Vocabulary } from '../../interfaces/vocabulary';
 import {MatDialog} from '@angular/material';
 import { DialogQueryCheckInputComponent } from 'src/app/dialogs/dialog-query-check-input/dialog-query-check-input.component';
+import { DialogQueryFinalResultComponent } from 'src/app/dialogs/dialog-query-final-result/dialog-query-final-result.component';
 
 @Component({
   selector: 'app-site-query',
@@ -71,7 +72,15 @@ export class SiteQueryComponent implements OnInit {
   }
 
   private shwoFinalDialog() {
-    
+    const dialogRef = this.dialog.open(DialogQueryFinalResultComponent, {
+      width: '250px',
+      data: {count: this.index+1, correct: this.correct, failures: this.failures}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      const link = ['../menu'];
+      this.router.navigate(link);
+    });
   }
 
 }
