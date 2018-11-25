@@ -34,7 +34,7 @@ export class SiteChangeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.vocService.getVocsByClasAndUnit(this.clas, this.unit)
+    this.vocService.getVocsFromOneUnit(this.clas, this.unit)
       .then((vocs)=> this.vocs = vocs);
   }
 

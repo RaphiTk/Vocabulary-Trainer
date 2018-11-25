@@ -37,8 +37,12 @@ export class VocabularyService extends BaseService {
     return this.connection.select({ from: this.tableName, order: {by: this.colPrimaryLanguage, type: "asc" }, ignoreCase: true});
   }
 
-  getVocsByClasAndUnit(clas: string, unit:string): Promise<any> {
+  getVocsFromOneUnit(clas: string, unit:string): Promise<any> {
     return this.connection.select({from: this.tableName, where: {clas: clas, unit: unit}, order: {by: this.colId, type: "ASC"}})
+  }
+
+  getVocsFromOneClas(clas: string): Promise<any> {
+    return this.connection.select({from: this.tableName, where: {clas: clas}, order: {by: this.colId, type: "ASC"}})
   }
 
 }

@@ -43,7 +43,12 @@ export class SiteMenuComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-        const link = ['../query', result.clas, result.unit ];
+        let link;
+        if (result.unit == null) {
+          link = ['../query', result.clas];
+        } else {
+          link = ['../query', result.clas, result.unit ];
+        }
         this.router.navigate(link);
       }
     });

@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Check your information</h1>
+<div mat-dialog-content>
+  <table style="overflow-x: auto">
+    <tr>
+        <td><app-var-primary-language></app-var-primary-language>:</td>
+        <td>{{data.voc.primaryLanguage}}</td>
+    </tr>
+    <br>
+    <tr>
+        <td>Your input:</td>
+        <td>{{data.userInput}} </td>
+    </tr>
+    <br>
+    <tr>
+        <td>Solution:</td>
+        <td>{{data.voc.secondaryLanguage}} </td>
+    </tr>
+  </table>
+  <br>
+  <p>{{resultMessage}}</p>
+</div>
+<div mat-dialog-actions>
+    <button mat-button style="margin-left: 0px;" (click)="okClicked()">Ok</button>
+  <button mat-button style="margin-left: 0px;" [hidden]="correct" (click)="correctClicked()">Nevertheless correct</button>
+</div>
+

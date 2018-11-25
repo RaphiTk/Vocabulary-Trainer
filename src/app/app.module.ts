@@ -24,6 +24,7 @@ import { VarSecondaryLanguageComponent } from './frames/var-secondary-language/v
 import { DialogChangeChooseUnitComponent } from './dialogs/dialog-change-choose-unit/dialog-change-choose-unit.component';
 import { DialogAddVocabularyComponent } from './dialogs/dialog-add-vocabulary/dialog-add-vocabulary.component';
 import { DialogQueryChooseUnitComponent } from './dialogs/dialog-query-choose-unit/dialog-query-choose-unit.component';
+import { DialogQueryCheckInputComponent } from './dialogs/dialog-query-check-input/dialog-query-check-input.component';
 //import { InitVocabularyService } from './services/vocabulary.service';
 
 @NgModule({
@@ -87,7 +88,8 @@ import { DialogQueryChooseUnitComponent } from './dialogs/dialog-query-choose-un
     VarSecondaryLanguageComponent,
     DialogChangeChooseUnitComponent,
     DialogAddVocabularyComponent,
-    DialogQueryChooseUnitComponent
+    DialogQueryChooseUnitComponent,
+    DialogQueryCheckInputComponent
   ],
   providers: [RestApiService/*, {
     provide: APP_INITIALIZER,
@@ -96,6 +98,6 @@ import { DialogQueryChooseUnitComponent } from './dialogs/dialog-query-choose-un
     deps: [ ]
 }*/],
   bootstrap: [AppComponent],
-  entryComponents: [DialogChangeChooseUnitComponent, DialogAddVocabularyComponent, DialogQueryChooseUnitComponent]
+  entryComponents: [DialogChangeChooseUnitComponent, DialogAddVocabularyComponent, DialogQueryChooseUnitComponent, DialogQueryCheckInputComponent]
 })
 export class AppModule { }
