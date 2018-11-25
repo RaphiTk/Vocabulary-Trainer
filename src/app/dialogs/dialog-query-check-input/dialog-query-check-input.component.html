@@ -17,10 +17,12 @@
     </tr>
   </table>
   <br>
-  <p>{{resultMessage}}</p>
+  <p [hidden]="!correct">Your information was correct, congratulations</p>
+  <p [hidden]="correct">Sadly, your information was wrong</p>
+
 </div>
 <div mat-dialog-actions>
-    <button mat-button style="margin-left: 0px;" (click)="okClicked()">Ok</button>
+  <button mat-button style="margin-left: 0px;" (click)="okClicked()">Ok</button>
   <button mat-button style="margin-left: 0px;" [hidden]="correct" (click)="correctClicked()">Nevertheless correct</button>
 </div>
 

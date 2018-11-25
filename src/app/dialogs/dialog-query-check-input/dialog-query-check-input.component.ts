@@ -7,8 +7,6 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
   styleUrls: ['./dialog-query-check-input.component.css']
 })
 export class DialogQueryCheckInputComponent {
-
-  resultMessage;
   correct: boolean;
 
   constructor(
@@ -16,10 +14,8 @@ export class DialogQueryCheckInputComponent {
     @Inject(MAT_DIALOG_DATA) public data) {
        if(this.checkUserInput(data)) {
          this.correct = true;
-        this.resultMessage = "Your information was correct, congratulations";
        } else {
          this.correct = false;
-        this.resultMessage = "Sadly, your information was wrong";
        }
     }
 

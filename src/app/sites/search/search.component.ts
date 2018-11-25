@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { VocabularyService } from '../../services/vocabulary.service';
-import { Vocabulary } from '../../interfaces/vocabulary';
+import { IVocabulary } from '../../interfaces/vocabulary';
 
 @Component({
   selector: 'app-site-search',
@@ -8,8 +8,8 @@ import { Vocabulary } from '../../interfaces/vocabulary';
   styleUrls: ['./search.component.css']
 })
 export class SiteSearchComponent implements OnInit {
-  vocs: Vocabulary[];
-  filteredVocs: Vocabulary[];
+  vocs: IVocabulary[];
+  filteredVocs: IVocabulary[];
 
   constructor(public vocService: VocabularyService) { }
 
@@ -39,7 +39,7 @@ export class SiteSearchComponent implements OnInit {
       return;
     }
 
-    let newFilteredVocs: Vocabulary[] = new Array();
+    let newFilteredVocs: IVocabulary[] = new Array();
     searchText = searchText.toUpperCase();
     for (let voc of this.vocs) {
       if (voc.primaryLanguage.toUpperCase().includes(searchText) || voc.secondaryLanguage.toUpperCase().includes(searchText)) {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { VocabularyService } from '../../services/vocabulary.service';
-import { Vocabulary } from '../../interfaces/vocabulary';
+import { IVocabulary } from '../../interfaces/vocabulary';
 import {MatDialog} from '@angular/material';
 import { DialogAddVocabularyComponent } from "../../dialogs/dialog-add-vocabulary/dialog-add-vocabulary.component";
 
@@ -14,7 +14,7 @@ import { DialogAddVocabularyComponent } from "../../dialogs/dialog-add-vocabular
 export class SiteChangeComponent implements OnInit {
   unit: string;
   clas: string;
-  vocs: Vocabulary[];
+  vocs: IVocabulary[];
 
   constructor(public vocService: VocabularyService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog) { 
     this.route.params.forEach((params: Params) => {
@@ -39,7 +39,7 @@ export class SiteChangeComponent implements OnInit {
   }
 
   addClicked() {
-    let voc = {} as Vocabulary;
+    let voc = {} as IVocabulary;
     voc.unit = this.unit;
     voc.clas = this.clas;
     voc.failuresCount = 0;
@@ -51,8 +51,10 @@ export class SiteChangeComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        this.vocService.addVocabulary(result).then((newVocs) => this.vocs.push(newVocs[0]));
+      }
       console.log('The dialog was closed');
-      this.vocService.addVocabulary(result).then((newVocs) => this.vocs.push(newVocs[0])/*console.log(newId)this.vocService.getVocabularybyId(newId).then((newVoc) => this.vocs.push(newVoc))*/);
     });
     
   }

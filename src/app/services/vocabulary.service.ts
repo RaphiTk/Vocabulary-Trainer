@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Vocabulary } from '../interfaces/vocabulary';
+import { IVocabulary } from '../interfaces/vocabulary';
 import { BaseService } from './base.service';
 import {   DATA_TYPE,  ITable } from 'jsstore';
 
@@ -13,8 +13,8 @@ export class VocabularyService extends BaseService {
     super(); 
   }
 
-  addVocabulary(voc: Vocabulary) {
-    return this.connection.insert<Vocabulary>({
+  addVocabulary(voc: IVocabulary) {
+    return this.connection.insert<IVocabulary>({
       into: this.tableName,
       return: true,
       values: [voc]
