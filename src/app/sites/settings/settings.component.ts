@@ -16,6 +16,10 @@ export class SiteSettingsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    var _this = this;
+    document.getElementById("readFile").onchange = function(ev) {
+      _this.readFile(ev);
+    }
     
   }
 
@@ -35,9 +39,7 @@ export class SiteSettingsComponent implements OnInit {
     if (dataType === "application/json") {
       let fr = new FileReader();
       fr.onload = function(e) {
-        console.log(fr.result);
         let vocs:any[] = JSON.parse(<string>fr.result);
-        console.log(vocs);
         let vocService: VocabularyService = new VocabularyService();
         for(let voc of vocs) {
           let newVoc: Vocabulary = new Vocabulary(voc.id, voc.Versuche, voc.Fehlversuche, voc.Klasse, voc.Unit, voc.Wort_Deutsch, voc.Wort_Englisch);
@@ -45,7 +47,6 @@ export class SiteSettingsComponent implements OnInit {
         }
       }
       fr.readAsText(event.target.files[0]);
-      console.log(event.target);
     }
   }
 }

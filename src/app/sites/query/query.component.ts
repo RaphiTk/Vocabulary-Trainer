@@ -78,7 +78,7 @@ export class SiteQueryComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      const link = ['../menu'];
+      const link = ['../'];
       this.router.navigate(link);
     });
   }

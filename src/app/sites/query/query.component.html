@@ -1,41 +1,37 @@
-  <app-logo-in-corner></app-logo-in-corner>
 
-  <div class="OuterBox blueBackground">
-    <div class="CenterBox">
-      <app-button-back></app-button-back>
-      <div style="width: 50%; float: left;">
-        <span class="headerText">Query</span>
-      </div>
-              
-      <div style='clear: both;'>
-      </div>
-      
-      <br>
-      <div>
-        <span class="buttonHeader">Word on <app-var-primary-language></app-var-primary-language>:</span>
-        <div class="buttonOutlineDisabled">
-          <div class="buttonOutlineTextDisabled" spellcheck="false">{{vocsToQuery[index].primaryLanguage}}</div>
-        </div>
-      </div>
-      
-      <br>
-      <div>
-        <span class="buttonHeader">Word on <app-var-secondary-language></app-var-secondary-language>:</span>
-        <div class="buttonOutline">
-          <div class="buttonOutlineText" contenteditable="true" spellcheck="false" data-placeholder="You're Task -> Translate" id="SecondaryLanguage"></div>
-        </div>
-      </div>
-      <br>
-      <div class="button" (click)="checkPressed()">
-        <span class="buttonText">
-          Check
-        </span>
-      </div>
-    </div>
+<app-button-back></app-button-back>
+<div style="width: 50%; float: left;">
+  <span class="headerText">Query</span>
+</div>
+        
+<div style='clear: both;'>
+</div>
+
+<br>
+<div>
+  <span class="buttonHeader">Word on <app-var-primary-language></app-var-primary-language>:</span>
+  <div class="buttonOutlineDisabled">
+    <div class="buttonOutlineTextDisabled" spellcheck="false">{{vocsToQuery[index].primaryLanguage}}</div>
   </div>
+</div>
 
-  <script type="text/javascript">
-    window.onload = function() {
-      document.getElementById("SecondaryLanguage").focus();
-    };
-  </script>
+<br>
+<div>
+  <span class="buttonHeader">Word on <app-var-secondary-language></app-var-secondary-language>:</span>
+  <div class="buttonOutline">
+    <div class="buttonOutlineText" contenteditable="true" spellcheck="false" data-placeholder="You're Task -> Translate" id="SecondaryLanguage"></div>
+  </div>
+</div>
+<br>
+<div class="button" (click)="checkPressed()">
+  <span class="buttonText">
+    Check
+  </span>
+</div>
+
+
+<script type="text/javascript">
+window.onload = function() {
+document.getElementById("SecondaryLanguage").focus();
+};
+</script>

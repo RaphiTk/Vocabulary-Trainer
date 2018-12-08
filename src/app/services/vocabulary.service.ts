@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IVocabulary } from '../interfaces/vocabulary';
 import { BaseService } from './base.service';
-import {   DATA_TYPE,  ITable } from 'jsstore';
 
 @Injectable({
   providedIn: 'root'
@@ -22,11 +21,11 @@ export class VocabularyService extends BaseService {
   }
 
   getClases() {
-    return this.connection.select({ from: this.tableName, groupBy: this.colClas, order: {by: this.colClas, type: "asc"}});
+    return this.connection.select({ from: this.tableName, groupBy: this.colClas, order: {by: this.colClas, type: "asc", idbSorting: false}});
   }
 
   getUnits(clas: String) {
-    return this.connection.select({from: this.tableName, where: {clas: clas}, groupBy: this.colUnit, order: {by: this.colUnit, type: "asc"}})
+    return this.connection.select({from: this.tableName, where: {clas: clas}, groupBy: this.colUnit, order: {by: this.colUnit, type: "asc", idbSorting: false}})
   }
 
   getVocabularybyId(id: Number) {
@@ -34,15 +33,15 @@ export class VocabularyService extends BaseService {
   }
 
   getAllVocs(): Promise<any> {
-    return this.connection.select({ from: this.tableName, order: {by: this.colPrimaryLanguage, type: "asc" }, ignoreCase: true});
+    return this.connection.select({ from: this.tableName, order: {by: this.colPrimaryLanguage, type: "asc", idbSorting: false }});
   }
 
   getVocsFromOneUnit(clas: string, unit:string): Promise<any> {
-    return this.connection.select({from: this.tableName, where: {clas: clas, unit: unit}, order: {by: this.colId, type: "ASC"}})
+    return this.connection.select({from: this.tableName, where: {clas: clas, unit: unit}, order: {by: this.colId, type: "ASC", idbSorting: false}})
   }
 
   getVocsFromOneClas(clas: string): Promise<any> {
-    return this.connection.select({from: this.tableName, where: {clas: clas}, order: {by: this.colId, type: "ASC"}})
+    return this.connection.select({from: this.tableName, where: {clas: clas}, order: {by: this.colId, type: "ASC", idbSorting: false}})
   }
 
 }

@@ -28,7 +28,7 @@
     "core-js": "^2.5.4",
     "file-loader": "^2.0.0",
     "hammerjs": "^2.0.8",
-    "jsstore": "^2.8.2",
+    "jsstore": "^2.9.1",
     "pouchdb": "^7.0.0",
     "rxjs": "~6.3.3",
     "sqlweb": "^1.2.0",

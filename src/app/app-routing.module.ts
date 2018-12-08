@@ -7,14 +7,14 @@ import { SiteChangeComponent } from './sites/change/change.component';
 import { SiteSettingsComponent } from './sites/settings/settings.component';
 
 const routes: Routes = [
-  { path: 'menu', component: SiteMenuComponent},
+  { path: '', component: SiteMenuComponent},
   { path: 'query/:clas/:unit', component: SiteQueryComponent},
   { path: 'query/:clas', component: SiteQueryComponent},
   { path: 'search', component: SiteSearchComponent},
   { path: 'change/:clas/:unit', component: SiteChangeComponent},
-  { path: 'settings', component: SiteSettingsComponent },
+  { path: 'settings', component: SiteSettingsComponent }/*,
   
-  { path: '', redirectTo: '/menu', pathMatch: 'full'}];
+{ path: '', redirectTo: '/menu', pathMatch: 'full'}*/];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -1,44 +1,38 @@
-<app-logo-in-corner></app-logo-in-corner>
 
-<div class="OuterBox blueBackground">
-  <div class="CenterBox">
-    	<app-button-back></app-button-back>
-			<div style="width: 50%; float: left;">
-				<span class="headerText">Change</span>
-			</div>
-			<div (click)="addClicked()" style="cursor: pointer; width: 25%; float: left;  top:7px; position:relative">
-				<span style="font-family: Montserrat;font-style: normal;font-weight: normal;line-height: normal;font-size: 26px;line-height: 32px;vertical-align: middle;display: inline-flex;">
-					Add
-					<i class="material-icons" style=" line-height: 32px;font-size: 32px;">add</i>
-				</span>
-			</div>
-							
-			<div style='clear: both;'>
-			</div>
-			
-			<br>
-			<table class="table">
-				<thead>
-					<tr>
-					  <th scope="col">#</th>
-					  <th scope="col"><app-var-primary-language></app-var-primary-language></th>
-					  <th scope="col"><app-var-secondary-language></app-var-secondary-language></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr *ngFor="let voc of vocs">
-					  <th scope="row">{{voc.id}}</th>
-					  <td>{{voc.primaryLanguage}}</td>
-					  <td>{{voc.secondaryLanguage}}</td>
-					</tr>
-				</tbody>
-			</table>
-		
-		</div>
-	</div>
+<app-button-back></app-button-back>
+<div style="width: 50%; float: left;">
+	<span class="headerText">Change</span>
+</div>
+<div (click)="addClicked()" style="cursor: pointer; width: 25%; float: left;  top:7px; position:relative">
+	<span style="font-family: Montserrat;font-style: normal;font-weight: normal;line-height: normal;font-size: 26px;line-height: 32px;vertical-align: middle;display: inline-flex;">
+		Add
+		<i class="material-icons" style=" line-height: 32px;font-size: 32px;">add</i>
+	</span>
+</div>
+				
+<div style='clear: both;'>
+</div>
+
+<br>
+<table class="table">
+	<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col"><app-var-primary-language></app-var-primary-language></th>
+			<th scope="col"><app-var-secondary-language></app-var-secondary-language></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let voc of vocs">
+			<th scope="row">{{voc.id}}</th>
+			<td>{{voc.primaryLanguage}}</td>
+			<td>{{voc.secondaryLanguage}}</td>
+		</tr>
+	</tbody>
+</table>
 	
-	<script type="text/javascript">
-		window.onload = function() {
-			document.getElementById("PrimaryLanguage").focus();
-		};
-	</script>
+<script type="text/javascript">
+	window.onload = function() {
+		document.getElementById("PrimaryLanguage").focus();
+	};
+</script>

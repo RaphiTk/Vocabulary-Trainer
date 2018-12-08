@@ -1,46 +1,41 @@
-	
-  <app-logo-in-corner></app-logo-in-corner>
 
-  <div class="OuterBox blueBackground">
-    <div class="CenterBox">
-        <app-button-back></app-button-back>
-      <div style="width: 50%; float: left;">
-        <span class="headerText">Settings</span>
-      </div>
-      <div (click)="getFile()" style="cursor: pointer; width: 25%; float: left;  top:7px; position:relative">
-          <span style="font-family: Montserrat;font-style: normal;font-weight: normal;line-height: normal;font-size: 26px;line-height: 32px;vertical-align: middle;display: inline-flex;">
-            Import
-            <i class="material-icons" style=" line-height: 32px;font-size: 32px;">cloud_download</i>
-            <div style="height: 0px; width: 0px; overflow: hidden;"><input id="readFile" type="file" value="readFile" (input)="readFile($event)"></div>
-          </span>
-        </div>
-              
-      <div style='clear: both;'>
-      </div>
-      
-      <br>
-      <div>
-        <span class="buttonHeader">Primary Language</span>
-        <div class="buttonOutline">
-          <div class="buttonOutlineText" contenteditable="true" spellcheck="false"><app-var-primary-language #VarPrimaryLanguage></app-var-primary-language></div>
-        </div>
-      </div>
-      <br>
-      <div>
-        <span class="buttonHeader">Secondary Language</span>
-        <div class="buttonOutline">
-          <div class="buttonOutlineText" contenteditable="true" spellcheck="false"><app-var-secondary-language #VarSecondaryLanguage></app-var-secondary-language></div>
-        </div>
-      </div>
-      <br>
-      <br>
-      <div class="button" (click)="saveButtonPressed()">
-        <span class="buttonText">
-          Save
-        </span>
-      </div>
-    
-    </div>
+<app-button-back></app-button-back>
+<div style="width: 50%; float: left;">
+  <span class="headerText">Settings</span>
+</div>
+<div (click)="getFile()" style="cursor: pointer; width: 25%; float: left;  top:7px; position:relative">
+    <span style="font-family: Montserrat;font-style: normal;font-weight: normal;line-height: normal;font-size: 26px;line-height: 32px;vertical-align: middle;display: inline-flex;">
+      Import 
+      <i class="material-icons" style=" line-height: 32px;font-size: 32px;">cloud_download</i>
+      <div style="height: 0px; width: 0px; overflow: hidden;"><input id="readFile" type="file" value="readFile" accept="application/json"></div>
+    </span>
+  </div>
+        
+<div style='clear: both;'>
+</div>
+
+<br>
+<div>
+  <span class="buttonHeader">Primary Language</span>
+  <div class="buttonOutline">
+    <div class="buttonOutlineText" contenteditable="true" spellcheck="false"><app-var-primary-language #VarPrimaryLanguage></app-var-primary-language></div>
+  </div>
+</div>
+<br>
+<div>
+  <span class="buttonHeader">Secondary Language</span>
+  <div class="buttonOutline">
+    <div class="buttonOutlineText" contenteditable="true" spellcheck="false"><app-var-secondary-language #VarSecondaryLanguage></app-var-secondary-language></div>
+  </div>
+</div>
+<br>
+<br>
+<div class="button" (click)="saveButtonPressed()">
+  <span class="buttonText">
+    Save
+  </span>
+</div>
+
 
 <script type="text/javascript">
   window.onload = function() {

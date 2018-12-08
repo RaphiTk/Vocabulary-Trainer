@@ -1,44 +1,36 @@
-	
-  <app-logo-in-corner></app-logo-in-corner>
+<app-button-back></app-button-back>
+<div style="width: 50%; float: left;">
+  <span class="headerText">Search</span>
+</div>
+        
+<div style='clear: both;'>
+</div>
 
-  <div class="OuterBox blueBackground">
-    <div class="CenterBox">
-        <app-button-back></app-button-back>
-          <div style="width: 50%; float: left;">
-            <span class="headerText">Search</span>
-          </div>
-                  
-          <div style='clear: both;'>
-          </div>
-          
-          <br>
-          <div class="buttonOutline">
-            <div class="buttonOutlineText" contenteditable="true" spellcheck="false" data-placeholder="Search Text" id="SearchText"></div>
-          </div>
-          
-          <br>
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col"><app-var-primary-language></app-var-primary-language></th>
-					      <th scope="col"><app-var-secondary-language></app-var-secondary-language></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let voc of filteredVocs">
-                <th scope="row">{{voc.id}}</th>
-                <td>{{voc.primaryLanguage}}</td>
-                <td>{{voc.secondaryLanguage}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      
-      <script type="text/javascript">
-        window.onload = function() {
-          document.getElementById("SearchText").focus();
-        };
-      </script>
-      
+<br>
+<div class="buttonOutline">
+  <div class="buttonOutlineText" contenteditable="true" spellcheck="false" data-placeholder="Search Text" id="SearchText"></div>
+</div>
+
+<br>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col"><app-var-primary-language></app-var-primary-language></th>
+      <th scope="col"><app-var-secondary-language></app-var-secondary-language></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let voc of filteredVocs">
+      <th scope="row">{{voc.id}}</th>
+      <td>{{voc.primaryLanguage}}</td>
+      <td>{{voc.secondaryLanguage}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<script type="text/javascript">
+  window.onload = function() {
+    document.getElementById("SearchText").focus();
+  };
+</script>
