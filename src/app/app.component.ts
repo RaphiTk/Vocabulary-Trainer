@@ -9,14 +9,23 @@ import { Router, RoutesRecognized, NavigationEnd } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'ngVoc';
-  isMainMenu
-  joke;
+  isMainMenu;
+  isMobileUser;
+  //joke;
 
   newUpdate: boolean = false;
   constructor(update: SwUpdate, private restApi: RestApiService, private router: Router) {
     document.ontouchstart = function(e){ 
       e.preventDefault(); 
+    }
+
+    alert(screen.height);
+    alert(screen.width);
+    if(screen.height > 600 && screen.width > 600) {
+      this.isMobileUser = false;
+    } else {
+      this.isMobileUser = true;
+      this.changeCssClasses();
     }
     
     this.router.events
@@ -39,8 +48,26 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    this.restApi.gimmeJokes().subscribe(res => {
+    this.deleteAddvertismentButton();
+    setTimeout(()=>this.deleteAddvertismentButton(),200);
+    /*this.restApi.gimmeJokes().subscribe(res => {
       this.joke = res;
-    })
+    })*/
+  }
+
+  private deleteAddvertismentButton() {
+    let images: HTMLCollectionOf<HTMLImageElement> = document.images;
+    console.log(images);
+    for (let index = 0; index < images.length; index++) {
+      const element: HTMLImageElement = images.item(index);
+      if (element.alt === "Free Web Hosting") {
+        element.width = 0;
+        element.height = 0;
+      }
+      
+    }
+  }
+
+  private changeCssClasses() {
   }
 }

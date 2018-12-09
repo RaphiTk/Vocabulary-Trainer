@@ -13,7 +13,7 @@ html, body {
 
 .button {
 	position: relative;
-	width: 60%;
+	width: 80%;
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
@@ -31,14 +31,15 @@ html, body {
 	font-style: normal;
 	font-weight: bold;
 	line-height: normal;
-	font-size: 25px;
+	font-size: 26px;
+	line-height: 32px;
 	text-align: center;
 	color: #FFFFFF;
 }
 
 .buttonOutline {
 	position: relative;
-	width: 60%;
+	width: 80%;
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
@@ -54,7 +55,7 @@ html, body {
 	font-style: normal;
 	font-weight: 200;
 	line-height: normal;
-	font-size: 25px;
+	font-size: 26px;
 	text-align: center;
 	color: #000000;
 }
@@ -78,7 +79,7 @@ html, body {
 	font-style: normal;
 	font-weight: 200;
 	line-height: normal;
-	font-size: 25px;
+	font-size: 26px;
 	text-align: center;
 	color: #6b6b6b;
 }
@@ -129,7 +130,7 @@ div[data-placeholder]:empty:before {
 	display: flex; 
 	justify-content: center; 
 	align-items: center; 
-	width:100%; 
+	width: 100%; 
 	height: 100%;
 }
 
@@ -143,6 +144,17 @@ div[data-placeholder]:empty:before {
 	border-radius: 50px; 	
 	width: 60%; 
 	max-height:70%; 
+	float: left; 
+	background: #C4C4C4; 
+	text-align: center; 
+	vertical-align: middle;
+}
+
+.MobileCenterBox {
+	box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.25);
+	overflow: auto;	
+	width: 100%; 
+	height: 100%; 
 	float: left; 
 	background: #C4C4C4; 
 	text-align: center; 
