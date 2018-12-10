@@ -19,8 +19,6 @@ export class AppComponent {
       e.preventDefault(); 
     }
 
-    alert(screen.height);
-    alert(screen.width);
     if(screen.height > 600 && screen.width > 600) {
       this.isMobileUser = false;
     } else {
