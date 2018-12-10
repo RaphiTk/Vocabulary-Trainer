@@ -65,8 +65,9 @@ export class AppComponent {
       }
       
     }
-    */
+
   }
+    */
 
   private changeCssClasses() {
   }
