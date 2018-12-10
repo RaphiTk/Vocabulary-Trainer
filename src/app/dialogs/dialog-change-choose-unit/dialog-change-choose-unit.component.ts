@@ -17,7 +17,6 @@ export class DialogChangeChooseUnitComponent {
     @Inject(MAT_DIALOG_DATA) public data: ChoosenUnit,
      private vocService: VocabularyService) {
       vocService.getClases().then((classes) => {
-        console.log(classes);
         this.clasOptions = classes;
       }).catch(err => console.log("ERR", err));
     }

@@ -15,7 +15,6 @@ export class SiteSearchComponent implements OnInit {
 
   ngOnInit() {
     this.vocService.getAllVocs().then((result) => {
-      console.log(JSON.stringify(result));
       this.vocs = result; this.filteredVocs = result
     });
   

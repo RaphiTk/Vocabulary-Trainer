@@ -20,14 +20,11 @@ export class SiteChangeComponent implements OnInit {
     this.route.params.forEach((params: Params) => {
       if (params['unit'] !== undefined) {
         this.unit = params['unit'];
-        console.log("2", this.unit);
       }
       if (params['clas'] !== undefined) {
         this.clas = params['clas'];
-        console.log("1", this.clas);
       }
     });
-    console.log("3", this.clas, this.unit);
     if (this.clas === undefined || this.clas === null || this.unit === undefined || this.unit === null) {
       router.navigate(["../"]);
     }
@@ -54,7 +51,6 @@ export class SiteChangeComponent implements OnInit {
       if (result != null) {
         this.vocService.addVocabulary(result).then((newVocs) => this.vocs.push(newVocs[0]));
       }
-      console.log('The dialog was closed');
     });
     
   }

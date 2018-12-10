@@ -46,13 +46,14 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    this.deleteAddvertismentButton();
-    setTimeout(()=>this.deleteAddvertismentButton(),200);
+    //this.deleteAddvertismentButton();
+    //setTimeout(()=>this.deleteAddvertismentButton(),200);
     /*this.restApi.gimmeJokes().subscribe(res => {
       this.joke = res;
     })*/
   }
 
+  /*
   private deleteAddvertismentButton() {
     let images: HTMLCollectionOf<HTMLImageElement> = document.images;
     console.log(images);
@@ -64,6 +65,7 @@ export class AppComponent {
       }
       
     }
+    */
   }
 
   private changeCssClasses() {
