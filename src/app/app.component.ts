@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import {RestApiService} from './services/rest-api.service';
 import { Router, RoutesRecognized, NavigationEnd } from '@angular/router';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,7 @@ export class AppComponent {
   //joke;
 
   newUpdate: boolean = false;
-  constructor(update: SwUpdate, private restApi: RestApiService, private router: Router) {
+  constructor(update: SwUpdate, private restApi: RestApiService, private router: Router, public snackBar: MatSnackBar) {
     document.ontouchstart = function(e){ 
       e.preventDefault(); 
     }
@@ -40,8 +41,14 @@ export class AppComponent {
     });
 
     update.available.subscribe(event => {
-      this.newUpdate = true;
-      update.activateUpdate().then(() => document.location.reload());
+      const snack = this.snackBar.open('Update Available', 'Reload', {duration: 5000});
+
+      snack
+        .onAction()
+        .subscribe(() => {
+          window.location.reload();
+        });
+
     })
   }
 

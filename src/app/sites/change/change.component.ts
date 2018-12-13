@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { VocabularyService } from '../../services/vocabulary.service';
 import { IVocabulary } from '../../interfaces/vocabulary';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import { DialogAddVocabularyComponent } from "../../dialogs/dialog-add-vocabulary/dialog-add-vocabulary.component";
 
 
@@ -16,7 +16,7 @@ export class SiteChangeComponent implements OnInit {
   clas: string;
   vocs: IVocabulary[];
 
-  constructor(public vocService: VocabularyService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog) { 
+  constructor(public vocService: VocabularyService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog, public snackBar: MatSnackBar) { 
     this.route.params.forEach((params: Params) => {
       if (params['unit'] !== undefined) {
         this.unit = params['unit'];
@@ -50,6 +50,7 @@ export class SiteChangeComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
         this.vocService.addVocabulary(result).then((newVocs) => this.vocs.push(newVocs[0]));
+        this.snackBar.open("Vocabulary successfully added", null, {duration: 2000})
       }
     });
     
