@@ -9,15 +9,14 @@ import {  IDataBase,  DATA_TYPE,  ITable } from 'jsstore';
 export class BaseService {
 
   private dbName = "Ts_Vocabulary";
-  tableName = "Vocabulary";
-  colId = "id";
-  colClas = "clas";
-  colUnit = "unit";
-  colPrimaryLanguage = "primaryLanguage";
-  colSecondaryLanguage = "secondaryLanguage";
-  colTries = "tries";
-  colFailuresCount = "failuresCount";
-
+  protected tableName = "Vocabulary";
+  protected colId = "id";
+  protected colClas = "clas";
+  protected colUnit = "unit";
+  protected colPrimaryLanguage = "primaryLanguage";
+  protected colSecondaryLanguage = "secondaryLanguage";
+  protected colTries = "tries";
+  protected colFailuresCount = "failuresCount";
 
   constructor() {
       // initiate database when a service instance is initiated
@@ -29,7 +28,7 @@ export class BaseService {
    * 
    * @memberof IdbService
    */
-  initDatabase() {
+  private initDatabase() {
       this.connection.isDbExist(this.dbName).then(isExist => {
         if (isExist) {
           this.connection.openDb(this.dbName);

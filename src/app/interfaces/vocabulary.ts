@@ -29,14 +29,3 @@ export class Vocabulary implements IVocabulary{
         this.secondaryLanguage = newSecondaryLanguage;
     }
 }
-
-/*
-export interface VocabularyWithOutKey {
-    tries;
-    failuresCount;
-    
-    clas;
-    unit;
-    primaryLanguage;
-    secondaryLanguage;
-}*/

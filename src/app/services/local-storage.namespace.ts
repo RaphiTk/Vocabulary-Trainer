@@ -1,4 +1,3 @@
-
 export namespace LocalStorageNamespace {
   const defaultPrimaryLanguage: string = "German";
   export const localStoragePrimaryLanguageKey: string = "PrimaryLanguage";

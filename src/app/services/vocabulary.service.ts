@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IVocabulary } from '../interfaces/vocabulary';
+import { IVocabulary, Vocabulary } from '../interfaces/vocabulary';
 import { BaseService } from './base.service';
 
 @Injectable({
@@ -18,6 +18,11 @@ export class VocabularyService extends BaseService {
       return: true,
       values: [voc]
     });
+  }
+
+  deleteVocabulary(voc: Vocabulary) {
+    console.log(voc);
+    return this.connection.remove({ from: this.tableName, where: {id: voc.id}})
   }
 
   getClases() {

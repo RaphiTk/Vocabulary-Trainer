@@ -26,7 +26,8 @@ import { DialogAddVocabularyComponent } from './dialogs/dialog-add-vocabulary/di
 import { DialogQueryChooseUnitComponent } from './dialogs/dialog-query-choose-unit/dialog-query-choose-unit.component';
 import { DialogQueryCheckInputComponent } from './dialogs/dialog-query-check-input/dialog-query-check-input.component';
 import { DialogQueryFinalResultComponent } from './dialogs/dialog-query-final-result/dialog-query-final-result.component';
-import {DialogChangeRemoveBottomSheetComponent} from './dialogs/dialog-change-remove-bottom-sheet/dialog-change-remove-bottom-sheet.component'
+import {DialogChangeRemoveBottomSheetComponent} from './dialogs/dialog-change-remove-bottom-sheet/dialog-change-remove-bottom-sheet.component';
+import { DialogConfirmationComponent } from './dialogs/dialog-confirmation/dialog-confirmation.component'
 //import { InitVocabularyService } from './services/vocabulary.service';
 
 @NgModule({
@@ -93,7 +94,8 @@ import {DialogChangeRemoveBottomSheetComponent} from './dialogs/dialog-change-re
     DialogQueryChooseUnitComponent,
     DialogQueryCheckInputComponent,
     DialogQueryFinalResultComponent,
-    DialogChangeRemoveBottomSheetComponent 
+    DialogChangeRemoveBottomSheetComponent,
+    DialogConfirmationComponent 
   ],
   providers: [RestApiService/*, {
     provide: APP_INITIALIZER,
@@ -102,6 +104,6 @@ import {DialogChangeRemoveBottomSheetComponent} from './dialogs/dialog-change-re
     deps: [ ]
 }*/],
   bootstrap: [AppComponent],
-  entryComponents: [DialogChangeChooseUnitComponent, DialogAddVocabularyComponent, DialogQueryChooseUnitComponent, DialogQueryCheckInputComponent, DialogQueryFinalResultComponent, DialogChangeRemoveBottomSheetComponent]
+  entryComponents: [DialogChangeChooseUnitComponent, DialogAddVocabularyComponent, DialogQueryChooseUnitComponent, DialogQueryCheckInputComponent, DialogQueryFinalResultComponent, DialogChangeRemoveBottomSheetComponent, DialogConfirmationComponent]
 })
 export class AppModule { }

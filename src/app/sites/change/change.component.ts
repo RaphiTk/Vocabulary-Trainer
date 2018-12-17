@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { VocabularyService } from '../../services/vocabulary.service';
-import { IVocabulary } from '../../interfaces/vocabulary';
+import { IVocabulary, Vocabulary } from '../../interfaces/vocabulary';
 import {MatDialog, MatSnackBar, MatBottomSheet, MatBottomSheetRef} from '@angular/material';
 import { DialogAddVocabularyComponent } from "../../dialogs/dialog-add-vocabulary/dialog-add-vocabulary.component";
 import { DialogChangeRemoveBottomSheetComponent } from "../../dialogs/dialog-change-remove-bottom-sheet/dialog-change-remove-bottom-sheet.component";
@@ -37,7 +37,15 @@ export class SiteChangeComponent implements OnInit {
 
   itemPressed(voc) {
     const bottomSheetRef = this.bottomSheet.open(DialogChangeRemoveBottomSheetComponent, {
-      data: { voc: voc },
+      data: { voc },
+    });
+
+    bottomSheetRef.afterDismissed().subscribe(result => {
+      if (result) {
+        console.log(voc);
+        this.vocs.splice(this.vocs.indexOf(voc), 1);
+        this.vocService.getVocabularybyId(voc.id).then((newVocs: Vocabulary[]) => {newVocs.length !== 0 ? this.vocs.push(newVocs[0]) : null;})
+      }
     });
   }
 
