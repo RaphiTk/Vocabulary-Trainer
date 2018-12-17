@@ -7,6 +7,11 @@ html, body {
 	overflow: hidden
 }
 
+html *:not(i)
+{
+	font-family: Montserrat !important;
+}
+
 .blueBackground {
 	background: #4596E8;
 }
@@ -27,7 +32,6 @@ html, body {
 }
 
 .buttonText {
-	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
 	line-height: normal;
@@ -51,7 +55,6 @@ html, body {
 }
 
 .buttonOutlineText {
-	font-family: Montserrat;
 	font-style: normal;
 	font-weight: 200;
 	line-height: normal;
@@ -75,7 +78,6 @@ html, body {
 }
 
 .buttonOutlineTextDisabled {
-	font-family: Montserrat;
 	font-style: normal;
 	font-weight: 200;
 	line-height: normal;
@@ -91,7 +93,6 @@ div[data-placeholder]:empty:before {
 
 .headerText {
 	position: relative;
-	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
 	line-height: normal;
@@ -102,7 +103,6 @@ div[data-placeholder]:empty:before {
 }
 
 .buttonHeader {
-	font-family: Montserrat; 
 	text-align: left;
 	font-style: normal;
 	font-weight: normal;
