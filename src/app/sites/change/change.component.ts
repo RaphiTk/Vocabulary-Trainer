@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { VocabularyService } from '../../services/vocabulary.service';
 import { IVocabulary } from '../../interfaces/vocabulary';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar, MatBottomSheet, MatBottomSheetRef} from '@angular/material';
 import { DialogAddVocabularyComponent } from "../../dialogs/dialog-add-vocabulary/dialog-add-vocabulary.component";
-
+import { DialogChangeRemoveBottomSheetComponent } from "../../dialogs/dialog-change-remove-bottom-sheet/dialog-change-remove-bottom-sheet.component";
 
 @Component({
   selector: 'app-site-change',
@@ -16,7 +16,7 @@ export class SiteChangeComponent implements OnInit {
   clas: string;
   vocs: IVocabulary[];
 
-  constructor(public vocService: VocabularyService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog, public snackBar: MatSnackBar) { 
+  constructor(public vocService: VocabularyService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog, public snackBar: MatSnackBar, private bottomSheet: MatBottomSheet) { 
     this.route.params.forEach((params: Params) => {
       if (params['unit'] !== undefined) {
         this.unit = params['unit'];
@@ -33,6 +33,12 @@ export class SiteChangeComponent implements OnInit {
   ngOnInit() {
     this.vocService.getVocsFromOneUnit(this.clas, this.unit)
       .then((vocs)=> this.vocs = vocs);
+  }
+
+  itemPressed(voc) {
+    const bottomSheetRef = this.bottomSheet.open(DialogChangeRemoveBottomSheetComponent, {
+      data: { voc: voc },
+    });
   }
 
   addClicked() {

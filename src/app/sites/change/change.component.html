@@ -23,7 +23,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr *ngFor="let voc of vocs">
+		<tr *ngFor="let voc of vocs" (press)="itemPressed(voc)">
 			<th scope="row">{{voc.id}}</th>
 			<td>{{voc.primaryLanguage}}</td>
 			<td>{{voc.secondaryLanguage}}</td>
