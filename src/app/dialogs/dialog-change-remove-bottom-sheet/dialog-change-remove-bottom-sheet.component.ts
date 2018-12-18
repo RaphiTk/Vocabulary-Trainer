@@ -14,7 +14,6 @@ export class DialogChangeRemoveBottomSheetComponent {
   public promise;
   private resolve;
 
-
   constructor(public snackBar: MatSnackBar, private bottomSheetRef: MatBottomSheetRef<DialogChangeRemoveBottomSheetComponent>, @Inject(MAT_BOTTOM_SHEET_DATA) public voc: any, public dialog: MatDialog, public vocService: VocabularyService) {
     let _this = this
     this.promise = new Promise(function(resolve, reject) {  
@@ -23,7 +22,6 @@ export class DialogChangeRemoveBottomSheetComponent {
   }
 
   deleteVoc(event: MouseEvent): void {
-
     let dialogRef = this.dialog.open(DialogConfirmationComponent, {
       disableClose: false
     });
@@ -33,11 +31,10 @@ export class DialogChangeRemoveBottomSheetComponent {
       if(result) {
         this.vocService.deleteVocabulary(this.voc).then((obj) => {
           this.snackBar.open("Vocabulary successfully deleted" , null, {duration:2000});
+          this.resolve(true);
         }).catch(err => this.snackBar.open(JSON.parse(err) , null, {duration:2000}));
       }
       dialogRef = null;
-      this.resolve();
-
     });
     this.bottomSheetRef.dismiss();
   }
@@ -49,7 +46,7 @@ export class DialogChangeRemoveBottomSheetComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      //this.resolve();
+      this.resolve(false);
       dialogRef = null;
     });
 

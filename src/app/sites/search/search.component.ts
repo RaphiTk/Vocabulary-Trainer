@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { VocabularyService } from '../../services/vocabulary.service';
-import { IVocabulary } from '../../interfaces/vocabulary';
+import { Vocabulary } from '../../interfaces/vocabulary';
+import { MatBottomSheet } from '@angular/material';
+import { DialogChangeRemoveBottomSheetComponent } from "../../dialogs/dialog-change-remove-bottom-sheet/dialog-change-remove-bottom-sheet.component";
+
 
 @Component({
   selector: 'app-site-search',
@@ -8,18 +11,18 @@ import { IVocabulary } from '../../interfaces/vocabulary';
   styleUrls: ['./search.component.css']
 })
 export class SiteSearchComponent implements OnInit {
-  vocs: IVocabulary[];
-  filteredVocs: IVocabulary[];
+  vocs: Vocabulary[];
+  filteredVocs: Vocabulary[];
 
-  constructor(public vocService: VocabularyService) { }
+  constructor(public vocService: VocabularyService, private bottomSheet: MatBottomSheet) { }
 
   ngOnInit() {
     this.vocService.getAllVocs().then((result) => {
-      this.vocs = result; this.filteredVocs = result
+      this.vocs = Vocabulary.createCorrectReferences(result); 
+      this.filteredVocs = Vocabulary.createCorrectReferences(result);
     });
   
     let editable = document.getElementById("SearchText");
-
     if (editable.addEventListener) {
       editable.addEventListener("input", evt => this.filterItems(evt), false);
     }
@@ -38,7 +41,7 @@ export class SiteSearchComponent implements OnInit {
       return;
     }
 
-    let newFilteredVocs: IVocabulary[] = new Array();
+    let newFilteredVocs: Vocabulary[] = new Array();
     searchText = searchText.toUpperCase();
     for (let voc of this.vocs) {
       if (voc.primaryLanguage.toUpperCase().includes(searchText) || voc.secondaryLanguage.toUpperCase().includes(searchText)) {
@@ -47,6 +50,19 @@ export class SiteSearchComponent implements OnInit {
     }
     this.filteredVocs = newFilteredVocs;
 
+  }
+
+  vocPressed(voc) {
+    const bottomSheetRef = this.bottomSheet.open(DialogChangeRemoveBottomSheetComponent, {
+      data: voc
+    });
+
+    bottomSheetRef.instance.promise.then(deleted => {
+      if (deleted) {
+        this.vocs.splice(this.vocs.findIndex(i => i.id === voc.id), 1);
+        this.filteredVocs.splice(this.filteredVocs.findIndex(i => i.id === voc.id), 1);
+      }
+    });
   }
 
 }

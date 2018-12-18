@@ -35,15 +35,15 @@ export class SiteChangeComponent implements OnInit {
       .then((vocs)=> this.vocs = Vocabulary.createCorrectReferences(vocs));
   }
 
-  itemPressed(voc) {
+  vocPressed(voc) {
     const bottomSheetRef = this.bottomSheet.open(DialogChangeRemoveBottomSheetComponent, {
       data: voc
     });
 
-    bottomSheetRef.instance.promise.then(value => {
-      this.vocService.getVocabularybyId(voc.id).then((newVocs: Vocabulary[]) => {
-        newVocs.length == 0 ? this.vocs.splice(this.vocs.indexOf(voc), 1) : this.vocs[this.vocs.indexOf(voc)] = Vocabulary.createCorrectReference(newVocs[0]);
-      });    
+    bottomSheetRef.instance.promise.then(deleted => {
+      if (deleted || (!deleted && (this.clas !== voc.clas || this.unit !== voc.unit)))
+        this.vocs.splice(this.vocs.indexOf(voc), 1);
+
     });
   }
 

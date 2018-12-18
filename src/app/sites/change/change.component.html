@@ -23,7 +23,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr *ngFor="let voc of vocs; let i = index" (press)="itemPressed(voc)">
+		<tr *ngFor="let voc of vocs; let i = index" (press)="vocPressed(voc)">
 			<th scope="row">{{i + 1}}</th>
 			<td>{{voc.primaryLanguage}}</td>
 			<td>{{voc.secondaryLanguage}}</td>

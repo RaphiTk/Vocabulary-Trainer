@@ -21,7 +21,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let voc of filteredVocs; let i = index">
+    <tr *ngFor="let voc of filteredVocs; let i = index" (press)="vocPressed(voc)">
       <th scope="row">{{i + 1}}</th>
       <td>{{voc.primaryLanguage}}</td>
       <td>{{voc.secondaryLanguage}}</td>
