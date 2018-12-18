@@ -37,8 +37,7 @@ export class SiteMenuComponent implements OnInit {
   queryButtonPressed() {
     
     const dialogRef = this.dialog.open(DialogQueryChooseUnitComponent, {
-      width: '250px',
-      data: {}
+      width: '250px'
     });
 
     dialogRef.afterClosed().subscribe(result => {

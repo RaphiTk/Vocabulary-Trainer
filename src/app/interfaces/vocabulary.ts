@@ -28,4 +28,31 @@ export class Vocabulary implements IVocabulary{
         this.primaryLanguage = newPrimaryLanguage;
         this.secondaryLanguage = newSecondaryLanguage;
     }
+
+    setNewValues(newVocValues: Vocabulary) {
+        this.id = newVocValues.id;
+        this.tries = newVocValues.tries;
+        this.failuresCount = newVocValues.failuresCount;
+        this.clas = newVocValues.clas;
+        this.unit = newVocValues.unit;
+        this.primaryLanguage = newVocValues.primaryLanguage;
+        this.secondaryLanguage = newVocValues.secondaryLanguage;
+    }
+    
+    createNewObject() {
+        return new Vocabulary(this.id, this.tries, this.failuresCount, this.clas, this.unit, this.primaryLanguage, this.secondaryLanguage);
+    }
+
+    static createCorrectReferences(vocs) {
+        let newVocs: Vocabulary[] = new Array();
+        vocs.forEach(element => {
+            newVocs.push(new Vocabulary(element.id, element.tries, element.failuresCount, element.clas, element.unit, element.primaryLanguage, element.secondaryLanguage));
+        });
+        return newVocs;
+    }
+
+    static createCorrectReference(voc) {
+        return new Vocabulary(voc.id, voc.tries, voc.failuresCount, voc.clas, voc.unit, voc.primaryLanguage, voc.secondaryLanguage);
+    }
+
 }

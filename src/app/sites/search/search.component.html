@@ -21,8 +21,8 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let voc of filteredVocs">
-      <th scope="row">{{voc.id}}</th>
+    <tr *ngFor="let voc of filteredVocs; let i = index">
+      <th scope="row">{{i + 1}}</th>
       <td>{{voc.primaryLanguage}}</td>
       <td>{{voc.secondaryLanguage}}</td>
     </tr>

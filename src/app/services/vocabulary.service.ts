@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IVocabulary, Vocabulary } from '../interfaces/vocabulary';
 import { BaseService } from './base.service';
+import { query } from '@angular/core/src/render3';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +21,11 @@ export class VocabularyService extends BaseService {
     });
   }
 
+  editVocabulary(voc: Vocabulary) {
+    return this.connection.update({in: this.tableName, set: voc, where: {id: voc.id}})
+  }
+
   deleteVocabulary(voc: Vocabulary) {
-    console.log(voc);
     return this.connection.remove({ from: this.tableName, where: {id: voc.id}})
   }
 

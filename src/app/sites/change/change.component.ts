@@ -14,7 +14,7 @@ import { DialogChangeRemoveBottomSheetComponent } from "../../dialogs/dialog-cha
 export class SiteChangeComponent implements OnInit {
   unit: string;
   clas: string;
-  vocs: IVocabulary[];
+  vocs: Vocabulary[];
 
   constructor(public vocService: VocabularyService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog, public snackBar: MatSnackBar, private bottomSheet: MatBottomSheet) { 
     this.route.params.forEach((params: Params) => {
@@ -32,20 +32,18 @@ export class SiteChangeComponent implements OnInit {
 
   ngOnInit() {
     this.vocService.getVocsFromOneUnit(this.clas, this.unit)
-      .then((vocs)=> this.vocs = vocs);
+      .then((vocs)=> this.vocs = Vocabulary.createCorrectReferences(vocs));
   }
 
   itemPressed(voc) {
     const bottomSheetRef = this.bottomSheet.open(DialogChangeRemoveBottomSheetComponent, {
-      data: { voc },
+      data: voc
     });
 
-    bottomSheetRef.afterDismissed().subscribe(result => {
-      if (result) {
-        console.log(voc);
-        this.vocs.splice(this.vocs.indexOf(voc), 1);
-        this.vocService.getVocabularybyId(voc.id).then((newVocs: Vocabulary[]) => {newVocs.length !== 0 ? this.vocs.push(newVocs[0]) : null;})
-      }
+    bottomSheetRef.instance.promise.then(value => {
+      this.vocService.getVocabularybyId(voc.id).then((newVocs: Vocabulary[]) => {
+        newVocs.length == 0 ? this.vocs.splice(this.vocs.indexOf(voc), 1) : this.vocs[this.vocs.indexOf(voc)] = Vocabulary.createCorrectReference(newVocs[0]);
+      });    
     });
   }
 
@@ -58,7 +56,7 @@ export class SiteChangeComponent implements OnInit {
     
     const dialogRef = this.dialog.open(DialogAddVocabularyComponent, {
       width: '250px',
-      data: {voc}
+      data: voc
     });
 
     dialogRef.afterClosed().subscribe(result => {

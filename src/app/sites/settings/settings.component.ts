@@ -14,7 +14,7 @@ export class SiteSettingsComponent implements OnInit {
   @ViewChild("VarPrimaryLanguage") varPrimaryLanguageComponent;
   @ViewChild("VarSecondaryLanguage") varSecondaryLanguageComponent;
 
-  constructor(public snackbar: MatSnackBar) { }
+  constructor(public snackBar: MatSnackBar) { }
 
   ngOnInit() {
     var _this = this;
@@ -29,7 +29,7 @@ export class SiteSettingsComponent implements OnInit {
     let newSecondaryLanguage: string = this.varSecondaryLanguageComponent.getSecondaryLanguage();
     LocalStorageNamespace.newPrimaryLanguage(newPrimaryLanguage);
     LocalStorageNamespace.newSecondaryLanguage(newSecondaryLanguage);
-    this.snackbar.open("Languages successfully saved" , null, {duration:2000});
+    this.snackBar.open("Languages successfully saved" , null, {duration:2000});
   }
 
   getFile() {
@@ -49,7 +49,7 @@ export class SiteSettingsComponent implements OnInit {
           vocService.addVocabulary(newVoc);
         }
         let message = vocs.length + " Vocabularies successfully saved";
-        _this.snackbar.open(message , null, {duration:2000});
+        _this.snackBar.open(message , null, {duration:2000});
       }
       fr.readAsText(event.target.files[0]);
     }
