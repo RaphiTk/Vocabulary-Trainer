@@ -61,11 +61,10 @@ export class SiteChangeComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-        this.vocService.addVocabulary(result).then((newVocs) => this.vocs.push(newVocs[0]));
+        this.vocService.addVocabulary(result).then((newVocs) => this.vocs.push(Vocabulary.createCorrectReference(newVocs[0])));
         this.snackBar.open("Vocabulary successfully added", null, {duration: 2000})
       }
     });
-    
   }
-
+  
 }
