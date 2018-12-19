@@ -7,6 +7,17 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ng build --prod
 ngh --no-silent --cname=www.vocabulary-trainer.tk
 
+## Installed Frameworks
+
+ng add @angular/pwa  
+Google Fonts see src/index.html  
+jsstore: npm install jsstore --save
+
+## Todos
+
+adding login / signup page for sync over serveral devices
+turning app to an angular universal app
+
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
