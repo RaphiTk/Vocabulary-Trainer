@@ -30,6 +30,8 @@ import {DialogChangeRemoveBottomSheetComponent} from './dialogs/dialog-change-re
 import { DialogConfirmationComponent } from './dialogs/dialog-confirmation/dialog-confirmation.component';
 import { DialogEditVocabularyComponent } from './dialogs/dialog-edit-vocabulary/dialog-edit-vocabulary.component'
 //import { InitVocabularyService } from './services/vocabulary.service';
+import { AuthService } from './services/auth.service';
+import { CallbackComponent } from './frames/callback/callback.component';
 
 @NgModule({
   imports: [
@@ -97,9 +99,10 @@ import { DialogEditVocabularyComponent } from './dialogs/dialog-edit-vocabulary/
     DialogQueryFinalResultComponent,
     DialogChangeRemoveBottomSheetComponent,
     DialogConfirmationComponent,
-    DialogEditVocabularyComponent 
+    DialogEditVocabularyComponent,
+    CallbackComponent 
   ],
-  providers: [RestApiService/*, {
+  providers: [RestApiService, AuthService/*, {
     provide: APP_INITIALIZER,
     useFactory: InitVocabularyService,
     multi: true,

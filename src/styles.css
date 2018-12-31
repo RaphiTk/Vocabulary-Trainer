@@ -25,6 +25,7 @@ html *:not(i)
 
 .button {
 	position: relative;
+	overflow: hidden;
 	width: 80%;
 	display: block;
 	margin-left: auto;

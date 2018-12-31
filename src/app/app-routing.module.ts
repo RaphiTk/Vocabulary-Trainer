@@ -5,6 +5,7 @@ import { SiteMenuComponent } from './sites/menu/menu.component';
 import { SiteQueryComponent } from './sites/query/query.component';
 import { SiteChangeComponent } from './sites/change/change.component';
 import { SiteSettingsComponent } from './sites/settings/settings.component';
+import {CallbackComponent} from './frames/callback/callback.component';
 
 const routes: Routes = [
   { path: '', component: SiteMenuComponent},
@@ -12,9 +13,9 @@ const routes: Routes = [
   { path: 'query/:clas', component: SiteQueryComponent},
   { path: 'search', component: SiteSearchComponent},
   { path: 'change/:clas/:unit', component: SiteChangeComponent},
-  { path: 'settings', component: SiteSettingsComponent }/*,
-  
-{ path: '', redirectTo: '/menu', pathMatch: 'full'}*/];
+  { path: 'callback', component: CallbackComponent },
+  { path: 'settings', component: SiteSettingsComponent },
+  { path: '**', redirectTo: ''}];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

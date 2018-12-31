@@ -3,7 +3,9 @@ import { VarPrimaryLanguageComponent } from '../../frames/var-primary-language/v
 import { LocalStorageNamespace } from '../../services/local-storage.namespace';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { Vocabulary } from 'src/app/interfaces/vocabulary';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
+import { AuthService } from 'src/app/services/auth.service';
+import { DialogQueryChooseUnitComponent } from 'src/app/dialogs/dialog-query-choose-unit/dialog-query-choose-unit.component'
 
 @Component({
   selector: 'app-site-settings',
@@ -14,12 +16,12 @@ export class SiteSettingsComponent implements OnInit {
   @ViewChild("VarPrimaryLanguage") varPrimaryLanguageComponent;
   @ViewChild("VarSecondaryLanguage") varSecondaryLanguageComponent;
 
-  constructor(public snackBar: MatSnackBar) { }
+  constructor(public snackBar: MatSnackBar, public auth: AuthService, private dialog: MatDialog, private vocService: VocabularyService ) { }
 
   ngOnInit() {
     var _this = this;
-    document.getElementById("readFile").onchange = function(ev) {
-      _this.readFile(ev);
+    document.getElementById("importFile").onchange = function(ev) {
+      _this.importFile(ev);
     }
     
   }
@@ -32,12 +34,12 @@ export class SiteSettingsComponent implements OnInit {
     this.snackBar.open("Languages successfully saved" , null, {duration:2000});
   }
 
-  getFile() {
-    document.getElementById("readFile").click();
+  chooseFileToImport() {
+    document.getElementById("importFile").click();
   }
 
-  readFile(event)  {
-    const dataType = (<any>document.getElementById("readFile")).files.item(0).type;
+  importFile(event)  {
+    const dataType = (<any>document.getElementById("importFile")).files.item(0).type;
     let _this = this;
     if (dataType === "application/json") {
       let fr = new FileReader();
@@ -45,7 +47,12 @@ export class SiteSettingsComponent implements OnInit {
         let vocs:any[] = JSON.parse(<string>fr.result);
         let vocService: VocabularyService = new VocabularyService();
         for(let voc of vocs) {
-          let newVoc: Vocabulary = new Vocabulary(voc.id, voc.Versuche, voc.Fehlversuche, voc.Klasse, voc.Unit, voc.Wort_Deutsch, voc.Wort_Englisch);
+          let newVoc;
+          if (voc.Klasse != null) {
+            newVoc = new Vocabulary(voc.id, voc.Versuche, voc.Fehlversuche, voc.Klasse, voc.Unit, voc.Wort_Deutsch, voc.Wort_Englisch);
+          } else {
+            newVoc = new Vocabulary(voc.id, voc.tries, voc.failuresCount, voc.clas, voc.unit, voc.primaryLanguage, voc.secondaryLanguage);
+          }
           vocService.addVocabulary(newVoc);
         }
         let message = vocs.length + " Vocabularies successfully saved";
@@ -53,5 +60,37 @@ export class SiteSettingsComponent implements OnInit {
       }
       fr.readAsText(event.target.files[0]);
     }
+  }
+
+  chooseVocabularyToExport() {
+    const dialogRef = this.dialog.open(DialogQueryChooseUnitComponent, {
+      width: '250px',
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        if (result.unit === undefined || result.unit === null) {
+          this.vocService.getVocsFromOneClas(result.clas).then((vocResult:Vocabulary[]) => {this.startDownload(vocResult) });
+        } else {
+          this.vocService.getVocsFromOneUnit(result.clas, result.unit).then((vocResult:Vocabulary[]) => {this.startDownload(vocResult)})
+        }
+      }
+    });
+  }
+
+  startDownload(vocs: Vocabulary[]) {
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(vocs));
+    var downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href",     dataStr);
+    downloadAnchorNode.setAttribute("download", vocs[0].clas + ".json");
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  }
+
+  loginButtonPressed() {
+    //
+    this.auth.login();
   }
 }

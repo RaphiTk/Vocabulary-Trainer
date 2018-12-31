@@ -10,12 +10,14 @@ ngh --no-silent --cname=www.vocabulary-trainer.tk
 ## Installed Frameworks
 
 ng add @angular/pwa  
+ng add @angular/material
 Google Fonts see src/index.html  
 jsstore: npm install jsstore --save
 
 ## Todos
 
 adding login / signup page for sync over serveral devices
+Export Unit / class
 turning app to an angular universal app
 
 ## Code scaffolding

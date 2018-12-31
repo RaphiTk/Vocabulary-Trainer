@@ -3,6 +3,7 @@ import { SwUpdate } from '@angular/service-worker';
 import {RestApiService} from './services/rest-api.service';
 import { Router, RoutesRecognized, NavigationEnd } from '@angular/router';
 import {MatSnackBar} from '@angular/material';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,9 @@ export class AppComponent {
   //joke;
 
   newUpdate: boolean = false;
-  constructor(update: SwUpdate, private restApi: RestApiService, private router: Router, public snackBar: MatSnackBar) {
+  constructor(update: SwUpdate, private restApi: RestApiService, private router: Router, public snackBar: MatSnackBar, private auth: AuthService) {
+    auth.handleAuthentication();
+    
     document.ontouchstart = function(e){ 
       e.preventDefault(); 
     }
@@ -53,6 +56,10 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+      this.auth.renewSession();
+    }
+
     //this.deleteAddvertismentButton();
     //setTimeout(()=>this.deleteAddvertismentButton(),200);
     /*this.restApi.gimmeJokes().subscribe(res => {
