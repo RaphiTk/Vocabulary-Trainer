@@ -10,20 +10,19 @@ import { VocabularyService } from 'src/app/services/vocabulary.service';
 export class DialogQueryChooseUnitComponent {
   clasOptions = [{}];
   unitOptions = [{}];
-  data: ChoosenUnit = {} as ChoosenUnit;
-  allowUnitChange = false;
+  clasChoosen = false;
 
   constructor(
     public dialogRef: MatDialogRef<DialogQueryChooseUnitComponent>,
-    private vocService: VocabularyService) {
+    private vocService: VocabularyService, @Inject(MAT_DIALOG_DATA) public data) {
       vocService.getClases().then((classes) => {
         this.clasOptions = classes;
       }).catch(err => console.log("ERR", err));
   }
-    
+  
     clasChanged(): void {
       this.vocService.getUnits(this.data.clas).then((units) => {
-        this.allowUnitChange = true;
+        this.clasChoosen = true;
         this.unitOptions = units;
       }).catch(err => console.log("ERR", err));
     }

@@ -11,6 +11,8 @@ import { VocabularyService } from 'src/app/services/vocabulary.service';
 export class DialogChangeChooseUnitComponent {
   clasOptions = [{}];
   unitOptions = [{}];
+  unitChoosen = false;
+  clasChoosen = false;
 
   constructor(
     public dialogRef: MatDialogRef<DialogChangeChooseUnitComponent>,
@@ -33,5 +35,18 @@ export class DialogChangeChooseUnitComponent {
     this.vocService.getUnits(this.data.clas).then((units) => {
       this.unitOptions = units;
     }).catch(err => console.log("ERR", err));
+    if (this.data.clas != "") {
+      this.clasChoosen = true;
+    } else {
+      this.clasChoosen = false;
+    }
+  }
+
+  unitChanged(): void {
+    if (this.data.unit != "") {
+      this.unitChoosen = true;
+    } else {
+      this.unitChoosen = false;
+    }
   }
 }

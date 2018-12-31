@@ -21,6 +21,25 @@ export class VocabularyService extends BaseService {
     });
   }
 
+  addBulkVocabulary(vocs: Vocabulary[], index?) {
+    let resolveIt;
+    let promise = new Promise(function(resolve, reject) {  
+      resolveIt = resolve;
+    });
+    if (!index) {
+      index = 0
+    }
+    //vocs[index].id = null;
+    this.addVocabulary(vocs[index]).then(result => {
+      if (index + 1 == vocs.length) {
+        resolveIt();
+      } else {
+        this.addBulkVocabulary(vocs, index + 1).then(result => resolveIt());
+      }
+    })
+    return promise;
+  }
+
   editVocabulary(voc: Vocabulary) {
     return this.connection.update({in: this.tableName, set: voc, where: {id: voc.id}})
   }
@@ -42,7 +61,7 @@ export class VocabularyService extends BaseService {
   }
 
   getAllVocs(): Promise<any> {
-    return this.connection.select({ from: this.tableName, order: {by: this.colPrimaryLanguage, type: "asc", idbSorting: false }});
+    return this.connection.select({ from: this.tableName});
   }
 
   getVocsFromOneUnit(clas: string, unit:string): Promise<any> {

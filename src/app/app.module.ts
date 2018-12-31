@@ -32,6 +32,8 @@ import { DialogEditVocabularyComponent } from './dialogs/dialog-edit-vocabulary/
 //import { InitVocabularyService } from './services/vocabulary.service';
 import { AuthService } from './services/auth.service';
 import { CallbackComponent } from './frames/callback/callback.component';
+import { LoadingSpinnerComponent } from './frames/loading-spinner/loading-spinner.component';
+import { FullscreenOverlayContainer, OverlayContainer} from '@angular/cdk/overlay';
 
 @NgModule({
   imports: [
@@ -100,15 +102,16 @@ import { CallbackComponent } from './frames/callback/callback.component';
     DialogChangeRemoveBottomSheetComponent,
     DialogConfirmationComponent,
     DialogEditVocabularyComponent,
-    CallbackComponent 
+    CallbackComponent,
+    LoadingSpinnerComponent 
   ],
-  providers: [RestApiService, AuthService/*, {
+  providers: [RestApiService, AuthService, {provide: LoadingSpinnerComponent, useClass: FullscreenOverlayContainer}/*, {
     provide: APP_INITIALIZER,
     useFactory: InitVocabularyService,
     multi: true,
     deps: [ ]
 }*/],
   bootstrap: [AppComponent],
-  entryComponents: [DialogChangeChooseUnitComponent, DialogAddVocabularyComponent, DialogQueryChooseUnitComponent, DialogQueryCheckInputComponent, DialogQueryFinalResultComponent, DialogChangeRemoveBottomSheetComponent, DialogConfirmationComponent, DialogEditVocabularyComponent]
+  entryComponents: [DialogChangeChooseUnitComponent, DialogAddVocabularyComponent, DialogQueryChooseUnitComponent, DialogQueryCheckInputComponent, DialogQueryFinalResultComponent, DialogChangeRemoveBottomSheetComponent, DialogConfirmationComponent, DialogEditVocabularyComponent, LoadingSpinnerComponent]
 })
 export class AppModule { }

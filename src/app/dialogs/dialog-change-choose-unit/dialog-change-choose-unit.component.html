@@ -10,7 +10,7 @@
   <br>
   <p>Which unit you want to edit?</p>
   <mat-form-field>
-    <input required matInput [(ngModel)]="data.unit" [matAutocomplete]="autoUnit">
+    <input required matInput [(ngModel)]="data.unit" [matAutocomplete]="autoUnit" (ngModelChange)="unitChanged()">
   </mat-form-field>
   <mat-autocomplete #autoUnit="matAutocomplete">
     <mat-option *ngFor="let option2 of unitOptions" [value]="option2.unit">{{option2.unit}}</mat-option>
@@ -18,6 +18,6 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="cancelClicked()">Cancel</button>
-  <button mat-button (click)="okClicked()">Ok</button>
+  <button mat-button (click)="okClicked()" [disabled]="!clasChoosen || !unitChoosen">Ok</button>
 </div>
 

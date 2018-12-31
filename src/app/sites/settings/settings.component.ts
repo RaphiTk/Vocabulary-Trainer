@@ -6,6 +6,10 @@ import { Vocabulary } from 'src/app/interfaces/vocabulary';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import { AuthService } from 'src/app/services/auth.service';
 import { DialogQueryChooseUnitComponent } from 'src/app/dialogs/dialog-query-choose-unit/dialog-query-choose-unit.component'
+import { LoadingSpinnerComponent } from 'src/app/frames/loading-spinner/loading-spinner.component';
+import { Overlay} from '@angular/cdk/overlay';
+import { ComponentPortal} from '@angular/cdk/portal';
+
 
 @Component({
   selector: 'app-site-settings',
@@ -16,13 +20,9 @@ export class SiteSettingsComponent implements OnInit {
   @ViewChild("VarPrimaryLanguage") varPrimaryLanguageComponent;
   @ViewChild("VarSecondaryLanguage") varSecondaryLanguageComponent;
 
-  constructor(public snackBar: MatSnackBar, public auth: AuthService, private dialog: MatDialog, private vocService: VocabularyService ) { }
+  constructor(public snackBar: MatSnackBar, public auth: AuthService, private dialog: MatDialog, private vocService: VocabularyService, private overlay: Overlay ) { }
 
   ngOnInit() {
-    var _this = this;
-    document.getElementById("importFile").onchange = function(ev) {
-      _this.importFile(ev);
-    }
     
   }
 
@@ -35,28 +35,41 @@ export class SiteSettingsComponent implements OnInit {
   }
 
   chooseFileToImport() {
+    
+    var _this = this;
+    document.getElementById("importFile").onchange = function(ev) {
+      _this.importFile(ev);
+    }
     document.getElementById("importFile").click();
   }
 
   importFile(event)  {
+    const overlayRef = this.overlay.create({height: '100%', width: '100%'});
+    const userProfilePortal = new ComponentPortal(LoadingSpinnerComponent);
+    overlayRef.attach(userProfilePortal);
+
     const dataType = (<any>document.getElementById("importFile")).files.item(0).type;
     let _this = this;
     if (dataType === "application/json") {
       let fr = new FileReader();
       fr.onload = function(e) {
-        let vocs:any[] = JSON.parse(<string>fr.result);
-        let vocService: VocabularyService = new VocabularyService();
-        for(let voc of vocs) {
-          let newVoc;
-          if (voc.Klasse != null) {
-            newVoc = new Vocabulary(voc.id, voc.Versuche, voc.Fehlversuche, voc.Klasse, voc.Unit, voc.Wort_Deutsch, voc.Wort_Englisch);
-          } else {
-            newVoc = new Vocabulary(voc.id, voc.tries, voc.failuresCount, voc.clas, voc.unit, voc.primaryLanguage, voc.secondaryLanguage);
+        let readVocs:any[] = JSON.parse(<string>fr.result);
+        let addVocs: Vocabulary[] = Array();
+        if (readVocs[0].Klasse != null) {
+          for(let voc of readVocs) {
+            if (voc.Klasse != null) {
+              addVocs.push(new Vocabulary(voc.id, voc.Versuche, voc.Fehlversuche, voc.Klasse, voc.Unit, voc.Wort_Deutsch, voc.Wort_Englisch));
+            }
           }
-          vocService.addVocabulary(newVoc);
+        } else {
+          addVocs = readVocs;
         }
-        let message = vocs.length + " Vocabularies successfully saved";
-        _this.snackBar.open(message , null, {duration:2000});
+        _this.vocService.addBulkVocabulary(addVocs).then(result => {
+          overlayRef.dispose();
+          let message = addVocs.length + " Vocabularies successfully saved";
+          _this.snackBar.open(message , null, {duration:2000});
+        })
+
       }
       fr.readAsText(event.target.files[0]);
     }
@@ -65,7 +78,7 @@ export class SiteSettingsComponent implements OnInit {
   chooseVocabularyToExport() {
     const dialogRef = this.dialog.open(DialogQueryChooseUnitComponent, {
       width: '250px',
-      data: {}
+      data: {reason: "export"}
     });
 
     dialogRef.afterClosed().subscribe(result => {
