@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { VocabularyService } from '../../services/vocabulary.service';
+import { VocabularyDbService } from '../../services/vocabulary-db.service';
 import { IVocabulary } from '../../interfaces/vocabulary';
 import {MatDialog} from '@angular/material';
 import { DialogQueryCheckInputComponent } from 'src/app/dialogs/dialog-query-check-input/dialog-query-check-input.component';
@@ -20,7 +20,7 @@ export class SiteQueryComponent implements OnInit {
   private failures: number = 0;
   public index:number = 0;
 
-  constructor(public vocService: VocabularyService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog) { 
+  constructor(public vocService: VocabularyDbService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog) { 
     this.route.params.forEach((params: Params) => {
       if (params['unit'] !== undefined) {
         this.unit = params['unit'];

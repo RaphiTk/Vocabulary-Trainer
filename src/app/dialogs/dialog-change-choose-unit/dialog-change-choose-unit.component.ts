@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ChoosenUnit } from '../../interfaces/choosen-unit';
-import { VocabularyService } from 'src/app/services/vocabulary.service';
+import { VocabularyDbService } from 'src/app/services/vocabulary-db.service';
 
 @Component({
   selector: 'app-dialog-change-choose-unit',
@@ -17,7 +17,7 @@ export class DialogChangeChooseUnitComponent {
   constructor(
     public dialogRef: MatDialogRef<DialogChangeChooseUnitComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ChoosenUnit,
-     private vocService: VocabularyService) {
+     private vocService: VocabularyDbService) {
       vocService.getClases().then((classes) => {
         this.clasOptions = classes;
       }).catch(err => console.log("ERR", err));

@@ -6,7 +6,7 @@ import {  IDataBase,  DATA_TYPE,  ITable } from 'jsstore';
 @Injectable({
   providedIn: 'root'
 })
-export class BaseService {
+export class InitDbService {
 
   private dbName = "Ts_Vocabulary";
   protected tableName = "Vocabulary";

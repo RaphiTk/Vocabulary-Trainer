@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { VarPrimaryLanguageComponent } from '../../frames/var-primary-language/var-primary-language.component';
 import { LocalStorageNamespace } from '../../services/local-storage.namespace';
-import { VocabularyService } from 'src/app/services/vocabulary.service';
+import { VocabularyDbService } from 'src/app/services/vocabulary-db.service';
 import { Vocabulary } from 'src/app/interfaces/vocabulary';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import { AuthService } from 'src/app/services/auth.service';
@@ -9,6 +9,7 @@ import { DialogQueryChooseUnitComponent } from 'src/app/dialogs/dialog-query-cho
 import { LoadingSpinnerComponent } from 'src/app/frames/loading-spinner/loading-spinner.component';
 import { Overlay} from '@angular/cdk/overlay';
 import { ComponentPortal} from '@angular/cdk/portal';
+import { VocabularyRestService } from 'src/app/services/vocabulary-rest.service';
 
 
 @Component({
@@ -20,10 +21,11 @@ export class SiteSettingsComponent implements OnInit {
   @ViewChild("VarPrimaryLanguage") varPrimaryLanguageComponent;
   @ViewChild("VarSecondaryLanguage") varSecondaryLanguageComponent;
 
-  constructor(public snackBar: MatSnackBar, public auth: AuthService, private dialog: MatDialog, private vocService: VocabularyService, private overlay: Overlay ) { }
+  constructor(public snackBar: MatSnackBar, public auth: AuthService, private dialog: MatDialog, private vocService: VocabularyDbService, private overlay: Overlay, private rest: VocabularyRestService ) { }
 
   ngOnInit() {
-    
+    console.log(this.auth.accessToken);
+    console.log(this.auth.idToken);
   }
 
   saveButtonPressed() {
@@ -90,6 +92,14 @@ export class SiteSettingsComponent implements OnInit {
         }
       }
     });
+  }
+
+  test() {
+    this.rest.getPrivate();
+  }
+
+  testPublic() {
+    this.rest.getPublic();
   }
 
   startDownload(vocs: Vocabulary[]) {

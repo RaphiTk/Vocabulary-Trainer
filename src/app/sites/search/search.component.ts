@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { VocabularyService } from '../../services/vocabulary.service';
+import { VocabularyDbService } from '../../services/vocabulary-db.service';
 import { Vocabulary } from '../../interfaces/vocabulary';
 import { MatBottomSheet } from '@angular/material';
 import { DialogChangeRemoveBottomSheetComponent } from "../../dialogs/dialog-change-remove-bottom-sheet/dialog-change-remove-bottom-sheet.component";
@@ -16,7 +16,7 @@ export class SiteSearchComponent implements OnInit {
   vocs: Vocabulary[];
   filteredVocs: Vocabulary[];
 
-  constructor(public vocService: VocabularyService, private bottomSheet: MatBottomSheet, private overlay: Overlay) { }
+  constructor(public vocService: VocabularyDbService, private bottomSheet: MatBottomSheet, private overlay: Overlay) { }
 
   ngOnInit() {
     let overlayRef;

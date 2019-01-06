@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA, MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import { Vocabulary } from 'src/app/interfaces/vocabulary';
 import { DialogConfirmationComponent } from '../dialog-confirmation/dialog-confirmation.component';
-import { VocabularyService } from 'src/app/services/vocabulary.service';
+import { VocabularyDbService } from 'src/app/services/vocabulary-db.service';
 import { DialogEditVocabularyComponent } from '../dialog-edit-vocabulary/dialog-edit-vocabulary.component';
 
 @Component({
@@ -14,7 +14,7 @@ export class DialogChangeRemoveBottomSheetComponent {
   public promise;
   private resolve;
 
-  constructor(public snackBar: MatSnackBar, private bottomSheetRef: MatBottomSheetRef<DialogChangeRemoveBottomSheetComponent>, @Inject(MAT_BOTTOM_SHEET_DATA) public voc: any, public dialog: MatDialog, public vocService: VocabularyService) {
+  constructor(public snackBar: MatSnackBar, private bottomSheetRef: MatBottomSheetRef<DialogChangeRemoveBottomSheetComponent>, @Inject(MAT_BOTTOM_SHEET_DATA) public voc: any, public dialog: MatDialog, public vocService: VocabularyDbService) {
     let _this = this
     this.promise = new Promise(function(resolve, reject) {  
       _this.resolve = resolve;

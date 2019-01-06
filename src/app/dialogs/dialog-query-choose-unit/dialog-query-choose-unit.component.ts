@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ChoosenUnit } from '../../interfaces/choosen-unit';
-import { VocabularyService } from 'src/app/services/vocabulary.service';
+import { VocabularyDbService } from 'src/app/services/vocabulary-db.service';
 @Component({
   selector: 'app-dialog-query-choose-unit',
   templateUrl: './dialog-query-choose-unit.component.html',
@@ -14,7 +14,7 @@ export class DialogQueryChooseUnitComponent {
 
   constructor(
     public dialogRef: MatDialogRef<DialogQueryChooseUnitComponent>,
-    private vocService: VocabularyService, @Inject(MAT_DIALOG_DATA) public data) {
+    private vocService: VocabularyDbService, @Inject(MAT_DIALOG_DATA) public data) {
       vocService.getClases().then((classes) => {
         this.clasOptions = classes;
       }).catch(err => console.log("ERR", err));

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import {RestApiService} from './services/rest-api.service';
+import {VocabularyRestService} from './services/vocabulary-rest.service';
 import { Router, RoutesRecognized, NavigationEnd } from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 import { AuthService } from './services/auth.service';
@@ -16,7 +16,7 @@ export class AppComponent {
   //joke;
 
   newUpdate: boolean = false;
-  constructor(update: SwUpdate, private restApi: RestApiService, private router: Router, public snackBar: MatSnackBar, private auth: AuthService) {
+  constructor(update: SwUpdate, private restApi: VocabularyRestService, private router: Router, public snackBar: MatSnackBar, private auth: AuthService) {
     auth.handleAuthentication();
     
     document.ontouchstart = function(e){ 

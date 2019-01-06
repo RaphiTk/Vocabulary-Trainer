@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Vocabulary } from 'src/app/interfaces/vocabulary';
-import { VocabularyService } from 'src/app/services/vocabulary.service';
+import { VocabularyDbService } from 'src/app/services/vocabulary-db.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 
 @Component({
@@ -15,7 +15,7 @@ export class DialogEditVocabularyComponent {
   constructor(
     public dialogRef: MatDialogRef<DialogEditVocabularyComponent>,
     @Inject(MAT_DIALOG_DATA) public voc: Vocabulary,
-     private vocService: VocabularyService, private snackBar: MatSnackBar) {  
+     private vocService: VocabularyDbService, private snackBar: MatSnackBar) {  
        this.data = voc.createNewObject();
        dialogRef.beforeClosed().subscribe(res => {
           if (!this.saved)

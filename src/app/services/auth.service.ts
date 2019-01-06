@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import * as auth0 from 'auth0-js';
 import { environment } from 'src/environments/environment';
+import { VocabularyRestService } from 'src/app/services/vocabulary-rest.service'
 
 @Injectable()
 export class AuthService {
@@ -10,6 +11,7 @@ export class AuthService {
   private _idToken: string;
   private _accessToken: string;
   private _expiresAt: number;
+  private firstLogin: boolean = false;
 
   auth0 = new auth0.WebAuth({
     clientID: environment.auth.CLIENT_ID,
@@ -19,7 +21,7 @@ export class AuthService {
     scope: 'openid'
   });
 
-  constructor(public router: Router) {
+  constructor(public router: Router, private vocApi: VocabularyRestService) {
     this._idToken = '';
     this._accessToken = '';
     this._expiresAt = 0;
@@ -34,17 +36,24 @@ export class AuthService {
   }
 
   public login(): void {
+    this.firstLogin = true;
     this.auth0.authorize();
   }
 
   public handleAuthentication(): void {
     this.auth0.parseHash((err, authResult) => {
+      console.log(authResult);
       if (authResult && authResult.accessToken && authResult.idToken) {
         window.location.hash = '';
         this.setSession(authResult);
-        this.router.navigate(['/home']);
+        this.vocApi.handleServiceStart();
+        
+        //this.router.navigate(['/home']);
       } else if (err) {
-        this.router.navigate(['/home']);
+        if(this.auth0.callback) {
+
+        }
+        //this.router.navigate(['/home']);
         console.log(err);
       }
     });

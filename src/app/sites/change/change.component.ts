@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { VocabularyService } from '../../services/vocabulary.service';
+import { VocabularyDbService } from '../../services/vocabulary-db.service';
 import { IVocabulary, Vocabulary } from '../../interfaces/vocabulary';
 import {MatDialog, MatSnackBar, MatBottomSheet, MatBottomSheetRef} from '@angular/material';
 import { DialogAddVocabularyComponent } from "../../dialogs/dialog-add-vocabulary/dialog-add-vocabulary.component";
@@ -16,7 +16,7 @@ export class SiteChangeComponent implements OnInit {
   clas: string;
   vocs: Vocabulary[];
 
-  constructor(public vocService: VocabularyService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog, public snackBar: MatSnackBar, private bottomSheet: MatBottomSheet) { 
+  constructor(public vocService: VocabularyDbService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog, public snackBar: MatSnackBar, private bottomSheet: MatBottomSheet) { 
     this.route.params.forEach((params: Params) => {
       if (params['unit'] !== undefined) {
         this.unit = params['unit'];

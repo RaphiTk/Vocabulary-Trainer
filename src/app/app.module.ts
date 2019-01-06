@@ -11,7 +11,7 @@ import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatAutocompleteModule,  MatBadgeModule,  MatBottomSheetModule,  MatButtonToggleModule,  MatCardModule,  MatChipsModule,  MatDatepickerModule,  MatDialogModule,  MatDividerModule,  MatExpansionModule,  MatGridListModule,  MatIconModule,  MatInputModule,  MatListModule,  MatMenuModule,  MatNativeDateModule,  MatPaginatorModule,  MatProgressBarModule,  MatProgressSpinnerModule,  MatRadioModule,  MatRippleModule,  MatSelectModule,  MatSidenavModule,  MatSliderModule,  MatSlideToggleModule,  MatSnackBarModule,  MatSortModule,  MatStepperModule,  MatTableModule,  MatTabsModule,  MatToolbarModule,  MatTooltipModule,  MatTreeModule,} from '@angular/material';
 
-import { RestApiService } from './services/rest-api.service';
+import { VocabularyRestService } from './services/vocabulary-rest.service';
 import { SiteSearchComponent } from './sites/search/search.component';
 import { SiteMenuComponent } from './sites/menu/menu.component';
 import { SiteQueryComponent } from './sites/query/query.component';
@@ -105,7 +105,7 @@ import { FullscreenOverlayContainer, OverlayContainer} from '@angular/cdk/overla
     CallbackComponent,
     LoadingSpinnerComponent 
   ],
-  providers: [RestApiService, AuthService, {provide: LoadingSpinnerComponent, useClass: FullscreenOverlayContainer}/*, {
+  providers: [VocabularyRestService, AuthService, {provide: LoadingSpinnerComponent, useClass: FullscreenOverlayContainer}/*, {
     provide: APP_INITIALIZER,
     useFactory: InitVocabularyService,
     multi: true,

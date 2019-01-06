@@ -58,7 +58,16 @@
   </span>
 </div>
 <br>
-
+<div class="button" *ngIf="auth.isAuthenticated()" (click)="test()">
+  <span class="buttonText">
+    Test
+  </span>
+</div>
+<div class="button" (click)="testPublic()">
+    <span class="buttonText">
+      Test Public
+    </span>
+  </div>
 
 <script type="text/javascript">
   window.onload = function() {

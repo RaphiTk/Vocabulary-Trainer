@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { IVocabulary, Vocabulary } from '../interfaces/vocabulary';
-import { BaseService } from './base.service';
+import { InitDbService } from './init-db.service';
 import { query } from '@angular/core/src/render3';
 
 @Injectable({
   providedIn: 'root'
 })
-export class VocabularyService extends BaseService {
+export class VocabularyDbService extends InitDbService {
   static db;
 
   constructor() {
