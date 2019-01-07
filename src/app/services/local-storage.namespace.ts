@@ -59,4 +59,9 @@ export namespace LocalStorageNamespace {
   export function setLocalSavedActions(actions: IAction[]) {
     localStorage.setItem(localStorageSavedActionsKey, JSON.stringify(actions));
   }
+
+  export function addCountSynchronizedActions(toAdd: number) {
+    let newCount = getCountSynchronisedActions() + toAdd;
+    localStorage.setItem(localStorageCountSynchronisedActionsKey, newCount+"");
+  }
 }

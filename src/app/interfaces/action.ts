@@ -20,6 +20,20 @@ export class Action implements IAction {
         this.vocabularyBeforeAction = vocabularyBeforeAction;
         this.vocabularyAfterAction = vocabularyAfterAction;
     }
+
+    static findReverseMethod(params:ActionMethod): ActionMethod {
+        switch (params) {
+            case ActionMethod.ADD:
+                return ActionMethod.DELETE;
+                break;
+            case ActionMethod.UPDATE:
+                return ActionMethod.UPDATE;
+                break;
+            case ActionMethod.DELETE:
+                return ActionMethod.ADD;
+                break;
+        }
+    }
 }
 
 export enum ActionMethod {

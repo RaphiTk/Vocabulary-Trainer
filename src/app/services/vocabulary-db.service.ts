@@ -4,15 +4,15 @@ import { InitDbService } from './init-db.service';
 import { query } from '@angular/core/src/render3';
 import { VocabularyRestService } from './vocabulary-rest.service';
 import { ActionMethod } from '../interfaces/action';
+import { DbFunctionService } from '../services/db-function.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class VocabularyDbService extends InitDbService {
-  static db;
+export class VocabularyDbService {
 
-  constructor(private vocRestService: VocabularyRestService) {
-    super(); 
+  constructor(private vocRestService: VocabularyRestService, private dbFunctions: DbFunctionService) {
+    
   }
 
   addVocabulary(voc: IVocabulary) {
@@ -23,7 +23,7 @@ export class VocabularyDbService extends InitDbService {
 
     });
     
-    this.insertVocabulary(voc).then(result => {
+    this.dbFunctions.insertVocabularyJustDb(voc).then(result => {
       this.vocRestService.postAction(ActionMethod.ADD, null, result[0]);
       resolveIt(result);
     }).catch(err => {
@@ -31,14 +31,6 @@ export class VocabularyDbService extends InitDbService {
     })
 
     return promise;
-  }
-
-  private insertVocabulary(voc: IVocabulary) {
-    return this.connection.insert<IVocabulary>({
-      into: this.tableName,
-      return: true,
-      values: [voc]
-    });
   }
 
   //By Bulk Insert First all Insert and then push the actions with one request to the server
@@ -50,7 +42,7 @@ export class VocabularyDbService extends InitDbService {
 
     });
     
-    this.insertVocabulary(voc).then(result => {
+    this.dbFunctions.insertVocabularyJustDb(voc).then(result => {
       this.vocRestService.saveActionForLaterPush(ActionMethod.ADD, null, result[0]);
       resolveIt(result);
     }).catch(err => {
@@ -71,6 +63,7 @@ export class VocabularyDbService extends InitDbService {
     
     this.bulkInserVocabulary(vocs[index]).then(result => {
       if (index + 1 == vocs.length) {
+        //TODO: push to server
         resolveIt();
       } else {
         this.addBulkVocabulary(vocs, index + 1).then(result => resolveIt());
@@ -80,15 +73,14 @@ export class VocabularyDbService extends InitDbService {
   }
 
   editVocabulary(voc: Vocabulary) {
-    let resolveIt;
-    let rejectIt;
+    let resolveIt, rejectIt;
     let promise = new Promise(function(resolve, reject) {  
       resolveIt = resolve;
     });
     
     this.getVocabularybyId(voc.id).then(oldresult => {
       console.log("oldResult", oldresult[0])
-      this.connection.update({in: this.tableName, set: voc, where: {id: voc.id}}).then(result => {
+      this.dbFunctions.updateVocabularyJustDb(voc).then(result => {
         this.vocRestService.postAction(ActionMethod.UPDATE, oldresult[0] as IVocabulary, voc);
         resolveIt(result);
       }).catch(err => {
@@ -100,14 +92,12 @@ export class VocabularyDbService extends InitDbService {
   }
 
   deleteVocabulary(voc: Vocabulary) {
-
-    let resolveIt;
-    let rejectIt;
+    let resolveIt, rejectIt;
     let promise = new Promise(function(resolve, reject) {  
       resolveIt = resolve;
     });
     
-    this.connection.remove({ from: this.tableName, where: {id: voc.id}}).then(result => {
+    this.dbFunctions.deleteVocabularyJustDb(voc).then(result => {
         this.vocRestService.postAction(ActionMethod.DELETE, voc, null);
         resolveIt(result);
       }).catch(err => {
@@ -118,27 +108,27 @@ export class VocabularyDbService extends InitDbService {
   }
 
   getClases() {
-    return this.connection.select({ from: this.tableName, groupBy: this.colClas, order: {by: this.colClas, type: "asc", idbSorting: false}});
+    return this.dbFunctions.getClases();
   }
 
   getUnits(clas: String) {
-    return this.connection.select({from: this.tableName, where: {clas: clas}, groupBy: this.colUnit, order: {by: this.colUnit, type: "asc", idbSorting: false}})
+    return this.dbFunctions.getUnits(clas);
   }
 
   getVocabularybyId(id: Number) {
-    return this.connection.select({from: this.tableName, where: {id: id}})
+    return this.dbFunctions.getVocabularybyId(id);
   }
 
   getAllVocs(): Promise<any> {
-    return this.connection.select({ from: this.tableName});
+    return this.dbFunctions.getAllVocs();
   }
 
   getVocsFromOneUnit(clas: string, unit:string): Promise<any> {
-    return this.connection.select({from: this.tableName, where: {clas: clas, unit: unit}, order: {by: this.colId, type: "ASC", idbSorting: false}})
+    return this.dbFunctions.getVocsFromOneUnit(clas, unit);
   }
 
   getVocsFromOneClas(clas: string): Promise<any> {
-    return this.connection.select({from: this.tableName, where: {clas: clas}, order: {by: this.colId, type: "ASC", idbSorting: false}})
+    return this.dbFunctions.getVocsFromOneClas(clas);
   }
 
 }
