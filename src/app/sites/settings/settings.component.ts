@@ -37,7 +37,6 @@ export class SiteSettingsComponent implements OnInit {
   }
 
   chooseFileToImport() {
-    
     var _this = this;
     document.getElementById("importFile").onchange = function(ev) {
       _this.importFile(ev);
@@ -92,14 +91,6 @@ export class SiteSettingsComponent implements OnInit {
         }
       }
     });
-  }
-
-  test() {
-    this.rest.getPrivate();
-  }
-
-  testPublic() {
-    this.rest.getPublic();
   }
 
   startDownload(vocs: Vocabulary[]) {

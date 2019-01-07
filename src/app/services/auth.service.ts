@@ -21,7 +21,7 @@ export class AuthService {
     scope: 'openid'
   });
 
-  constructor(public router: Router, private vocApi: VocabularyRestService) {
+  constructor(public router: Router) {
     this._idToken = '';
     this._accessToken = '';
     this._expiresAt = 0;
@@ -43,17 +43,12 @@ export class AuthService {
   public handleAuthentication(): void {
     this.auth0.parseHash((err, authResult) => {
       console.log(authResult);
+      console.log(err);
       if (authResult && authResult.accessToken && authResult.idToken) {
-        window.location.hash = '';
         this.setSession(authResult);
-        this.vocApi.handleServiceStart();
-        
-        //this.router.navigate(['/home']);
+        this.router.navigate(['/callback'], { queryParams: { finished: 'true' } });
       } else if (err) {
-        if(this.auth0.callback) {
-
-        }
-        //this.router.navigate(['/home']);
+        this.router.navigate(['/callback'], { queryParams: { finished: 'true' } });
         console.log(err);
       }
     });

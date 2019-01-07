@@ -1,3 +1,5 @@
+import { IAction } from "../interfaces/action";
+
 export namespace LocalStorageNamespace {
   const defaultPrimaryLanguage: string = "German";
   export const localStoragePrimaryLanguageKey: string = "PrimaryLanguage";
@@ -5,9 +7,11 @@ export namespace LocalStorageNamespace {
   export const localStorageSecondaryLanguageKey: string = "SecondaryLanguage";
   const defaultCountSynchronisedActions: number = 0;
   const localStorageCountSynchronisedActionsKey: string = "CountSynchronisedActions";
+  export const defaultSavedActions = [];
+  const localStorageSavedActionsKey: string = "LocalSavedActions"
 
   export function getPrimaryLanguage() {
-    let local: string = localStorage.getItem(this.localStoragePrimaryLanguageKey);
+    let local: string = localStorage.getItem(localStoragePrimaryLanguageKey);
     if (local === null || local === undefined) {
       local = defaultPrimaryLanguage;
     }
@@ -20,7 +24,7 @@ export namespace LocalStorageNamespace {
   }
 
   export function getSecondaryLanguage() {
-    let local: string = localStorage.getItem(this.localStorageSecondaryLanguageKey);
+    let local: string = localStorage.getItem(localStorageSecondaryLanguageKey);
     if (local === null || local === undefined) {
       local = defaultSecondaryLanguage;
     }
@@ -33,12 +37,26 @@ export namespace LocalStorageNamespace {
   }
 
   export function getCountSynchronisedActions(): number {
-    let local: string | number = localStorage.getItem(this.localStorageCountSynchronisedActionsKey);
+    let local: string | number = localStorage.getItem(localStorageCountSynchronisedActionsKey);
     if (local === null || local === undefined) {
-      local = this.defaultCountSynchronisedActions;
+      local = defaultCountSynchronisedActions;
     } else {
       local = +local;
     }
     return local as number;
+  }
+
+  export function getLocalSavedActions(): IAction[] {
+    let local: string | IAction[] = localStorage.getItem(localStorageSavedActionsKey);
+    if (local === null || local === undefined) {
+      local = defaultSavedActions;
+    } else {
+      local = JSON.parse(local);
+    }
+    return local as IAction[];
+  }
+
+  export function setLocalSavedActions(actions: IAction[]) {
+    localStorage.setItem(localStorageSavedActionsKey, JSON.stringify(actions));
   }
 }

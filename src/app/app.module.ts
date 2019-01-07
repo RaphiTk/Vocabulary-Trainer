@@ -103,7 +103,7 @@ import { FullscreenOverlayContainer, OverlayContainer} from '@angular/cdk/overla
     DialogConfirmationComponent,
     DialogEditVocabularyComponent,
     CallbackComponent,
-    LoadingSpinnerComponent 
+    LoadingSpinnerComponent,
   ],
   providers: [VocabularyRestService, AuthService, {provide: LoadingSpinnerComponent, useClass: FullscreenOverlayContainer}/*, {
     provide: APP_INITIALIZER,
