@@ -1,47 +1,70 @@
 # Vocabulary Trainer
-
+  
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.4.
-
+  
 ## Deploy
-
+  
 ng build --prod
 ngh --no-silent --cname=www.vocabulary-trainer.tk
-
+  
 ## Installed Frameworks
-
-ng add @angular/pwa  
+  
+ng add @angular/pwa
 ng add @angular/material
-Google Fonts see src/index.html  
+Google Fonts see src/index.html
 jsstore: npm install jsstore --save
-
+  
 ## Todos
-
+  
 (check) adding login / signup page for sync over serveral devices
 (check) Export Unit / class
 (doing at the moment) adding sync functionality
-turning app to an angular universal app
-
+Refactoring
+(optional) turning app to an angular universal app
+  
 ## Code scaffolding
-
+  
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
+  
 ## Further help
-
+  
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+  
+## The sync process
+  
+### Definition of Action
 
-##The sync process
+An Action in the context of this project is a modify operation (Insert, Update or Delete) forced by the user on a device. This action then must be synced through the several devices the user may have.
 
-###Workflow
-
-1. We get the server Actions from the Rest Service (just the actions since last sync --> so just the actions from other devices)
+### Workflow
+  
+1. We get the server Actions from the Rest Service (just the actions since the last sync --> so just the actions from other devices)
 2. We undo the local Actions (newest to oldest)
 3. We perform the server Actions
-4. For Version 2: Performance Improvements --> we perform not all actions (e.g. 2 Update Actions on 1 Vocabulary --> just the 2. Upadate is done, the first is discarded) 
-5. We redo the local Actions (maybe not all actions can be done, e.g. the server Action deleted a Vocabulary. After this a update of course not works anymore. These actions are discarted)
+4. For Version 2: Performance Improvements --> we perform not all actions (e.g. 2 Update Actions on 1 Vocabulary --> just the 2. Update is done, the first is discarded)
+5. We redo the local Actions (maybe not all actions can be done, e.g. the server Action deleted a Vocabulary. After this an update of course not works anymore. These actions are discarded)
 6. We publish the local Actions to the server
-   
-###Challenges & Rules 
-
-1. Through the server Actions, the deleted and then readded Vocabularies (local Actions with method "ADD") will have another Id after the insert --> if afterwards a update on this vocabulary is done, the id there must also be changed, that the action is performed on the correct Vocabulary.
+### Challenges & Rules
+  
+1. Through the server Actions, the deleted and then readded Vocabularies (local Actions with the method "ADD") will have another Id after the insert --> if afterwards an update on this vocabulary is done, the id there must also be changed, that the action is performed on the correct Vocabulary.
 2. Through the server Actions, a vocabulary could be deleted --> The Update must be discarded
-...
+3. ...
+  
+### Defined Test Cases
+  
+| Id | Requirements | Test Case | Expected Output | Current Output | Result | 
+|----|--------------|-----------|-----------------|----------------|--------|
+| 1  | no actions on server; no vocabularies on device; device not synced | add Vocabulary; sync device | Action should be synced to the server | Action is synced to the server | ✓ |
+| 2  | no actions on server; no vocabularies on device; device not synced | add Vocabulary; update vocabulary; sync device | 2 Actions (ADD, UPDATE) should be synced to the server | 2 Actions (ADD, UPDATE) are synced to the server | ✓ |
+| 3  | no actions on server; no vocabularies on device; device not synced | add Vocabulary; delete vocabulary; sync device | 2 Actions (ADD, DELETE) should be synced to the server | 2 Actions are synced to the server | ✓ |
+| 4  | Situation after Test Case 2 | add Vocabulary | 1 Action (ADD) should be synced to the server | 1 Action (ADD) is synced to the server | ✓ |
+| 5  | Situation after Test Case 2 | update vocabulary | 1 Action (UPDATE) should be synced to the server | 1 Action (UPDATE) is synced to the server | ✓ |
+| 6  | Situation after Test Case 2 | delete vocabulary | 1 Action (DELETE) should be synced to the server | 1 Action is synced to the server | ✓ |
+| 7 | 2 actions on server (ADD, UPDATE), the first action is already synced with the device | add vocabulary | the update from the server should be done and then the new vocabulary be added; on the server should be 3 actions at the end | | ❌ |
+| 8 | 2 actions on server (ADD, UPDATE), the first action is already synced with the device | update vocabulary | the update from the server should be done and then the vocabulary should be edited the second time; on the server should be 3 actions at the end | | ❌ |
+| 9 | 2 actions on server (ADD, UPDATE), the first action is already synced with the device | delete vocabulary | the update from the server should be done and then the vocabulary should be deleted --> no vocabulary at the end on the device; on the server should be 3 actions at the end | | ❌ |
+| 10 | 2 actions on server (ADD, ADD), the first action is already synced with the device | add vocabulary | the add from the server should be done (with same id than on server) and then should be the local add be done (with new id); on the server should be 3 actions at the end | | ❌ |
+| 10 | 2 actions on server (ADD, ADD), the first action is already synced with the device | add vocabulary + update added vocabulary | the add from the server should be done (with same id than on server) and then should be the local add be done (with new id); the id in the update action must be changed on the third add and then be done; on the server should be 4 actions at the end | | ❌ | 
+| 11 | 2 actions on server (ADD, ADD), the first action is already synced with the device | add vocabulary + delete added vocabulary | the add from the server should be done (with same id than on server) and then should be the local add be done (with new id); the id in the delete action must be changed so that the third vocabulary is be deleted; on the server should be 4 actions at the end OR the 2 actions should be discarded (so dont readd the voc and then delete it) | | ❌ |  
+| 12 | no actions on server, device is synced| import vocabularies | All the actions should be at the end synced to the server (Test over 2nd device, synced, no vocabularies at the beginning) | | ❌ | 
+| 13 | | | | // 30 mixed actions on the server, device not synced, 10 local actions (ADD, UPDATE, DELETE) / sync device / the vocabularies from the other device should be now also on the new device + the additional vocabularies from the local actions; on the server should be 40 actions

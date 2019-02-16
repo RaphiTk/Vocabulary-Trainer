@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+        <title>Vocabulary Trainer</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        <link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'HelveticaNeue-Light', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+    </head>
+    <body>
+        <h1 id="vocabulary-trainer">Vocabulary Trainer</h1>
+<p>This project was generated with <a href="https://github.com/angular/angular-cli">Angular CLI</a> version 7.0.4.</p>
+<h2 id="deploy">Deploy</h2>
+<p>ng build --prod
+ngh --no-silent --cname=<a href="http://www.vocabulary-trainer.tk">www.vocabulary-trainer.tk</a></p>
+<h2 id="installed-frameworks">Installed Frameworks</h2>
+<p>ng add @angular/pwa
+ng add @angular/material
+Google Fonts see src/index.html
+jsstore: npm install jsstore --save</p>
+<h2 id="todos">Todos</h2>
+<p>(check) adding login / signup page for sync over serveral devices
+(check) Export Unit / class
+(doing at the moment) adding sync functionality
+Refactoring
+(optional) turning app to an angular universal app</p>
+<h2 id="code-scaffolding">Code scaffolding</h2>
+<p>Run <code>ng generate component component-name</code> to generate a new component. You can also use <code>ng generate directive|pipe|service|class|guard|interface|enum|module</code>.</p>
+<h2 id="further-help">Further help</h2>
+<p>To get more help on the Angular CLI use <code>ng help</code> or go check out the <a href="https://github.com/angular/angular-cli/blob/master/README.md">Angular CLI README</a>.</p>
+<h2 id="the-sync-process">The sync process</h2>
+<h3 id="definition-of-action">Definition of Action</h3>
+<p>An Action in the context of this project is a modify operation (Insert, Update or Delete) forced by the user on a device. This action then must be synced through the several devices the user may have.</p>
+<h3 id="workflow">Workflow</h3>
+<ol>
+<li>We get the server Actions from the Rest Service (just the actions since the last sync --&gt; so just the actions from other devices)</li>
+<li>We undo the local Actions (newest to oldest)</li>
+<li>We perform the server Actions</li>
+<li>For Version 2: Performance Improvements --&gt; we perform not all actions (e.g. 2 Update Actions on 1 Vocabulary --&gt; just the 2. Update is done, the first is discarded)</li>
+<li>We redo the local Actions (maybe not all actions can be done, e.g. the server Action deleted a Vocabulary. After this an update of course not works anymore. These actions are discarded)</li>
+<li>We publish the local Actions to the server</li>
+</ol>
+<h3 id="challenges--rules">Challenges &amp; Rules</h3>
+<ol>
+<li>Through the server Actions, the deleted and then readded Vocabularies (local Actions with the method &quot;ADD&quot;) will have another Id after the insert --&gt; if afterwards an update on this vocabulary is done, the id there must also be changed, that the action is performed on the correct Vocabulary.</li>
+<li>Through the server Actions, a vocabulary could be deleted --&gt; The Update must be discarded</li>
+<li>...</li>
+</ol>
+<h3 id="defined-test-cases">Defined Test Cases</h3>
+<table>
+<thead>
+<tr>
+<th>Id</th>
+<th>Requirements</th>
+<th>Test Case</th>
+<th>Expected Output</th>
+<th>Current Output</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>no actions on server; no vocabularies on device; device not synced</td>
+<td>add Vocabulary; sync device</td>
+<td>Action should be synced to the server</td>
+<td>Action is synced to the server</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>2</td>
+<td>no actions on server; no vocabularies on device; device not synced</td>
+<td>add Vocabulary; update vocabulary; sync device</td>
+<td>2 Actions (ADD, UPDATE) should be synced to the server</td>
+<td>2 Actions (ADD, UPDATE) are synced to the server</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>3</td>
+<td>no actions on server; no vocabularies on device; device not synced</td>
+<td>add Vocabulary; delete vocabulary; sync device</td>
+<td>2 Actions (ADD, DELETE) should be synced to the server</td>
+<td>2 Actions are synced to the server</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Situation after Test Case 2</td>
+<td>add Vocabulary</td>
+<td>1 Action (ADD) should be synced to the server</td>
+<td>1 Action (ADD) is synced to the server</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Situation after Test Case 2</td>
+<td>update vocabulary</td>
+<td>1 Action (UPDATE) should be synced to the server</td>
+<td>1 Action (UPDATE) is synced to the server</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Situation after Test Case 2</td>
+<td>delete vocabulary</td>
+<td>1 Action (DELETE) should be synced to the server</td>
+<td>1 Action is synced to the server</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>7</td>
+<td>2 actions on server (ADD, UPDATE), the first action is already synced with the device</td>
+<td>add vocabulary</td>
+<td>the update from the server should be done and then the new vocabulary be added; on the server should be 3 actions at the end</td>
+<td></td>
+<td>❌</td>
+</tr>
+<tr>
+<td>8</td>
+<td>2 actions on server (ADD, UPDATE), the first action is already synced with the device</td>
+<td>update vocabulary</td>
+<td>the update from the server should be done and then the vocabulary should be edited the second time; on the server should be 3 actions at the end</td>
+<td></td>
+<td>❌</td>
+</tr>
+<tr>
+<td>9</td>
+<td>2 actions on server (ADD, UPDATE), the first action is already synced with the device</td>
+<td>delete vocabulary</td>
+<td>the update from the server should be done and then the vocabulary should be deleted --&gt; no vocabulary at the end on the device; on the server should be 3 actions at the end</td>
+<td></td>
+<td>❌</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2 actions on server (ADD, ADD), the first action is already synced with the device</td>
+<td>add vocabulary</td>
+<td>the add from the server should be done (with same id than on server) and then should be the local add be done (with new id); on the server should be 3 actions at the end</td>
+<td></td>
+<td>❌</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2 actions on server (ADD, ADD), the first action is already synced with the device</td>
+<td>add vocabulary + update added vocabulary</td>
+<td>the add from the server should be done (with same id than on server) and then should be the local add be done (with new id); the id in the update action must be changed on the third add and then be done; on the server should be 4 actions at the end</td>
+<td></td>
+<td>❌</td>
+</tr>
+<tr>
+<td>11</td>
+<td>2 actions on server (ADD, ADD), the first action is already synced with the device</td>
+<td>add vocabulary + delete added vocabulary</td>
+<td>the add from the server should be done (with same id than on server) and then should be the local add be done (with new id); the id in the delete action must be changed so that the third vocabulary is be deleted; on the server should be 4 actions at the end OR the 2 actions should be discarded (so dont readd the voc and then delete it)</td>
+<td></td>
+<td>❌</td>
+</tr>
+<tr>
+<td>12</td>
+<td>no actions on server, device is synced</td>
+<td>import vocabularies</td>
+<td>All the actions should be at the end synced to the server (Test over 2nd device, synced, no vocabularies at the beginning)</td>
+<td></td>
+<td>❌</td>
+</tr>
+<tr>
+<td>13</td>
+<td></td>
+<td></td>
+<td></td>
+<td>// 30 mixed actions on the server, device not synced, 10 local actions (ADD, UPDATE, DELETE) / sync device / the vocabularies from the other device should be now also on the new device + the additional vocabularies from the local actions; on the server should be 40 actions</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+    </body>
+    </html>

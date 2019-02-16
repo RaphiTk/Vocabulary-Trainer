@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment.prod';
 import { LocalActionsService } from './local-actions.service';
 import { IAction, Action, ActionMethod } from '../interfaces/action';
 import { DbFunctionService } from './db-function.service';
+import { resolveReflectiveProviders } from '@angular/core/src/di/reflective_provider';
 
 
 @Injectable({
@@ -21,60 +22,127 @@ export class VocabularyRestService {
   }
 
   handleServiceStart() {
+    let resolveIt, rejectIt;
+    let promise = new Promise(function(resolve, reject) {  
+      resolveIt = resolve; rejectIt = reject;
+    });
+
     this.getNewActions().subscribe((result: any) => {
-      //if(result.status === "ok") {
-        if (result.length > 0) {
-          this.syncLocal(result as IAction[]);
-        } else if (LocalStorageNamespace.getLocalSavedActions().length > 0) {
-          this.postLocalActions(LocalStorageNamespace.getLocalSavedActions());
-        }
-      //} else {
-        console.log("result", result);
-      //}
+      console.log("result", result);
+      if (result.length > 0) {
+        this.syncLocal(result as IAction[], resolveIt, rejectIt);
+      } else if (LocalStorageNamespace.getLocalSavedActions().length > 0) {
+        this.postLocalActions(LocalStorageNamespace.getLocalSavedActions()).then(res => resolveIt(res)).catch(err => rejectIt(err));
+      } else {
+        resolveIt();
+      }
     }, err => {
       console.log(err);
-    })
+      rejectIt(err);
+    });
+    return promise;
   }
 
-  private syncLocal(serverActions: IAction[]) {
+  private syncLocal(serverActions: IAction[], resolveIt, rejectIt) {
     let local: IAction[] = LocalStorageNamespace.getLocalSavedActions();
-    for (let index = local.length-1; index >= 0; index--) {
-      const element = local[index];
-      this.performAction(element, Action.findReverseMethod(element.method));
-    }
+    this.performReverseLocalActions(local,serverActions, resolveIt, rejectIt, local.length-1);
+  }
 
-    for (let index = 0; index < serverActions.length; index++) {
-      const element = serverActions[index];
-      this.performAction(element, element.method);
-    }
-
-    for (let index = 0; index < local.length; index++) {
+  private performReverseLocalActions(local, serverActions, resolveIt, rejectIt, index) {
+    console.log(index);
+    if (local.length > 0) {
       const element = local[index];
-      if (element.method == ActionMethod.ADD) {
-        let oldId = element.vocabularyAfterAction.id;
-        element.vocabularyAfterAction.id = null
-        this.performAction(element, element.method).then((result) => {
-          console.log(result);
-        });
+      this.performAction(element, Action.findReverseMethod(element.method)).finally(function() {
+        if(element === local[local.length-1]) {
+          this.performServerActions(local, serverActions, resolveIt, rejectIt, 0);
+        } else {
+          this.performReverseLocalActions(local, serverActions, resolveIt, rejectIt, index-1);
+        }
+      })
+    } else {
+      this.performServerActions(local, serverActions, resolveIt, rejectIt, 0);
+    }
+  }
+
+  private performServerActions(local, serverActions, resolveIt, rejectIt, index) {
+    console.log(index);
+    const element = serverActions[index];
+    console.log(element);
+    let _this = this;
+    this.performSerializedAction(element, element.method).finally(function() {
+      console.log("FINALLY");
+      if(index === serverActions.length-1) {
+        console.log("FINALLY1");
+        LocalStorageNamespace.addCountSynchronizedActions(index + 1);
+        _this.performLocalActionsAndPushThem(local, serverActions, resolveIt, rejectIt, 0, []);
+      } else {
+        console.log("FINALLY2");
+        _this.performServerActions(local, serverActions, resolveIt, rejectIt, index+1);
       }
-      
+    });
+  }
+
+  private performLocalActionsAndPushThem(local, serverActions, resolveIt, rejectIt, index, localActionsReadyToPush) {
+    console.log(index);
+    if (local.length > 0) {
+      const element = local[index];
+      let oldId
+      if (element.method == ActionMethod.ADD) {
+        oldId = element.vocabularyAfterAction.id;
+        element.vocabularyAfterAction.id = null
+      }
+      this.performAction(element, element.method).then((result: any) => {
+        if (element.method == ActionMethod.ADD && oldId != result[0].id) {
+          for (let innerIndex = index; innerIndex < local.length; innerIndex++) {
+            const element: IAction = local[innerIndex];
+            if (element.vocabularyAfterAction != null)
+              element.vocabularyAfterAction.id = result[0].id
+            if (element.vocabularyBeforeAction != null)
+              element.vocabularyBeforeAction.id = result[0].id
+          }
+        }
+        localActionsReadyToPush.push(element);
+        console.log(result);
+        if (element === local[local.length - 1]) {
+          this.postLocalActions(localActionsReadyToPush).then(res => resolveIt(res)).catch(err => rejectIt(err));
+        } else {
+          this.performLocalActionsAndPushThem(local, serverActions, resolveIt, rejectIt, index+1, localActionsReadyToPush);
+        }
+      }).catch(err => {
+        console.log("sdfsdfsdfxc", err);
+      });
+    } else {
+      resolveIt();
     }
-    //Now we have to add the deleted Actions and Publish the Actions then to the Server
-    //The challenge:
-    //    - Through the server Actions, the recently deleted Actions will have another Id after the insert
-    //    - Through the server Actions, a vocabulary could be deleted. A Update on the Vocabulary don't work
+  }
+
+  private performSerializedAction(element:any, method: ActionMethod) {
+    console.log(element);
+    console.log(JSON.parse(element.vocabularyAfterAction));
+    console.log(element);
+    switch (method) {
+      case ActionMethod.ADD:
+        return this.dbFunctions.insertVocabularyJustDb(JSON.parse(element.vocabularyAfterAction));
+        break;
+      case ActionMethod.UPDATE:
+        return this.dbFunctions.updateVocabularyJustDb(JSON.parse(element.vocabularyAfterAction));
+        break;
+      case ActionMethod.DELETE:
+        return this.dbFunctions.deleteVocabularyJustDb(JSON.parse(element.vocabularyBeforeAction));
+        break;
+    }
   }
 
   private performAction(element:IAction, method: ActionMethod) {
     switch (method) {
       case ActionMethod.ADD:
-        return this.dbFunctions.insertVocabularyJustDb(element.vocabularyBeforeAction);
+        return this.dbFunctions.insertVocabularyJustDb(element.vocabularyAfterAction);
         break;
       case ActionMethod.UPDATE:
-        return this.dbFunctions.updateVocabularyJustDb(element.vocabularyBeforeAction);
+        return this.dbFunctions.updateVocabularyJustDb(element.vocabularyAfterAction);
         break;
       case ActionMethod.DELETE:
-        return this.dbFunctions.deleteVocabularyJustDb(element.vocabularyAfterAction);
+        return this.dbFunctions.deleteVocabularyJustDb(element.vocabularyBeforeAction);
         break;
     }
   }
@@ -84,6 +152,10 @@ export class VocabularyRestService {
   }
 
   private postLocalActions(actions: IAction[]) {
+    let resolveIt, rejectIt;
+    let promise = new Promise(function(resolve, reject) {  
+      resolveIt = resolve; rejectIt = reject;
+    });
     console.log(JSON.stringify(actions));
     this.httpClient.post(environment.vocabulary_server.URL + "?count-synchronised-actions=" + LocalStorageNamespace.getCountSynchronisedActions(), JSON.stringify(actions), this.customHttpHeader()).subscribe((result:any) => {
       console.log(result);
@@ -94,10 +166,14 @@ export class VocabularyRestService {
       } else {
         LocalStorageNamespace.setLocalSavedActions(actions);
       }
+      resolveIt(result);
     }, err => {
       console.log(err);
       LocalStorageNamespace.setLocalSavedActions(actions);
+      rejectIt(err);
     })
+
+    return promise;
   }
 
   private customHttpHeader() {
@@ -135,7 +211,7 @@ export class VocabularyRestService {
   private getIdForNewAction(actions: IAction[]) {
     let newId;
     if (actions.length > 0)
-      newId = actions[actions.length-1];
+      newId = actions[actions.length-1].id+1;
     else
       newId = LocalStorageNamespace.getCountSynchronisedActions();  
     return newId;

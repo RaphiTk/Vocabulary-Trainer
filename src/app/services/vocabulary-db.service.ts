@@ -20,7 +20,7 @@ export class VocabularyDbService {
     let rejectIt;
     let promise = new Promise(function(resolve, reject) {  
       resolveIt = resolve;
-
+      rejectIt = reject;
     });
     
     this.dbFunctions.insertVocabularyJustDb(voc).then(result => {
@@ -39,7 +39,7 @@ export class VocabularyDbService {
     let rejectIt;
     let promise = new Promise(function(resolve, reject) {  
       resolveIt = resolve;
-
+      rejectIt = reject;
     });
     
     this.dbFunctions.insertVocabularyJustDb(voc).then(result => {
@@ -76,6 +76,7 @@ export class VocabularyDbService {
     let resolveIt, rejectIt;
     let promise = new Promise(function(resolve, reject) {  
       resolveIt = resolve;
+      rejectIt = reject;
     });
     
     this.getVocabularybyId(voc.id).then(oldresult => {
@@ -95,6 +96,7 @@ export class VocabularyDbService {
     let resolveIt, rejectIt;
     let promise = new Promise(function(resolve, reject) {  
       resolveIt = resolve;
+      rejectIt = reject;
     });
     
     this.dbFunctions.deleteVocabularyJustDb(voc).then(result => {
