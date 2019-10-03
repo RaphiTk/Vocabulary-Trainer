@@ -48,7 +48,7 @@ export class InitDbService {
       columns: [{
         name: this.colId,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: false
       },
       {
         name: this.colClas,

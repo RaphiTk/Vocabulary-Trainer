@@ -30,7 +30,14 @@ export class SiteSearchComponent implements OnInit {
     this.vocService.getAllVocs().then((result) => {
       this.vocs = Vocabulary.createCorrectReferences(result); 
       this.filteredVocs = Vocabulary.createCorrectReferences(result);
-      overlayRef.dispose();
+      if (overlayRef != undefined) {
+        overlayRef.dispose();
+      }
+      setTimeout(() => {
+        if (overlayRef != undefined) {
+          overlayRef.dispose();
+        }
+      }, 100);
     });
   
     let editable = document.getElementById("SearchText");

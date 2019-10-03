@@ -34,6 +34,30 @@ export class Action implements IAction {
                 break;
         }
     }
+
+    static findVocabularyId(action: Action): number {
+        switch (action.method) {
+            case ActionMethod.ADD:
+                return action.vocabularyAfterAction.id;
+                break;
+            case ActionMethod.UPDATE:
+                return action.vocabularyAfterAction.id;
+                break;
+            case ActionMethod.DELETE:
+                return action.vocabularyBeforeAction.id;
+                break;
+        }
+    }
+
+    static deserializeVocabularies(action): Action {
+        if (action.vocabularyBeforeAction != null) {
+            action.vocabularyBeforeAction = JSON.parse(action.vocabularyBeforeAction);
+        }
+        if (action.vocabularyAfterAction != null) {
+            action.vocabularyAfterAction = JSON.parse(action.vocabularyAfterAction);
+        }
+        return action;
+    }
 }
 
 export enum ActionMethod {

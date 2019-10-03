@@ -5,6 +5,8 @@ import { query } from '@angular/core/src/render3';
 import { VocabularyRestService } from './vocabulary-rest.service';
 import { ActionMethod } from '../interfaces/action';
 import { DbFunctionService } from '../services/db-function.service';
+import { LocalStorageNamespace } from './local-storage.namespace';
+
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +25,7 @@ export class VocabularyDbService {
       rejectIt = reject;
     });
     
+    voc.id = LocalStorageNamespace.getNextPrimaryId();
     this.dbFunctions.insertVocabularyJustDb(voc).then(result => {
       this.vocRestService.postAction(ActionMethod.ADD, null, result[0]);
       resolveIt(result);
@@ -42,6 +45,7 @@ export class VocabularyDbService {
       rejectIt = reject;
     });
     
+    voc.id = LocalStorageNamespace.getNextPrimaryId();
     this.dbFunctions.insertVocabularyJustDb(voc).then(result => {
       this.vocRestService.saveActionForLaterPush(ActionMethod.ADD, null, result[0]);
       resolveIt(result);
@@ -58,12 +62,14 @@ export class VocabularyDbService {
       resolveIt = resolve;
     });
     if (!index) {
-      index = 0
+      index = 0;
+      //TODO: Initial Sync for performance improvements
     }
     
     this.bulkInserVocabulary(vocs[index]).then(result => {
       if (index + 1 == vocs.length) {
         //TODO: push to server
+        this.vocRestService.sync();//.finally();
         resolveIt();
       } else {
         this.addBulkVocabulary(vocs, index + 1).then(result => resolveIt());
