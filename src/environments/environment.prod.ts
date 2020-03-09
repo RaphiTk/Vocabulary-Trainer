@@ -7,6 +7,6 @@ export const environment = {
     LOGOUT_URL: "https://www.vocabulary-trainer.tk/logout"
   },
   vocabulary_server: {
-    URL: "http://localhost/vocabulary-trainer/v1/actions"
+    URL: "https://vocabulary-trainer-backend.tk/vocabulary-trainer/v1/actions",
   }
 };

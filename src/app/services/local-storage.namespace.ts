@@ -7,8 +7,10 @@ export namespace LocalStorageNamespace {
   export const localStorageSecondaryLanguageKey: string = "SecondaryLanguage";
   const defaultCountSynchronisedActions: number = 0;
   const localStorageCountSynchronisedActionsKey: string = "CountSynchronisedActions";
-  export const defaultSavedActions = [];
+  //export const defaultSavedActions = [];
   const localStorageSavedActionsKey: string = "LocalSavedActions"
+  const defaultPrimaryId: number = 0;
+  const localStoragePrimaryIdKey: string = "PrimaryId";
 
   export function getPrimaryLanguage() {
     let local: string = localStorage.getItem(localStoragePrimaryLanguageKey);
@@ -49,7 +51,7 @@ export namespace LocalStorageNamespace {
   export function getLocalSavedActions(): IAction[] {
     let local: string | IAction[] = localStorage.getItem(localStorageSavedActionsKey);
     if (local === null || local === undefined) {
-      local = defaultSavedActions;
+      local = []//defaultSavedActions;
     } else {
       local = JSON.parse(local);
     }
@@ -60,8 +62,38 @@ export namespace LocalStorageNamespace {
     localStorage.setItem(localStorageSavedActionsKey, JSON.stringify(actions));
   }
 
+  export function deleteLocalSavedActions() {
+    localStorage.setItem(localStorageSavedActionsKey, JSON.stringify([]/*defaultSavedActions*/));
+    localStorage.removeItem(localStorageSavedActionsKey);
+  }
+
   export function addCountSynchronizedActions(toAdd: number) {
     let newCount = getCountSynchronisedActions() + toAdd;
     localStorage.setItem(localStorageCountSynchronisedActionsKey, newCount+"");
+  }
+
+  export function getNextPrimaryId(): number {
+    let local = getPrimaryId();
+    increasePrimaryId(1);
+    return local as number;
+  }
+
+  function getPrimaryId(): number {
+    let local: string | number = localStorage.getItem(localStoragePrimaryIdKey);
+    if (local === null || local === undefined) {
+      local = defaultPrimaryId;
+    } else {
+      local = +local
+    }
+    return local as number;
+  }
+
+  function increasePrimaryId(toAdd: number) {
+    let newCount = getPrimaryId() + toAdd;
+    localStorage.setItem(localStoragePrimaryIdKey, newCount+"");
+  }
+
+  export function setNextPrimaryId(newNumber: number) {
+    localStorage.setItem(localStoragePrimaryIdKey, newNumber+"");
   }
 }

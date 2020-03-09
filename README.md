@@ -4,7 +4,12 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
   
 ## Deploy
   
-ng build --prod
+ng build --prod  
+
+### Google Cloud
+gcloud app deploy --version=prod  
+--OR--  
+### Github Pages
 ngh --no-silent --cname=www.vocabulary-trainer.tk
   
 ## Installed Frameworks
@@ -43,7 +48,8 @@ An Action in the context of this project is a modify operation (Insert, Update o
 3. We perform the server Actions
 4. For Version 2: Performance Improvements --> we perform not all actions (e.g. 2 Update Actions on 1 Vocabulary --> just the 2. Update is done, the first is discarded)
 5. We redo the local Actions (maybe not all actions can be done, e.g. the server Action deleted a Vocabulary. After this an update of course not works anymore. These actions are discarded)
-6. We publish the local Actions to the server
+6. We publish the local Actions to the server  
+   
 ### Challenges & Rules
   
 1. Through the server Actions, the deleted and then readded Vocabularies (local Actions with the method "ADD") will have another Id after the insert --> if afterwards an update on this vocabulary is done, the id there must also be changed, that the action is performed on the correct Vocabulary.
