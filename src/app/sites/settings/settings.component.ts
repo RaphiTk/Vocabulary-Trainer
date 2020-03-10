@@ -17,11 +17,17 @@ import { VocabularyRestService } from 'src/app/services/vocabulary-rest.service'
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
-export class SiteSettingsComponent {
+export class SiteSettingsComponent implements OnInit {
   @ViewChild("VarPrimaryLanguage") varPrimaryLanguageComponent;
   @ViewChild("VarSecondaryLanguage") varSecondaryLanguageComponent;
+  private userId: string = '';
 
   constructor(public snackBar: MatSnackBar, public auth: AuthService, private dialog: MatDialog, private vocService: VocabularyDbService, private overlay: Overlay, private rest: VocabularyRestService ) { }
+
+  ngOnInit() {
+      console.log("Init called");
+      this.userId = this.auth.sub;
+  }
 
   saveButtonPressed() {
     let newPrimaryLanguage: string = this.varPrimaryLanguageComponent.getPrimaryLanguage();

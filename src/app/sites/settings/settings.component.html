@@ -52,10 +52,13 @@
     Login to Sync
   </span>
 </div>
-<div class="button" *ngIf="auth.isAuthenticated()" (click)="auth.logout()">
-  <span class="buttonText">
-    Logout
-  </span>
+<div *ngIf="auth.isAuthenticated()" >
+  Logged in as {{userId}}
+  <div class="button" (click)="auth.logout()">
+    <span class="buttonText">
+      Logout
+    </span>
+  </div>
 </div>
 <br>
 

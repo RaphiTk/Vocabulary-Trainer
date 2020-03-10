@@ -17,10 +17,6 @@ export class VocabularyRestService {
 
   constructor(private httpClient: HttpClient, private auth: AuthService, private localActions: LocalActionsService, private dbFunctions: DbFunctionService) { }
 
-  gimmeJokes() {
-    return this.httpClient.get("https://api.chucknorris.io/jokes/random");
-  }
-
   handleServiceStart() {
     let resolveIt, rejectIt;
     let promise = new Promise(function(resolve, reject) {  
@@ -240,42 +236,4 @@ export class VocabularyRestService {
     LocalStorageNamespace.setLocalSavedActions(actions);
   }
 
-  /*
-  postDeleteAction(voc: Vocabulary) {
-    if (this.auth.isAuthenticated()) {
-      //Try Http Request 
-        //if works -> perfect
-        //if not -> save local
-    } else {
-      //this.localActions.addAction(voc, ActionMethod.DELETE)
-    }
-  }
-
-  postAddAction(voc: Vocabulary) {
-    if (this.auth.isAuthenticated()) {
-      //Try Http Request 
-        //if works -> perfect
-        //if not -> save local
-    } else {
-      //this.localActions.addAction(voc, ActionMethod.ADD)
-    }
-  }
-
-  postUpdateAction(voc: Vocabulary) {
-    if (this.auth.isAuthenticated()) {
-      //Try Http Request 
-        //if works -> perfect
-        //if not -> save local
-    } else {
-     // this.
-    }
-  }
-
-  getPublic() {
-    this.httpClient.get("http://localhost:3010/api/public").subscribe(result => {
-      console.log(result);
-    }, err => {
-      console.log(err);
-    })
-  }*/
 }

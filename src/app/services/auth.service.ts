@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import * as auth0 from 'auth0-js';
 import { environment } from 'src/environments/environment';
-import { VocabularyRestService } from 'src/app/services/vocabulary-rest.service'
 
 @Injectable()
 export class AuthService {
@@ -11,6 +10,7 @@ export class AuthService {
   private _idToken: string;
   private _accessToken: string;
   private _expiresAt: number;
+  private _sub: string;
   private firstLogin: boolean = false;
 
   auth0 = new auth0.WebAuth({
@@ -24,6 +24,7 @@ export class AuthService {
   constructor(public router: Router) {
     this._idToken = '';
     this._accessToken = '';
+    this._sub = '';
     this._expiresAt = 0;
   }
 
@@ -33,6 +34,10 @@ export class AuthService {
 
   get idToken(): string {
     return this._idToken;
+  }
+
+  get sub(): string {
+    return this._sub;
   }
 
   public login(): void {
@@ -46,9 +51,10 @@ export class AuthService {
       console.log(err);
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
-        this.router.navigate(['/callback'], { queryParams: { finished: 'true' } });
+        this.router.navigate(['/login-successful']);
       } else if (err) {
-        this.router.navigate(['/callback'], { queryParams: { finished: 'true' } });
+        //TODO handle login error
+        //this.router.navigate(['/login-successful']);
         console.log(err);
       }
     });
@@ -58,10 +64,15 @@ export class AuthService {
     // Set isLoggedIn flag in localStorage
     localStorage.setItem('isLoggedIn', 'true');
     // Set the time that the access token will expire at
+    console.log(authResult);
     const expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
+    console.log(expiresAt);
+    console.log( new Date().getTime());
+    console.log(authResult.idTokenPayload.sub);
     this._accessToken = authResult.accessToken;
     this._idToken = authResult.idToken;
     this._expiresAt = expiresAt;
+    this._sub = authResult.idTokenPayload.sub;
   }
 
   public renewSession(): void {

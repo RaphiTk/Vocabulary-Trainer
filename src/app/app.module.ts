@@ -31,7 +31,7 @@ import { DialogConfirmationComponent } from './dialogs/dialog-confirmation/dialo
 import { DialogEditVocabularyComponent } from './dialogs/dialog-edit-vocabulary/dialog-edit-vocabulary.component'
 //import { InitVocabularyService } from './services/vocabulary.service';
 import { AuthService } from './services/auth.service';
-import { CallbackComponent } from './frames/callback/callback.component';
+import { LoginSuccessfulComponent } from './frames/login-succesful/login-succesful.component';
 import { LoadingSpinnerComponent } from './frames/loading-spinner/loading-spinner.component';
 import { FullscreenOverlayContainer, OverlayContainer} from '@angular/cdk/overlay';
 
@@ -102,7 +102,7 @@ import { FullscreenOverlayContainer, OverlayContainer} from '@angular/cdk/overla
     DialogChangeRemoveBottomSheetComponent,
     DialogConfirmationComponent,
     DialogEditVocabularyComponent,
-    CallbackComponent,
+    LoginSuccessfulComponent,
     LoadingSpinnerComponent,
   ],
   providers: [VocabularyRestService, AuthService, {provide: LoadingSpinnerComponent, useClass: FullscreenOverlayContainer}/*, {
