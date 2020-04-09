@@ -47,12 +47,13 @@
   </div>
 </div>
 <br>
-<div class="button" *ngIf="!auth.isAuthenticated()" (click)="auth.login()">
+
+<div class="button" *ngIf="!auth.loggedIn" (click)="auth.login()">
   <span class="buttonText">
     Login to Sync
   </span>
 </div>
-<div *ngIf="auth.isAuthenticated()" >
+<div *ngIf="auth.loggedIn" >
   Logged in as {{userId}}
   <div class="button" (click)="auth.logout()">
     <span class="buttonText">
@@ -60,6 +61,7 @@
     </span>
   </div>
 </div>
+
 <br>
 
 <script type="text/javascript">

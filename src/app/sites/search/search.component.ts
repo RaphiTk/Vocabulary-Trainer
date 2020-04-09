@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { VocabularyDbService } from '../../services/vocabulary-db.service';
 import { Vocabulary } from '../../interfaces/vocabulary';
-import { MatBottomSheet } from '@angular/material';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { DialogChangeRemoveBottomSheetComponent } from "../../dialogs/dialog-change-remove-bottom-sheet/dialog-change-remove-bottom-sheet.component";
 import { LoadingSpinnerComponent } from 'src/app/frames/loading-spinner/loading-spinner.component';
 import { Overlay} from '@angular/cdk/overlay';

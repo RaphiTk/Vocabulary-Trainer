@@ -168,21 +168,3 @@ div[data-placeholder]:empty:before {
 	text-align: center; 
 	vertical-align: middle;
 }
-
-
-/*TODO Try Delete
-.Col {
-	display: table-cell;
-
-	height: 75pt;
-	width: 150pt;
-	border:  1pt solid black;
-	background-color: #99ff99;
-}
-.MiddleCenter {
-	text-align: center;
-	align-items: center;
-	vertical-align: middle;
-}
-
-*/

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 import { DialogChangeChooseUnitComponent } from '../../dialogs/dialog-change-choose-unit/dialog-change-choose-unit.component';
 import { Router } from '@angular/router';
 import { DialogQueryChooseUnitComponent } from 'src/app/dialogs/dialog-query-choose-unit/dialog-query-choose-unit.component';

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { VocabularyDbService } from '../../services/vocabulary-db.service';
 import { IVocabulary } from '../../interfaces/vocabulary';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 import { DialogQueryCheckInputComponent } from 'src/app/dialogs/dialog-query-check-input/dialog-query-check-input.component';
 import { DialogQueryFinalResultComponent } from 'src/app/dialogs/dialog-query-final-result/dialog-query-final-result.component';
 

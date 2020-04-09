@@ -7,7 +7,6 @@ import { environment } from 'src/environments/environment';
 import { LocalActionsService } from './local-actions.service';
 import { IAction, Action, ActionMethod } from '../interfaces/action';
 import { DbFunctionService } from './db-function.service';
-import { resolveReflectiveProviders } from '@angular/core/src/di/reflective_provider';
 
 
 @Injectable({
@@ -112,24 +111,7 @@ export class VocabularyRestService {
       resolveIt();
     }
   }
-/*
-  private performSerializedAction(element:any, method: ActionMethod) {
-    //console.log(element);
-    //console.log(JSON.parse(element.vocabularyAfterAction));
-    //console.log(element);
-    switch (method) {
-      case ActionMethod.ADD:
-        return this.dbFunctions.insertVocabularyJustDb(JSON.parse(element.vocabularyAfterAction));
-        break;
-      case ActionMethod.UPDATE:
-        return this.dbFunctions.updateVocabularyJustDb(JSON.parse(element.vocabularyAfterAction));
-        break;
-      case ActionMethod.DELETE:
-        return this.dbFunctions.deleteVocabularyJustDb(JSON.parse(element.vocabularyBeforeAction));
-        break;
-    }
-  }
-*/
+
   private performAction(element:IAction, method: ActionMethod) {
     switch (method) {
       case ActionMethod.ADD:
@@ -159,7 +141,7 @@ export class VocabularyRestService {
   }
 
   private getNewActions() {
-    return this.httpClient.get(environment.vocabulary_server.URL + "?count-synchronised-actions=" + LocalStorageNamespace.getCountSynchronisedActions(), this.customHttpHeader());
+    return this.httpClient.get(environment.vocabulary_server.URL + "?count-synchronised-actions=" + LocalStorageNamespace.getCountSynchronisedActions()/*, this.customHttpHeader()*/);
   }
 
   private postLocalActions(actions: IAction[]) {
@@ -168,7 +150,7 @@ export class VocabularyRestService {
       resolveIt = resolve; rejectIt = reject;
     });
     console.log(JSON.stringify(actions));
-    this.httpClient.post(environment.vocabulary_server.URL + "?count-synchronised-actions=" + LocalStorageNamespace.getCountSynchronisedActions(), JSON.stringify(actions), this.customHttpHeader()).subscribe((result:any) => {
+    this.httpClient.post(environment.vocabulary_server.URL + "?count-synchronised-actions=" + LocalStorageNamespace.getCountSynchronisedActions(), JSON.stringify(actions)/*, this.customHttpHeader()*/).subscribe((result:any) => {
       console.log(result);
       
       if(result.status === "ok") {
@@ -187,25 +169,10 @@ export class VocabularyRestService {
     return promise;
   }
 
-  private customHttpHeader() {
-    let headers = {headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.auth.accessToken)};
-    console.log(headers);
-    return headers;
-  }
-
-  //Erst einmal nur lokal ; TODO: HTTP request einbauen
-  /*
-  if (this.auth.isAuthenticated()) {
-      //Try Http Request 
-        //if works -> perfect
-        //if not -> save local
-    } else {
-      this.localActions.addAction(voc, ActionMethod.DELETE)
-    }
-    */
   postAction(method: ActionMethod, vocBeforeAction: IVocabulary, vocAfterAction: IVocabulary) {
     this.saveActionForLaterPush(method, vocBeforeAction, vocAfterAction);
-    if (this.auth.isAuthenticated()) {
+    var sddf = this.auth.isAuthenticated$
+    if (true/*this.auth.isAuthenticated()*/) {
       console.log("authenticated");
       //let actions: IAction[] = LocalStorageNamespace.getLocalSavedActions();
       //actions.push(new Action(this.getIdForNewAction(actions), method, vocBeforeAction, vocAfterAction));
@@ -229,7 +196,6 @@ export class VocabularyRestService {
     return newId;
   }
 
-  //TODO: moving function to LocalStorageNamespace
   saveActionForLaterPush(method: ActionMethod, vocBeforeAction: IVocabulary, vocAfterAction: IVocabulary) {
     let actions: IAction[] = LocalStorageNamespace.getLocalSavedActions();
     actions.push(new Action(this.getIdForNewAction(actions), method, vocBeforeAction, vocAfterAction));

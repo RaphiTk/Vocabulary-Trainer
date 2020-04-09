@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import {VocabularyRestService} from './services/vocabulary-rest.service';
 import { Router, RoutesRecognized, NavigationEnd } from '@angular/router';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -16,9 +16,7 @@ export class AppComponent {
   //joke;
 
   newUpdate: boolean = false;
-  constructor(update: SwUpdate, private restApi: VocabularyRestService, private router: Router, public snackBar: MatSnackBar, private auth: AuthService) {
-    auth.handleAuthentication();
-    
+  constructor(update: SwUpdate, private restApi: VocabularyRestService, private router: Router, public snackBar: MatSnackBar, private auth: AuthService) {    
     document.ontouchstart = function(e){ 
       e.preventDefault(); 
     }
@@ -27,7 +25,6 @@ export class AppComponent {
       this.isMobileUser = false;
     } else {
       this.isMobileUser = true;
-      this.changeCssClasses();
     }
     
     this.router.events
@@ -53,36 +50,5 @@ export class AppComponent {
         });
 
     })
-  }
-
-  ngOnInit() {
-    if (localStorage.getItem('isLoggedIn') === 'true') {
-      this.auth.renewSession();
-    }
-
-    //this.deleteAddvertismentButton();
-    //setTimeout(()=>this.deleteAddvertismentButton(),200);
-    /*this.restApi.gimmeJokes().subscribe(res => {
-      this.joke = res;
-    })*/
-  }
-
-  /*
-  private deleteAddvertismentButton() {
-    let images: HTMLCollectionOf<HTMLImageElement> = document.images;
-    console.log(images);
-    for (let index = 0; index < images.length; index++) {
-      const element: HTMLImageElement = images.item(index);
-      if (element.alt === "Free Web Hosting") {
-        element.width = 0;
-        element.height = 0;
-      }
-      
-    }
-
-  }
-    */
-
-  private changeCssClasses() {
   }
 }
