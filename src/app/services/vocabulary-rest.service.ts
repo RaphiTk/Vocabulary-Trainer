@@ -17,25 +17,21 @@ export class VocabularyRestService {
   constructor(private httpClient: HttpClient, private auth: AuthService, private localActions: LocalActionsService, private dbFunctions: DbFunctionService) { }
 
   handleServiceStart() {
-    let resolveIt, rejectIt;
-    let promise = new Promise(function(resolve, reject) {  
-      resolveIt = resolve; rejectIt = reject;
+    return new Promise(function(resolve, reject) {  
+      this.getNewActions().subscribe((result: any) => {
+        console.log("result", result);
+        if (result.length > 0) {
+          this.syncLocal(result as IAction[], resolve, reject);
+        } else if (LocalStorageNamespace.getLocalSavedActions().length > 0) {
+          this.postLocalActions(LocalStorageNamespace.getLocalSavedActions()).then(res => resolve(res)).catch(err => reject(err));
+        } else {
+          resolve();
+        }
+      }, err => {
+        console.log(err);
+        reject(err);
+      });
     });
-
-    this.getNewActions().subscribe((result: any) => {
-      console.log("result", result);
-      if (result.length > 0) {
-        this.syncLocal(result as IAction[], resolveIt, rejectIt);
-      } else if (LocalStorageNamespace.getLocalSavedActions().length > 0) {
-        this.postLocalActions(LocalStorageNamespace.getLocalSavedActions()).then(res => resolveIt(res)).catch(err => rejectIt(err));
-      } else {
-        resolveIt();
-      }
-    }, err => {
-      console.log(err);
-      rejectIt(err);
-    });
-    return promise;
   }
 
   public sync () {
@@ -171,19 +167,11 @@ export class VocabularyRestService {
 
   postAction(method: ActionMethod, vocBeforeAction: IVocabulary, vocAfterAction: IVocabulary) {
     this.saveActionForLaterPush(method, vocBeforeAction, vocAfterAction);
-    var sddf = this.auth.isAuthenticated$
-    if (true/*this.auth.isAuthenticated()*/) {
+    if (this.auth.loggedIn) {
       console.log("authenticated");
-      //let actions: IAction[] = LocalStorageNamespace.getLocalSavedActions();
-      //actions.push(new Action(this.getIdForNewAction(actions), method, vocBeforeAction, vocAfterAction));
-      //console.log(actions, LocalStorageNamespace.getCountSynchronisedActions());
       this.sync();
-      //Try Http Request 
-        //if works -> perfect
-        //if not -> save local
     } else {
       console.log("Not authenticated");
-      //this.saveActionForLaterPush(method, vocBeforeAction, vocAfterAction);
     }
   }
 

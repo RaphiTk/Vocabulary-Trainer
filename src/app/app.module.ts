@@ -65,14 +65,13 @@ import { DialogQueryFinalResultComponent } from './dialogs/dialog-query-final-re
 import {DialogChangeRemoveBottomSheetComponent} from './dialogs/dialog-change-remove-bottom-sheet/dialog-change-remove-bottom-sheet.component';
 import { DialogConfirmationComponent } from './dialogs/dialog-confirmation/dialog-confirmation.component';
 import { DialogEditVocabularyComponent } from './dialogs/dialog-edit-vocabulary/dialog-edit-vocabulary.component'
-//import { InitVocabularyService } from './services/vocabulary.service';
 import { AuthService } from './services/auth.service';
 import { LoginSuccessfulComponent } from './frames/login-succesful/login-succesful.component';
 import { LoadingSpinnerComponent } from './frames/loading-spinner/loading-spinner.component';
 import { FullscreenOverlayContainer, OverlayContainer} from '@angular/cdk/overlay';
+import { InterceptorService } from './services/interceptor.service';
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { InterceptorService } from './services/interceptor.service';
 
 @NgModule({
   imports: [
@@ -153,13 +152,7 @@ import { InterceptorService } from './services/interceptor.service';
       useClass: InterceptorService,
       multi: true
     }
-    
-    /*, {
-    provide: APP_INITIALIZER,
-    useFactory: InitVocabularyService,
-    multi: true,
-    deps: [ ]
-}*/],
+  ],
   bootstrap: [AppComponent],
   entryComponents: [DialogChangeChooseUnitComponent, DialogAddVocabularyComponent, DialogQueryChooseUnitComponent, DialogQueryCheckInputComponent, DialogQueryFinalResultComponent, DialogChangeRemoveBottomSheetComponent, DialogConfirmationComponent, DialogEditVocabularyComponent, LoadingSpinnerComponent]
 })

@@ -13,9 +13,8 @@ import { AuthService } from './services/auth.service';
 export class AppComponent {
   isMainMenu;
   isMobileUser;
-  //joke;
-
   newUpdate: boolean = false;
+
   constructor(update: SwUpdate, private restApi: VocabularyRestService, private router: Router, public snackBar: MatSnackBar, private auth: AuthService) {    
     document.ontouchstart = function(e){ 
       e.preventDefault(); 
@@ -37,18 +36,14 @@ export class AppComponent {
           this.isMainMenu = false;
         }
       }
-      
     });
 
     update.available.subscribe(event => {
       const snack = this.snackBar.open('Update Available', 'Reload', {duration: 5000});
-
-      snack
-        .onAction()
+      snack.onAction()
         .subscribe(() => {
           window.location.reload();
         });
-
     })
   }
 }
