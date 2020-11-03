@@ -135,5 +135,8 @@
       }
     }
   },
-  "defaultProject": "ngVoc"
+  "defaultProject": "ngVoc",
+  "cli": {
+    "analytics": false
+  }
 }

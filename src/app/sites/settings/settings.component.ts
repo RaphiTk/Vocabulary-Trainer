@@ -3,7 +3,8 @@ import { VarPrimaryLanguageComponent } from '../../frames/var-primary-language/v
 import { LocalStorageNamespace } from '../../services/local-storage.namespace';
 import { VocabularyDbService } from 'src/app/services/vocabulary-db.service';
 import { Vocabulary } from 'src/app/interfaces/vocabulary';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth.service';
 import { DialogQueryChooseUnitComponent } from 'src/app/dialogs/dialog-query-choose-unit/dialog-query-choose-unit.component'
 import { LoadingSpinnerComponent } from 'src/app/frames/loading-spinner/loading-spinner.component';
@@ -17,11 +18,24 @@ import { VocabularyRestService } from 'src/app/services/vocabulary-rest.service'
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
-export class SiteSettingsComponent {
+export class SiteSettingsComponent implements OnInit {
   @ViewChild("VarPrimaryLanguage") varPrimaryLanguageComponent;
   @ViewChild("VarSecondaryLanguage") varSecondaryLanguageComponent;
+  private userId: string = '';
 
   constructor(public snackBar: MatSnackBar, public auth: AuthService, private dialog: MatDialog, private vocService: VocabularyDbService, private overlay: Overlay, private rest: VocabularyRestService ) { }
+
+  ngOnInit() {
+      console.log("Init called");
+
+      console.log(this.auth.userProfile$)
+      this.auth.userProfile$.forEach((value) => {
+        if(value!= null) {
+          console.log(value)
+          this.userId = value.nickname;
+        }
+      });
+  }
 
   saveButtonPressed() {
     let newPrimaryLanguage: string = this.varPrimaryLanguageComponent.getPrimaryLanguage();

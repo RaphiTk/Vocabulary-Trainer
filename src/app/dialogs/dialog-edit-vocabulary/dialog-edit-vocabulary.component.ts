@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Vocabulary } from 'src/app/interfaces/vocabulary';
 import { VocabularyDbService } from 'src/app/services/vocabulary-db.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dialog-edit-vocabulary',

@@ -3,11 +3,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { Vocabulary, IVocabulary } from '../interfaces/vocabulary';
 import { LocalStorageNamespace } from './local-storage.namespace';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 import { LocalActionsService } from './local-actions.service';
 import { IAction, Action, ActionMethod } from '../interfaces/action';
 import { DbFunctionService } from './db-function.service';
-import { resolveReflectiveProviders } from '@angular/core/src/di/reflective_provider';
 
 
 @Injectable({
@@ -17,30 +16,22 @@ export class VocabularyRestService {
 
   constructor(private httpClient: HttpClient, private auth: AuthService, private localActions: LocalActionsService, private dbFunctions: DbFunctionService) { }
 
-  gimmeJokes() {
-    return this.httpClient.get("https://api.chucknorris.io/jokes/random");
-  }
-
   handleServiceStart() {
-    let resolveIt, rejectIt;
-    let promise = new Promise(function(resolve, reject) {  
-      resolveIt = resolve; rejectIt = reject;
+    return new Promise(function(resolve, reject) {  
+      this.getNewActions().subscribe((result: any) => {
+        console.log("result", result);
+        if (result.length > 0) {
+          this.syncLocal(result as IAction[], resolve, reject);
+        } else if (LocalStorageNamespace.getLocalSavedActions().length > 0) {
+          this.postLocalActions(LocalStorageNamespace.getLocalSavedActions()).then(res => resolve(res)).catch(err => reject(err));
+        } else {
+          resolve();
+        }
+      }, err => {
+        console.log(err);
+        reject(err);
+      });
     });
-
-    this.getNewActions().subscribe((result: any) => {
-      console.log("result", result);
-      if (result.length > 0) {
-        this.syncLocal(result as IAction[], resolveIt, rejectIt);
-      } else if (LocalStorageNamespace.getLocalSavedActions().length > 0) {
-        this.postLocalActions(LocalStorageNamespace.getLocalSavedActions()).then(res => resolveIt(res)).catch(err => rejectIt(err));
-      } else {
-        resolveIt();
-      }
-    }, err => {
-      console.log(err);
-      rejectIt(err);
-    });
-    return promise;
   }
 
   public sync () {
@@ -116,24 +107,7 @@ export class VocabularyRestService {
       resolveIt();
     }
   }
-/*
-  private performSerializedAction(element:any, method: ActionMethod) {
-    //console.log(element);
-    //console.log(JSON.parse(element.vocabularyAfterAction));
-    //console.log(element);
-    switch (method) {
-      case ActionMethod.ADD:
-        return this.dbFunctions.insertVocabularyJustDb(JSON.parse(element.vocabularyAfterAction));
-        break;
-      case ActionMethod.UPDATE:
-        return this.dbFunctions.updateVocabularyJustDb(JSON.parse(element.vocabularyAfterAction));
-        break;
-      case ActionMethod.DELETE:
-        return this.dbFunctions.deleteVocabularyJustDb(JSON.parse(element.vocabularyBeforeAction));
-        break;
-    }
-  }
-*/
+
   private performAction(element:IAction, method: ActionMethod) {
     switch (method) {
       case ActionMethod.ADD:
@@ -163,7 +137,7 @@ export class VocabularyRestService {
   }
 
   private getNewActions() {
-    return this.httpClient.get(environment.vocabulary_server.URL + "?count-synchronised-actions=" + LocalStorageNamespace.getCountSynchronisedActions(), this.customHttpHeader());
+    return this.httpClient.get(environment.vocabulary_server.URL + "?count-synchronised-actions=" + LocalStorageNamespace.getCountSynchronisedActions()/*, this.customHttpHeader()*/);
   }
 
   private postLocalActions(actions: IAction[]) {
@@ -172,7 +146,7 @@ export class VocabularyRestService {
       resolveIt = resolve; rejectIt = reject;
     });
     console.log(JSON.stringify(actions));
-    this.httpClient.post(environment.vocabulary_server.URL + "?count-synchronised-actions=" + LocalStorageNamespace.getCountSynchronisedActions(), JSON.stringify(actions), this.customHttpHeader()).subscribe((result:any) => {
+    this.httpClient.post(environment.vocabulary_server.URL + "?count-synchronised-actions=" + LocalStorageNamespace.getCountSynchronisedActions(), JSON.stringify(actions)/*, this.customHttpHeader()*/).subscribe((result:any) => {
       console.log(result);
       
       if(result.status === "ok") {
@@ -191,36 +165,13 @@ export class VocabularyRestService {
     return promise;
   }
 
-  private customHttpHeader() {
-    let headers = {headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.auth.accessToken)};
-    console.log(headers);
-    return headers;
-  }
-
-  //Erst einmal nur lokal ; TODO: HTTP request einbauen
-  /*
-  if (this.auth.isAuthenticated()) {
-      //Try Http Request 
-        //if works -> perfect
-        //if not -> save local
-    } else {
-      this.localActions.addAction(voc, ActionMethod.DELETE)
-    }
-    */
   postAction(method: ActionMethod, vocBeforeAction: IVocabulary, vocAfterAction: IVocabulary) {
     this.saveActionForLaterPush(method, vocBeforeAction, vocAfterAction);
-    if (this.auth.isAuthenticated()) {
+    if (this.auth.loggedIn) {
       console.log("authenticated");
-      //let actions: IAction[] = LocalStorageNamespace.getLocalSavedActions();
-      //actions.push(new Action(this.getIdForNewAction(actions), method, vocBeforeAction, vocAfterAction));
-      //console.log(actions, LocalStorageNamespace.getCountSynchronisedActions());
       this.sync();
-      //Try Http Request 
-        //if works -> perfect
-        //if not -> save local
     } else {
       console.log("Not authenticated");
-      //this.saveActionForLaterPush(method, vocBeforeAction, vocAfterAction);
     }
   }
 
@@ -233,49 +184,10 @@ export class VocabularyRestService {
     return newId;
   }
 
-  //TODO: moving function to LocalStorageNamespace
   saveActionForLaterPush(method: ActionMethod, vocBeforeAction: IVocabulary, vocAfterAction: IVocabulary) {
     let actions: IAction[] = LocalStorageNamespace.getLocalSavedActions();
     actions.push(new Action(this.getIdForNewAction(actions), method, vocBeforeAction, vocAfterAction));
     LocalStorageNamespace.setLocalSavedActions(actions);
   }
 
-  /*
-  postDeleteAction(voc: Vocabulary) {
-    if (this.auth.isAuthenticated()) {
-      //Try Http Request 
-        //if works -> perfect
-        //if not -> save local
-    } else {
-      //this.localActions.addAction(voc, ActionMethod.DELETE)
-    }
-  }
-
-  postAddAction(voc: Vocabulary) {
-    if (this.auth.isAuthenticated()) {
-      //Try Http Request 
-        //if works -> perfect
-        //if not -> save local
-    } else {
-      //this.localActions.addAction(voc, ActionMethod.ADD)
-    }
-  }
-
-  postUpdateAction(voc: Vocabulary) {
-    if (this.auth.isAuthenticated()) {
-      //Try Http Request 
-        //if works -> perfect
-        //if not -> save local
-    } else {
-     // this.
-    }
-  }
-
-  getPublic() {
-    this.httpClient.get("http://localhost:3010/api/public").subscribe(result => {
-      console.log(result);
-    }, err => {
-      console.log(err);
-    })
-  }*/
 }

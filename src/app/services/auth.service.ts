@@ -1,95 +1,115 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
-import * as auth0 from 'auth0-js';
 import { environment } from 'src/environments/environment';
-import { VocabularyRestService } from 'src/app/services/vocabulary-rest.service'
+import createAuth0Client from '@auth0/auth0-spa-js';
+import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
+import { from, of, Observable, BehaviorSubject, combineLatest, throwError } from 'rxjs';
+import { tap, catchError, concatMap, shareReplay } from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
 
-  private _idToken: string;
-  private _accessToken: string;
-  private _expiresAt: number;
-  private firstLogin: boolean = false;
+  auth0Client$ = (from(
+    createAuth0Client({
+      domain: environment.auth.CLIENT_DOMAIN,
+      client_id: environment.auth.CLIENT_ID,
+      redirect_uri: environment.auth.REDIRECT
+    })
+  ) as Observable<Auth0Client>).pipe(
+    shareReplay(1), // Every subscription receives the same shared value
+    catchError(err => throwError(err))
+  );
+  // Create subject and public observable of user profile data
+  private userProfileSubject$ = new BehaviorSubject<any>(null);
+  userProfile$ = this.userProfileSubject$.asObservable();
+  // Create a local property for login status
+  loggedIn: boolean = null;
 
-  auth0 = new auth0.WebAuth({
-    clientID: environment.auth.CLIENT_ID,
-    domain: environment.auth.CLIENT_DOMAIN,
-    responseType: 'token id_token',
-    redirectUri: environment.auth.REDIRECT,
-    scope: 'openid'
-  });
-
-  constructor(public router: Router) {
-    this._idToken = '';
-    this._accessToken = '';
-    this._expiresAt = 0;
+  constructor(private router: Router) {
+    // On initial load, check authentication state with authorization server
+    // Set up local auth streams if user is already authenticated
+    this.localAuthSetup();
+    // Handle redirect from Auth0 login
+    this.handleAuthCallback();
   }
 
-  get accessToken(): string {
-    return this._accessToken;
+  // Define observables for SDK methods that return promises by default
+  // For each Auth0 SDK method, first ensure the client instance is ready
+  // concatMap: Using the client instance, call SDK method; SDK returns a promise
+  // from: Convert that resulting promise into an observable
+  isAuthenticated$ = this.auth0Client$.pipe(
+    concatMap((client: Auth0Client) => from(client.isAuthenticated())),
+    tap(res => this.loggedIn = res)
+  );
+  handleRedirectCallback$ = this.auth0Client$.pipe(
+    concatMap((client: Auth0Client) => from(client.handleRedirectCallback()))
+  );
+
+  getUser$(options?): Observable<any> {
+    return this.auth0Client$.pipe(
+      concatMap((client: Auth0Client) => from(client.getUser(options))),
+      tap(user => this.userProfileSubject$.next(user))
+    );
   }
 
-  get idToken(): string {
-    return this._idToken;
+  private localAuthSetup() {
+    const checkAuth$ = this.isAuthenticated$.pipe(
+      concatMap((loggedIn: boolean) => {
+        if (loggedIn) {
+          return this.getUser$();
+        }
+        return of(loggedIn);
+      })
+    );
+    checkAuth$.subscribe();
   }
 
-  public login(): void {
-    this.firstLogin = true;
-    this.auth0.authorize();
-  }
-
-  public handleAuthentication(): void {
-    this.auth0.parseHash((err, authResult) => {
-      console.log(authResult);
-      console.log(err);
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        this.setSession(authResult);
-        this.router.navigate(['/callback'], { queryParams: { finished: 'true' } });
-      } else if (err) {
-        this.router.navigate(['/callback'], { queryParams: { finished: 'true' } });
-        console.log(err);
-      }
+  login(redirectPath: string = environment.auth.REDIRECT) {
+    this.auth0Client$.subscribe((client: Auth0Client) => {
+      // Call method to log in
+      client.loginWithRedirect({
+        redirect_uri: `${window.location.origin}`,
+        appState: { target: redirectPath }
+      });
     });
   }
 
-  private setSession(authResult): void {
-    // Set isLoggedIn flag in localStorage
-    localStorage.setItem('isLoggedIn', 'true');
-    // Set the time that the access token will expire at
-    const expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
-    this._accessToken = authResult.accessToken;
-    this._idToken = authResult.idToken;
-    this._expiresAt = expiresAt;
+  private handleAuthCallback() {
+    const params = window.location.search;
+    if (params.includes('code=') && params.includes('state=')) {
+      let targetRoute: string; // Path to redirect to after login processsed
+      const authComplete$ = this.handleRedirectCallback$.pipe(
+        // Have client, now call method to handle auth callback redirect
+        tap(cbRes => {
+          // Get and set target redirect route from callback results
+          targetRoute = cbRes.appState && cbRes.appState.target ? cbRes.appState.target : '/';
+        }),
+        concatMap(() => {
+          // Redirect callback complete; get user and login status
+          return combineLatest([
+            this.getUser$(),
+            this.isAuthenticated$
+          ]);
+        })
+      );
+      authComplete$.subscribe(([user, loggedIn]) => {
+        this.router.navigate([targetRoute]);
+      });
+    }
   }
 
-  public renewSession(): void {
-    this.auth0.checkSession({}, (err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        this.setSession(authResult);
-      } else if (err) {
-        alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
-        this.logout();
-      }
+  logout() {
+    this.auth0Client$.subscribe((client: Auth0Client) => {
+      client.logout({
+        client_id: environment.auth.CLIENT_ID,
+        returnTo: environment.auth.LOGOUT_URL//window.location.origin
+      });
     });
   }
 
-  public logout(): void {
-    // Remove tokens and expiry time
-    this._accessToken = '';
-    this._idToken = '';
-    this._expiresAt = 0;
-    // Remove isLoggedIn flag from localStorage
-    localStorage.removeItem('isLoggedIn');
-    // Go back to the home route
-    this.router.navigate(['/']);
+  getTokenSilently$(options?): Observable<string> {
+    return this.auth0Client$.pipe(
+      concatMap((client: Auth0Client) => from(client.getTokenSilently(options)))
+    );
   }
-
-  public isAuthenticated(): boolean {
-    // Check whether the current time is past the
-    // access token's expiry time
-    return new Date().getTime() < this._expiresAt;
-  }
-
 }

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IVocabulary, Vocabulary } from '../interfaces/vocabulary';
 import { InitDbService } from './init-db.service';
-import { query } from '@angular/core/src/render3';
 import { VocabularyRestService } from './vocabulary-rest.service';
 import { ActionMethod } from '../interfaces/action';
 import { DbFunctionService } from '../services/db-function.service';
@@ -68,8 +67,7 @@ export class VocabularyDbService {
     
     this.bulkInserVocabulary(vocs[index]).then(result => {
       if (index + 1 == vocs.length) {
-        //TODO: push to server
-        this.vocRestService.sync();//.finally();
+        this.vocRestService.sync();
         resolveIt();
       } else {
         this.addBulkVocabulary(vocs, index + 1).then(result => resolveIt());

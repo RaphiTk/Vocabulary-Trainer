@@ -1,5 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA, MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
+import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
+import { MatSnackBar} from '@angular/material/snack-bar'
+import {MatDialog, MatDialogRef } from '@angular/material/dialog';
+
 import { Vocabulary } from 'src/app/interfaces/vocabulary';
 import { DialogConfirmationComponent } from '../dialog-confirmation/dialog-confirmation.component';
 import { VocabularyDbService } from 'src/app/services/vocabulary-db.service';
