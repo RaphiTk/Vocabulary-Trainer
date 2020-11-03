@@ -17,13 +17,14 @@ export class VocabularyRestService {
   constructor(private httpClient: HttpClient, private auth: AuthService, private localActions: LocalActionsService, private dbFunctions: DbFunctionService) { }
 
   handleServiceStart() {
-    return new Promise(function(resolve, reject) {  
-      this.getNewActions().subscribe((result: any) => {
+    let _this = this;
+    let promise = new Promise(function(resolve, reject) {  
+      _this.getNewActions().subscribe((result: any) => {
         console.log("result", result);
         if (result.length > 0) {
-          this.syncLocal(result as IAction[], resolve, reject);
+          _this.syncLocal(result as IAction[], resolve, reject);
         } else if (LocalStorageNamespace.getLocalSavedActions().length > 0) {
-          this.postLocalActions(LocalStorageNamespace.getLocalSavedActions()).then(res => resolve(res)).catch(err => reject(err));
+          _this.postLocalActions(LocalStorageNamespace.getLocalSavedActions()).then(res => resolve(res)).catch(err => reject(err));
         } else {
           resolve();
         }
@@ -32,6 +33,7 @@ export class VocabularyRestService {
         reject(err);
       });
     });
+    return promise;
   }
 
   public sync () {

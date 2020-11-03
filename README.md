@@ -4,24 +4,25 @@ Live version is accessable under <vocabulary-trainer.tk>
 
 ## Deploy
   
-ng build --prod  
-Zip the dist folder  
-Upload it to 000webhost
+- npm version patch
+- ng build --prod  
+- Zip the dist folder  
+- Upload it to 000webhost
   
 ## Installed Frameworks
   
-ng add @angular/pwa
-ng add @angular/material
-Google Fonts see src/index.html
-jsstore: npm install jsstore --save
+- ng add @angular/pwa  
+- ng add @angular/material
+- Google Fonts see src/index.html
+- jsstore: npm install jsstore --save
   
 ## Todos
   
-(check) adding login / signup page for sync over serveral devices
-(check) Export Unit / class
-(doing at the moment) adding sync functionality
-Refactoring
-(optional) turning app to an angular universal app
+- (check) adding login / signup page for sync over serveral devices
+- (check) Export Unit / class
+- (doing at the moment) adding sync functionality
+- Refactoring
+- (optional) turning app to an angular universal app
   
 ## The sync process
   
@@ -62,11 +63,6 @@ An Action in the context of this project is a modify operation (Insert, Update o
 | 11 | 2 actions on server (ADD, ADD), the first action is already synced with the device | add vocabulary + delete added vocabulary | the add from the server should be done (with same id than on server) and then should be the local add be done (with new id); the id in the delete action must be changed so that the third vocabulary is be deleted; on the server should be 4 actions at the end OR the 2 actions should be discarded (so dont readd the voc and then delete it) | | ❌ |  
 | 12 | no actions on server, device is synced| import vocabularies | All the actions should be at the end synced to the server (Test over 2nd device, synced, no vocabularies at the beginning) | | ❌ | 
 | 13 | | | | // 30 mixed actions on the server, device not synced, 10 local actions (ADD, UPDATE, DELETE) / sync device / the vocabularies from the other device should be now also on the new device + the additional vocabularies from the local actions; on the server should be 40 actions
+| 13 | | | | // import a bunch of vocabularies
+
   
-## Old Settings
-  
-### Google Cloud
-gcloud app deploy --version=prod  
---OR--  
-### Github Pages
-ngh --no-silent --cname=www.vocabulary-trainer.tk
