@@ -8,19 +8,21 @@ import { LocalStorageNamespace} from '../../services/local-storage.namespace';
   templateUrl: './var-secondary-language.component.html',
   styleUrls: ['./var-secondary-language.component.css']
 })
-export class VarSecondaryLanguageComponent implements AfterViewInit {
+export class VarSecondaryLanguageComponent implements OnInit, AfterViewInit {
   secondaryLanguage: string;
   @Input() editable: boolean = false;
   @ViewChildren('secondaryLanguage') editableDiv;
 
   constructor() { }
 
-  ngAfterViewInit() {
+  ngOnInit(): void {
     this.secondaryLanguage = LocalStorageNamespace.getSecondaryLanguage();
     document.addEventListener(LocalStorageNamespace.localStorageSecondaryLanguageKey, function(e) {
       this.secondaryLanguage = LocalStorageNamespace.getSecondaryLanguage();
     });
+  }
 
+  ngAfterViewInit() {
     if (this.editable) {
       this.editableDiv.first.nativeElement.innerText = this.secondaryLanguage;
     }
