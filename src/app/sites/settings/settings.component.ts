@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { VarSecondaryLanguageComponent } from './../../frames/var-secondary-language/var-secondary-language.component';
+import { Component, OnInit, ViewChild, Input, AfterViewInit } from '@angular/core';
 import { VarPrimaryLanguageComponent } from '../../frames/var-primary-language/var-primary-language.component';
 import { LocalStorageNamespace } from '../../services/local-storage.namespace';
 import { VocabularyDbService } from 'src/app/services/vocabulary-db.service';
@@ -18,13 +19,13 @@ import { VocabularyRestService } from 'src/app/services/vocabulary-rest.service'
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
-export class SiteSettingsComponent implements OnInit {
-  @ViewChild("VarPrimaryLanguage") varPrimaryLanguageComponent;
-  @ViewChild("VarSecondaryLanguage") varSecondaryLanguageComponent;
+export class SiteSettingsComponent implements OnInit, AfterViewInit {
+  @ViewChild("VarPrimaryLanguage") varPrimaryLanguageComponent: VarPrimaryLanguageComponent;
+  @ViewChild("VarSecondaryLanguage") varSecondaryLanguageComponent: VarSecondaryLanguageComponent;
   private userId: string = '';
 
   constructor(public snackBar: MatSnackBar, public auth: AuthService, private dialog: MatDialog, private vocService: VocabularyDbService, private overlay: Overlay, private rest: VocabularyRestService ) { }
-
+ 
   ngOnInit() {
       console.log("Init called");
 
@@ -35,6 +36,10 @@ export class SiteSettingsComponent implements OnInit {
           this.userId = value.nickname;
         }
       });
+  }
+
+  ngAfterViewInit(): void {
+    //this.varSecondaryLanguageComponent.makeEditable();
   }
 
   saveButtonPressed() {

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-button-back',
@@ -7,13 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ButtonBackComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
 
   backButtonPressed() {
-    window.history.back();
+    this.router.navigate(["../"]);
   }
 
 }

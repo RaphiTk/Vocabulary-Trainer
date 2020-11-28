@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { NavigationEnd } from '@angular/router';
+import { AfterViewInit, Component, Input, OnInit, ViewChildren } from '@angular/core';
 import { LocalStorageNamespace} from '../../services/local-storage.namespace';
 
 
@@ -7,22 +8,32 @@ import { LocalStorageNamespace} from '../../services/local-storage.namespace';
   templateUrl: './var-secondary-language.component.html',
   styleUrls: ['./var-secondary-language.component.css']
 })
-export class VarSecondaryLanguageComponent implements OnInit {
+export class VarSecondaryLanguageComponent implements AfterViewInit {
   secondaryLanguage: string;
+  @Input() editable: boolean = false;
+  @ViewChildren('secondaryLanguage') editableDiv;
 
   constructor() { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.secondaryLanguage = LocalStorageNamespace.getSecondaryLanguage();
     document.addEventListener(LocalStorageNamespace.localStorageSecondaryLanguageKey, function(e) {
       this.secondaryLanguage = LocalStorageNamespace.getSecondaryLanguage();
     });
+
+    if (this.editable) {
+      this.editableDiv.first.nativeElement.innerText = this.secondaryLanguage;
+    }
   }
 
   /**
    * getSecondaryLanguage
    */
   public getSecondaryLanguage() {
-    return document.getElementById("secondaryLanguageText").innerHTML;
+    if (this.editable) {
+      return this.editableDiv.first.nativeElement.innerText;
+    } else {
+      return this.secondaryLanguage;
+    }
   }
 }

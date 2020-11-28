@@ -2,6 +2,11 @@
   
 Live version is accessable under <vocabulary-trainer.tk>
 
+## Debugging 
+
+ - ng serve --host 0.0.0.0
+Debugging ios device on windows: https://github.com/google/ios-webkit-debug-proxy
+
 ## Deploy
   
 - npm version patch

@@ -13,15 +13,17 @@ export class DialogChangeChooseUnitComponent {
   unitOptions = [{}];
   unitChoosen = false;
   clasChoosen = false;
+  data: ChoosenUnit = {
+    clas: "",
+    unit: "",
+  }
+  test="";
 
-  constructor(
-    public dialogRef: MatDialogRef<DialogChangeChooseUnitComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ChoosenUnit,
-     private vocService: VocabularyDbService) {
-      vocService.getClases().then((classes) => {
-        this.clasOptions = classes;
-      }).catch(err => console.log("ERR", err));
-    }
+  constructor(public dialogRef: MatDialogRef<DialogChangeChooseUnitComponent>, private vocService: VocabularyDbService) {
+    vocService.getClases().then((classes) => {
+      this.clasOptions = classes;
+    }).catch(err => console.log("ERR", err));
+  }
 
   cancelClicked(): void {
     this.dialogRef.close();

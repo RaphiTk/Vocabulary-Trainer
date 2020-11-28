@@ -1,1 +1,5 @@
-<span id="primaryLanguageText">{{primaryLanguage}}</span>
+<div *ngIf="editable">
+    <div autocorrect='off' contenteditable="true" spellcheck="false" #primaryLanguage>
+    </div>
+</div>
+<span *ngIf="!editable">{{primaryLanguage}}</span>
