@@ -1,4 +1,7 @@
+import { version } from '../../package.json';
+
 export const environment = {
+  version: version,
   production: true,
   auth: {
     CLIENT_ID: "pYn9igA2s1PMicmuGE5jnPyxE8RuCWhx",

@@ -4,6 +4,7 @@ import {VocabularyRestService} from './services/vocabulary-rest.service';
 import { Router, RoutesRecognized, NavigationEnd } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from './services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,8 @@ export class AppComponent {
       e.preventDefault(); 
     }
 
+    console.info("App version: " + environment.version);
+
     if(screen.height > 600 && screen.width > 600) {
       this.isMobileUser = false;
     } else {
@@ -28,7 +31,6 @@ export class AppComponent {
     
     this.router.events
     .subscribe((event) => {
-      // example: NavigationStart, RoutesRecognized, NavigationEnd
       if (event instanceof RoutesRecognized) {
         if (event.url == "/") {
           this.isMainMenu = true;
