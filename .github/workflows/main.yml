@@ -1,4 +1,4 @@
-name: Increase Minor Version
+name: Build & Publish app
 
 on:
   push:
