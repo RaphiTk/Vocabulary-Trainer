@@ -1,6 +1,7 @@
 # Vocabulary Trainer
-  
-Live version is accessable under <vocabulary-trainer.tk>
+
+![Build & Publish app](https://github.com/Raphael-Stellwag/Vocabulary-Trainer/workflows/Build%20&%20Publish%20app/badge.svg)  
+Live version is accessable under [vocabulary-trainer.ml](vocabulary-trainer.ml)
 
 ## Debugging 
 
@@ -8,6 +9,11 @@ Live version is accessable under <vocabulary-trainer.tk>
 Debugging ios device on windows: https://github.com/google/ios-webkit-debug-proxy
 
 ## Deploy
+
+ - push your changes to github (main branch)
+ - a ci job will be started and your changes will be available after around 5 mins
+
+## Deploy manually (OLD)
   
 - npm version patch
 - ng build --prod  
