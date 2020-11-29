@@ -1,0 +1,32 @@
+name: Increase Minor Version
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        if: github.event.pull_request.merged
+        with:
+          ref: refs/heads/master
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 8
+      - name: npm install
+        run: npm install
+      - name: version and publish
+        run: |
+          git config user.name $GITHUB_ACTOR
+          git config user.email gh-actions-${GITHUB_ACTOR}@github.com          
+          npm version minor --force -m "Version %s"          
+          git remote add gh-origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git push gh-origin HEAD:main --tags
+        env:
+          CI: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
