@@ -22,7 +22,7 @@ jobs:
           date > generated.txt
           git config user.name github-actions
           git config user.email github-actions@github.com
-          npm version minor --force -m "Version %s"
+          npm version patch --force -m "Version %s"
           git push
           git push --tags
         #  git config user.name $GITHUB_ACTOR
