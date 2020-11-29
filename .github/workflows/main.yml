@@ -17,14 +17,15 @@ jobs:
           node-version: 8
       - name: npm install
         run: npm install
-      - run: |
+      - name: increase version
+        run: |
           date > generated.txt
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
           git commit -m "generated"
           git push
-      #- name: version and publish
+      #
        # run: |
         #  git config user.name $GITHUB_ACTOR
         #  git config user.email gh-actions-${GITHUB_ACTOR}@github.com          
