@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogChangeChooseUnitComponent } from '../../dialogs/dialog-change-choose-unit/dialog-change-choose-unit.component';
 import { Router } from '@angular/router';
 import { DialogQueryChooseUnitComponent } from 'src/app/dialogs/dialog-query-choose-unit/dialog-query-choose-unit.component';
@@ -12,7 +12,7 @@ import { DialogQueryChooseUnitComponent } from 'src/app/dialogs/dialog-query-cho
 })
 export class SiteMenuComponent {
 
-  constructor(public dialog: MatDialog, public router: Router) {}
+  constructor(public dialog: MatDialog, public router: Router) { }
 
   changeButtonPressed() {
     const dialogRef = this.dialog.open(DialogChangeChooseUnitComponent, {
@@ -22,7 +22,7 @@ export class SiteMenuComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-        const link = ['../change', result.clas, result.unit ];
+        const link = ['../change', result.clas, result.unit];
         this.router.navigate(link);
       }
     });
@@ -31,7 +31,7 @@ export class SiteMenuComponent {
   queryButtonPressed() {
     const dialogRef = this.dialog.open(DialogQueryChooseUnitComponent, {
       width: '250px',
-      data: {reason: "train"}
+      data: { reason: "train" }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -40,7 +40,7 @@ export class SiteMenuComponent {
         if (result.unit == null) {
           link = ['../query', result.clas];
         } else {
-          link = ['../query', result.clas, result.unit ];
+          link = ['../query', result.clas, result.unit];
         }
         this.router.navigate(link);
       }
