@@ -1,0 +1,41 @@
+name: Build & Publish app
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+      - name: npm install
+        run: |
+          npm install
+          npm install @angular/cli
+      - name: increase version
+        run: |
+          date > generated.txt
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          npm version patch --force -m "Version %s"
+          git push
+          git push --tags
+      - name: build prod version
+        run: |
+          npm install
+          npm install @angular/cli
+          npm run build:prod
+          # ng build --prod
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        with:
+          server: files.000webhost.com
+          username: podgiest-removal
+          password: ${{ secrets.password }} 
+          server-dir: public_html/
+          local-dir: dist/
