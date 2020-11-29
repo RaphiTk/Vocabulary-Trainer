@@ -9,6 +9,7 @@
           "/favicon.ico",
           "/assets/icons/logo.png",
           "/index.html",
+          "/manifest.webmanifest",
           "/*.css",
           "/*.js",
           "/*.json",
@@ -25,20 +26,9 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
-          "/assets/**"
+          "/assets/**",
+          "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
         ]
-      }
-    }
-  ],
-  "dataGroups": [
-    {
-      "name": "jokes-api",
-      "urls": ["https://api.chucknorris.io/jokes/random"],
-      "cacheConfig": {
-        "strategy": "freshness",
-        "maxSize": 20,
-        "maxAge": "1h",
-        "timeout": "5s"
       }
     }
   ]
