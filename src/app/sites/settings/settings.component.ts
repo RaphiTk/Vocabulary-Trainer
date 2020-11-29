@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { VarSecondaryLanguageComponent } from './../../frames/var-secondary-language/var-secondary-language.component';
 import { Component, OnInit, ViewChild, Input, AfterViewInit } from '@angular/core';
 import { VarPrimaryLanguageComponent } from '../../frames/var-primary-language/var-primary-language.component';
@@ -12,6 +13,7 @@ import { LoadingSpinnerComponent } from 'src/app/frames/loading-spinner/loading-
 import { Overlay} from '@angular/cdk/overlay';
 import { ComponentPortal} from '@angular/cdk/portal';
 import { VocabularyRestService } from 'src/app/services/vocabulary-rest.service';
+import { version } from 'punycode';
 
 
 @Component({
@@ -23,11 +25,14 @@ export class SiteSettingsComponent implements OnInit, AfterViewInit {
   @ViewChild("VarPrimaryLanguage") varPrimaryLanguageComponent: VarPrimaryLanguageComponent;
   @ViewChild("VarSecondaryLanguage") varSecondaryLanguageComponent: VarSecondaryLanguageComponent;
   private userId: string = '';
+  private version: string = '';
 
   constructor(public snackBar: MatSnackBar, public auth: AuthService, private dialog: MatDialog, private vocService: VocabularyDbService, private overlay: Overlay, private rest: VocabularyRestService ) { }
  
   ngOnInit() {
       console.log("Init called");
+
+      this.version = environment.version;
 
       console.log(this.auth.userProfile$)
       this.auth.userProfile$.forEach((value) => {
