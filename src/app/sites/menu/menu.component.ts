@@ -4,22 +4,17 @@ import {MatDialog} from '@angular/material/dialog';
 import { DialogChangeChooseUnitComponent } from '../../dialogs/dialog-change-choose-unit/dialog-change-choose-unit.component';
 import { Router } from '@angular/router';
 import { DialogQueryChooseUnitComponent } from 'src/app/dialogs/dialog-query-choose-unit/dialog-query-choose-unit.component';
-import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-site-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
 })
-export class SiteMenuComponent implements OnInit {
+export class SiteMenuComponent {
 
   constructor(public dialog: MatDialog, public router: Router) {}
 
-  ngOnInit() {
-  }
-
   changeButtonPressed() {
-    
     const dialogRef = this.dialog.open(DialogChangeChooseUnitComponent, {
       width: '250px',
       data: {}
@@ -31,11 +26,9 @@ export class SiteMenuComponent implements OnInit {
         this.router.navigate(link);
       }
     });
-
   }
 
   queryButtonPressed() {
-    
     const dialogRef = this.dialog.open(DialogQueryChooseUnitComponent, {
       width: '250px',
       data: {reason: "train"}
@@ -52,7 +45,6 @@ export class SiteMenuComponent implements OnInit {
         this.router.navigate(link);
       }
     });
-
   }
 
 }

@@ -1,8 +1,8 @@
 
-<h1 mat-dialog-title>Which unit you want to {{data.reason}}?</h1>
+<h1 mat-dialog-title>Which unit you want to {{input.reason}}?</h1>
 <div mat-dialog-content>
   <mat-form-field>
-    <mat-select placeholder="Class to {{data.reason}}" [(value)]="data.clas" (selectionChange)="clasChanged()">
+    <mat-select placeholder="Class to {{input.reason}}" [(value)]="choosenUnit.clas" (selectionChange)="clasChanged()">
       <mat-option *ngFor="let option of clasOptions" [value]="option.clas">
         {{option.clas}}
       </mat-option>
@@ -10,7 +10,7 @@
   </mat-form-field>
   <br>
   <mat-form-field>
-    <mat-select placeholder="Unit to {{data.reason}}" [disabled]="!clasChoosen" [(value)]="data.unit">
+    <mat-select placeholder="Unit to {{input.reason}}" [disabled]="!clasChoosen" [(value)]="choosenUnit.unit">
         <mat-option>All</mat-option>
         <mat-option *ngFor="let option of unitOptions" [value]="option.unit">
           {{option.unit}}

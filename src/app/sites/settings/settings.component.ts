@@ -21,7 +21,7 @@ import { version } from 'punycode';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
-export class SiteSettingsComponent implements OnInit, AfterViewInit {
+export class SiteSettingsComponent implements OnInit {
   @ViewChild("VarPrimaryLanguage") varPrimaryLanguageComponent: VarPrimaryLanguageComponent;
   @ViewChild("VarSecondaryLanguage") varSecondaryLanguageComponent: VarSecondaryLanguageComponent;
   userId: string = '';
@@ -30,21 +30,17 @@ export class SiteSettingsComponent implements OnInit, AfterViewInit {
   constructor(public snackBar: MatSnackBar, public auth: AuthService, private dialog: MatDialog, private vocService: VocabularyDbService, private overlay: Overlay, private rest: VocabularyRestService ) { }
  
   ngOnInit() {
-      console.log("Init called");
+    console.log("Init called");
 
-      this.version = environment.version;
+    this.version = environment.version;
 
-      console.log(this.auth.userProfile$)
-      this.auth.userProfile$.forEach((value) => {
-        if(value!= null) {
-          console.log(value)
-          this.userId = value.nickname;
-        }
-      });
-  }
-
-  ngAfterViewInit(): void {
-    //this.varSecondaryLanguageComponent.makeEditable();
+    console.log(this.auth.userProfile$)
+    this.auth.userProfile$.forEach((value) => {
+      if(value!= null) {
+        console.log(value)
+        this.userId = value.nickname;
+      }
+    });
   }
 
   saveButtonPressed() {
@@ -104,9 +100,13 @@ export class SiteSettingsComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
         if (result.unit === undefined || result.unit === null) {
-          this.vocService.getVocsFromOneClas(result.clas).then((vocResult:Vocabulary[]) => {this.startDownload(vocResult) });
+          this.vocService.getVocsFromOneClas(result.clas).then((vocResult:Vocabulary[]) => {
+            this.startDownload(vocResult) 
+          });
         } else {
-          this.vocService.getVocsFromOneUnit(result.clas, result.unit).then((vocResult:Vocabulary[]) => {this.startDownload(vocResult)})
+          this.vocService.getVocsFromOneUnit(result.clas, result.unit).then((vocResult:Vocabulary[]) => {
+            this.startDownload(vocResult)
+          });
         }
       }
     });

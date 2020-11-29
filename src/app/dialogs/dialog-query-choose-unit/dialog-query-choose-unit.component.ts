@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { ChoosenUnit } from '../../interfaces/choosen-unit';
 import { VocabularyDbService } from 'src/app/services/vocabulary-db.service';
 @Component({
@@ -11,28 +11,31 @@ export class DialogQueryChooseUnitComponent {
   clasOptions = [{}];
   unitOptions = [{}];
   clasChoosen = false;
+  choosenUnit: ChoosenUnit = {
+    unit: "",
+    clas: ""
+  }
 
-  constructor(
-    public dialogRef: MatDialogRef<DialogQueryChooseUnitComponent>,
-    private vocService: VocabularyDbService, @Inject(MAT_DIALOG_DATA) public data) {
+  constructor(public dialogRef: MatDialogRef<DialogQueryChooseUnitComponent>,
+    private vocService: VocabularyDbService, @Inject(MAT_DIALOG_DATA) public input) {
       vocService.getClases().then((classes) => {
         this.clasOptions = classes;
       }).catch(err => console.log("ERR", err));
   }
   
-    clasChanged(): void {
-      this.vocService.getUnits(this.data.clas).then((units) => {
-        this.clasChoosen = true;
-        this.unitOptions = units;
-      }).catch(err => console.log("ERR", err));
-    }
+  clasChanged(): void {
+    this.vocService.getUnits(this.choosenUnit.clas).then((units) => {
+      this.clasChoosen = true;
+      this.unitOptions = units;
+    }).catch(err => console.log("ERR", err));
+  }
 
-    cancelClicked(): void {
-      this.dialogRef.close();
-    }
-  
-    okClicked(): void {
-      this.dialogRef.close(this.data);
-    }
+  cancelClicked(): void {
+    this.dialogRef.close();
+  }
+
+  okClicked(): void {
+    this.dialogRef.close(this.choosenUnit);
+  }
 
 }
