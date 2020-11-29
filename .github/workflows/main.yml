@@ -38,4 +38,4 @@ jobs:
           username: podgiest-removal
           password: ${{ secrets.password }} 
           server-dir: public_html/
-          local-dir: ./dist/
+          local-dir: dist/
