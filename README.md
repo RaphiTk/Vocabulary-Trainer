@@ -11,7 +11,7 @@ Debugging ios device on windows: https://github.com/google/ios-webkit-debug-prox
 ## Deploy
 
  - push your changes to github (main branch)
- - a ci job will be started and your changes will be available after around 5 mins
+ - a ci job will be started and your changes will be available after around 5 mins (sometimes doesnt work because of bad ftp server)
 
 ## Deploy manually (OLD)
   
