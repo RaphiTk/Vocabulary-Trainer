@@ -29,6 +29,7 @@ jobs:
           git push --tags
       - name: build prod version
         run: |
+          npm install @angular/cli
           ng build --prod
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
