@@ -2,9 +2,9 @@ name: Increase Minor Version
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   publish:
@@ -26,7 +26,7 @@ jobs:
           git config user.email gh-actions-${GITHUB_ACTOR}@github.com          
           npm version minor --force -m "Version %s"          
           git remote add gh-origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          git push gh-origin HEAD:master --tags
+          git push gh-origin HEAD:main --tags
         env:
           CI: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
