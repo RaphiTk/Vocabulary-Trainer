@@ -25,11 +25,13 @@ jobs:
           npm version patch --force -m "Version %s"
           git push
           git push --tags
-        #  git config user.name $GITHUB_ACTOR
-        #  git config user.email gh-actions-${GITHUB_ACTOR}@github.com          
-        #  npm version minor --force -m "Version %s"          
-        #  git remote add gh-origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-        #  git push gh-origin HEAD:main --tags
-        #env:
-         # CI: true
-          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: build prod version
+        run: |
+          ng build --prod
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        with:
+          server: files.000webhost.com
+          username: podgiest-removal
+          password: ${{ secrets.password }} 
+          server-dir: public_html/
