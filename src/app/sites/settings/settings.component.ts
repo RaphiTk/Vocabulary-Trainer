@@ -24,8 +24,8 @@ import { version } from 'punycode';
 export class SiteSettingsComponent implements OnInit, AfterViewInit {
   @ViewChild("VarPrimaryLanguage") varPrimaryLanguageComponent: VarPrimaryLanguageComponent;
   @ViewChild("VarSecondaryLanguage") varSecondaryLanguageComponent: VarSecondaryLanguageComponent;
-  private userId: string = '';
-  private version: string = '';
+  userId: string = '';
+  version: string = '';
 
   constructor(public snackBar: MatSnackBar, public auth: AuthService, private dialog: MatDialog, private vocService: VocabularyDbService, private overlay: Overlay, private rest: VocabularyRestService ) { }
  
