@@ -1,7 +1,7 @@
 # Vocabulary Trainer
 
 ![Build & Publish app](https://github.com/Raphael-Stellwag/Vocabulary-Trainer/workflows/Build%20&%20Publish%20app/badge.svg)  
-Live version is accessable under [vocabulary-trainer.ml](vocabulary-trainer.ml)
+Live version is accessable under [https://vocabulary-trainer.ml](https://vocabulary-trainer.ml)
 
 ## Debugging 
 
