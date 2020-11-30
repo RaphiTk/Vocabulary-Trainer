@@ -5,7 +5,7 @@
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "/",
-  "start_url": "https://vocabulary-trainer.ml/#/",
+  "start_url": "https://vocabulary-trainer.ml/",
   "icons": [
     {
       "src": "assets/icons/windows10/Square71x71Logo.scale-400.png",
