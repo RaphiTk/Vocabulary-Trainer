@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
-import { Vocabulary, IVocabulary } from '../interfaces/vocabulary';
+import {  IVocabulary } from '../interfaces/vocabulary';
 import { LocalStorageNamespace } from './local-storage.namespace';
 import { environment } from 'src/environments/environment';
-import { LocalActionsService } from './local-actions.service';
 import { IAction, Action, ActionMethod } from '../interfaces/action';
 import { DbFunctionService } from './db-function.service';
 
@@ -14,7 +13,7 @@ import { DbFunctionService } from './db-function.service';
 })
 export class VocabularyRestService {
 
-  constructor(private httpClient: HttpClient, private auth: AuthService, private localActions: LocalActionsService, private dbFunctions: DbFunctionService) { }
+  constructor(private httpClient: HttpClient, private auth: AuthService, private dbFunctions: DbFunctionService) { }
 
   handleServiceStart() {
     let _this = this;
@@ -169,7 +168,7 @@ export class VocabularyRestService {
 
   postAction(method: ActionMethod, vocBeforeAction: IVocabulary, vocAfterAction: IVocabulary) {
     this.saveActionForLaterPush(method, vocBeforeAction, vocAfterAction);
-    if (this.auth.loggedIn) {
+    if (this.auth.isLoggedIn()) {
       console.log("authenticated");
       this.sync();
     } else {

@@ -7,23 +7,13 @@ export const environment = {
   version: version,
   production: false,
   auth: {
-    CLIENT_ID: "pYn9igA2s1PMicmuGE5jnPyxE8RuCWhx",
-    CLIENT_DOMAIN: "vocabulary-trainer.eu.auth0.com", // e.g., 'you.auth0.com'
-    REDIRECT: "http://localhost:4200?callback",
-    LOGOUT_URL: "http://localhost:4200/logout"
+    LOGIN: "http://localhost:3010/v1/users/login",
+    REGISTER: "http://localhost:3010/v1/users/register",
   },
   vocabulary_server: {
     URL: "http://localhost:3010/v1/actions",
-//    URL: "https://vocabulary-trainer.ml/vocabulary-trainer/v1/actions",
-
+    //URL: "https://raphael-stellwag.tk/api/voc-trainer/v1/actions",
+    //URL: "http://www.vocabulary-trainer.ml/vocabulary-trainer/v1/actions",
+    //    URL: "https://vocabulary-trainer.ml/vocabulary-trainer/v1/actions",
   }
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.

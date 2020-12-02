@@ -12,6 +12,9 @@ export namespace LocalStorageNamespace {
   const defaultPrimaryId: number = 0;
   const localStoragePrimaryIdKey: string = "PrimaryId";
 
+  const localStorageAuthentificationToken = "AuthentificationToken";
+  const localStorageUserKey = "User";
+
   export function getPrimaryLanguage() {
     let local: string = localStorage.getItem(localStoragePrimaryLanguageKey);
     if (local === null || local === undefined) {
@@ -95,5 +98,33 @@ export namespace LocalStorageNamespace {
 
   export function setNextPrimaryId(newNumber: number) {
     localStorage.setItem(localStoragePrimaryIdKey, newNumber+"");
+  }
+
+  export function isLoggedIn() {
+    let loggedIn = localStorage.getItem("LoggedIn");
+    if (loggedIn != "true") {
+      return false;
+    }
+    return true;
+  }
+
+  export function setLoggedInToTrue() {
+    localStorage.setItem("LoggedIn", "true");
+  }
+
+  export function getAuthenticationToken() {
+    return localStorage.getItem(localStorageAuthentificationToken);
+  }
+
+  export function setAuthentificationToken(newToken: string) {
+    localStorage.setItem(localStorageAuthentificationToken, newToken);
+  }
+
+  export function setUser(newUser:string) {
+    localStorage.setItem(localStorageUserKey, newUser);
+  }
+
+  export function getUser() {
+    return localStorage.getItem(localStorageUserKey);
   }
 }

@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 
 import { Injectable } from '@angular/core';
 import {
@@ -21,14 +22,17 @@ export class InterceptorService implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    return this.auth.getTokenSilently$().pipe(
-      mergeMap(token => {
+    if (req.url == environment.auth.LOGIN || req.url == environment.auth.REGISTER) {
+      return next.handle(req);
+    } else if (this.auth.isLoggedIn) {
+      let token = this.auth.getAuthToken();
+      if (token != null) {
         const tokenReq = req.clone({
-          setHeaders: { Authorization: `Bearer ${token}` }
+          setHeaders: { Authorization: `Basic ${token}` }
         });
         return next.handle(tokenReq);
-      }),
-      catchError(err => throwError(err))
-    );
+      }
+    }
+    
   }
 }

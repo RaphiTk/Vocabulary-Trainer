@@ -1,115 +1,102 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import createAuth0Client from '@auth0/auth0-spa-js';
-import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
-import { from, of, Observable, BehaviorSubject, combineLatest, throwError } from 'rxjs';
-import { tap, catchError, concatMap, shareReplay } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { LocalStorageNamespace} from './local-storage.namespace';
+//import { toBase64String } from '@angular/compiler/src/output/source_map';
 
 @Injectable()
 export class AuthService {
+  private loggedIn: boolean = null;
+  private user: string = null;
+  private token: string = null;
 
-  auth0Client$ = (from(
-    createAuth0Client({
-      domain: environment.auth.CLIENT_DOMAIN,
-      client_id: environment.auth.CLIENT_ID,
-      redirect_uri: environment.auth.REDIRECT
-    })
-  ) as Observable<Auth0Client>).pipe(
-    shareReplay(1), // Every subscription receives the same shared value
-    catchError(err => throwError(err))
-  );
-  // Create subject and public observable of user profile data
-  private userProfileSubject$ = new BehaviorSubject<any>(null);
-  userProfile$ = this.userProfileSubject$.asObservable();
-  // Create a local property for login status
-  loggedIn: boolean = null;
-
-  constructor(private router: Router) {
-    // On initial load, check authentication state with authorization server
-    // Set up local auth streams if user is already authenticated
-    this.localAuthSetup();
-    // Handle redirect from Auth0 login
-    this.handleAuthCallback();
-  }
-
-  // Define observables for SDK methods that return promises by default
-  // For each Auth0 SDK method, first ensure the client instance is ready
-  // concatMap: Using the client instance, call SDK method; SDK returns a promise
-  // from: Convert that resulting promise into an observable
-  isAuthenticated$ = this.auth0Client$.pipe(
-    concatMap((client: Auth0Client) => from(client.isAuthenticated())),
-    tap(res => this.loggedIn = res)
-  );
-  handleRedirectCallback$ = this.auth0Client$.pipe(
-    concatMap((client: Auth0Client) => from(client.handleRedirectCallback()))
-  );
-
-  getUser$(options?): Observable<any> {
-    return this.auth0Client$.pipe(
-      concatMap((client: Auth0Client) => from(client.getUser(options))),
-      tap(user => this.userProfileSubject$.next(user))
-    );
-  }
-
-  private localAuthSetup() {
-    const checkAuth$ = this.isAuthenticated$.pipe(
-      concatMap((loggedIn: boolean) => {
-        if (loggedIn) {
-          return this.getUser$();
-        }
-        return of(loggedIn);
-      })
-    );
-    checkAuth$.subscribe();
-  }
-
-  login(redirectPath: string = environment.auth.REDIRECT) {
-    this.auth0Client$.subscribe((client: Auth0Client) => {
-      // Call method to log in
-      client.loginWithRedirect({
-        redirect_uri: `${window.location.origin}`,
-        appState: { target: redirectPath }
-      });
-    });
-  }
-
-  private handleAuthCallback() {
-    const params = window.location.search;
-    if (params.includes('code=') && params.includes('state=')) {
-      let targetRoute: string; // Path to redirect to after login processsed
-      const authComplete$ = this.handleRedirectCallback$.pipe(
-        // Have client, now call method to handle auth callback redirect
-        tap(cbRes => {
-          // Get and set target redirect route from callback results
-          targetRoute = cbRes.appState && cbRes.appState.target ? cbRes.appState.target : '/';
-        }),
-        concatMap(() => {
-          // Redirect callback complete; get user and login status
-          return combineLatest([
-            this.getUser$(),
-            this.isAuthenticated$
-          ]);
-        })
-      );
-      authComplete$.subscribe(([user, loggedIn]) => {
-        this.router.navigate([targetRoute]);
-      });
+  constructor(private httpClient: HttpClient) {
+    this.loggedIn = LocalStorageNamespace.isLoggedIn();
+    if (this.loggedIn) {
+      this.user = LocalStorageNamespace.getUser();
+      this.token = LocalStorageNamespace.getAuthenticationToken();
     }
   }
 
-  logout() {
-    this.auth0Client$.subscribe((client: Auth0Client) => {
-      client.logout({
-        client_id: environment.auth.CLIENT_ID,
-        returnTo: environment.auth.LOGOUT_URL//window.location.origin
+  isLoggedIn(): boolean {
+    return this.loggedIn;
+  }
+
+  getAuthToken() {
+    return this.token;
+  }
+
+  register(user, password) {
+    if (this.loggedIn) {
+      return null;
+    }
+    let userObject = {
+      username: user,
+      password: password
+    }
+    return new Promise((resolve, reject) => {
+      this.httpClient.post(environment.auth.REGISTER, JSON.stringify(userObject)).toPromise()
+          .then((result: any) => {
+        this.saveCredentials(userObject);
+        resolve();
+      }).catch(err => {
+        console.log(err);
+        reject(err);
       });
     });
   }
 
-  getTokenSilently$(options?): Observable<string> {
-    return this.auth0Client$.pipe(
-      concatMap((client: Auth0Client) => from(client.getTokenSilently(options)))
-    );
+  login(user, password) {
+    if (this.loggedIn) {
+      return null;
+    }
+    let userObject = {
+      username: user,
+      password: password
+    }
+    let promise = new Promise((resolve, reject) => {
+      this.httpClient.post(environment.auth.LOGIN, JSON.stringify(userObject)).toPromise()
+          .then((result: any) => {
+        this.saveCredentials(userObject);
+        resolve();
+      }).catch(err => {
+        console.log(err);
+        reject(err);
+      });
+    });
+
+    return promise;
   }
+
+  logout() {
+    console.error("Must be implemented");
+  }
+
+  getUsername(): string {
+    return this.user;
+  }
+
+  private saveCredentials(userObject: any) {
+    this.user = userObject.username;
+    this.loggedIn = true;
+    // Create Base64 Object
+    //let Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/\r\n/g,"\n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
+
+
+// Encode the String
+
+    let stringToEncode = userObject.username + ":" + userObject.password
+    //let token = Base64.encode(stringToEncode);
+    let token = btoa(stringToEncode);
+    this.user = userObject.username;
+    this.loggedIn = true;
+    this.token = token;
+    console.log(token); 
+    LocalStorageNamespace.setAuthentificationToken(token);
+    LocalStorageNamespace.setUser(userObject.username)
+    LocalStorageNamespace.setLoggedInToTrue();
+    
+  }
+
 }

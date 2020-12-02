@@ -24,8 +24,8 @@ import { version } from 'punycode';
 export class SiteSettingsComponent implements OnInit {
   @ViewChild("VarPrimaryLanguage") varPrimaryLanguageComponent: VarPrimaryLanguageComponent;
   @ViewChild("VarSecondaryLanguage") varSecondaryLanguageComponent: VarSecondaryLanguageComponent;
-  userId: string = '';
-  version: string = '';
+  userId: string = null;
+  version: string = null;
 
   constructor(public snackBar: MatSnackBar, public auth: AuthService, private dialog: MatDialog, private vocService: VocabularyDbService, private overlay: Overlay, private rest: VocabularyRestService ) { }
  
@@ -34,13 +34,7 @@ export class SiteSettingsComponent implements OnInit {
 
     this.version = environment.version;
 
-    console.log(this.auth.userProfile$)
-    this.auth.userProfile$.forEach((value) => {
-      if(value!= null) {
-        console.log(value)
-        this.userId = value.nickname;
-      }
-    });
+    this.userId = this.auth.getUsername();
   }
 
   saveButtonPressed() {
@@ -120,10 +114,5 @@ export class SiteSettingsComponent implements OnInit {
     document.body.appendChild(downloadAnchorNode); // required for firefox
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
-  }
-
-  loginButtonPressed() {
-    //
-    this.auth.login();
   }
 }

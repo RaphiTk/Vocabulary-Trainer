@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER  } from '@angular/core';
 
@@ -72,6 +73,9 @@ import { FullscreenOverlayContainer, OverlayContainer} from '@angular/cdk/overla
 import { InterceptorService } from './services/interceptor.service';
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { LoginToSyncComponent } from './sites/login-to-sync/login-to-sync.component';
+import { DialogErrorMessageComponent } from './dialogs/dialog-error-message/dialog-error-message.component';
+import { DialogSuccessMessageComponent } from './dialogs/dialog-success-message/dialog-success-message.component';
 
 @NgModule({
   imports: [
@@ -118,6 +122,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     HttpClientModule,
     FormsModule,
     AppRoutingModule,
+    RouterModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   exports: [MatButtonModule, MatFormFieldModule, MatCheckboxModule],
@@ -142,6 +147,9 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     DialogEditVocabularyComponent,
     LoginSuccessfulComponent,
     LoadingSpinnerComponent,
+    LoginToSyncComponent,
+    DialogErrorMessageComponent,
+    DialogSuccessMessageComponent,
   ],
   providers: [
     VocabularyRestService, 

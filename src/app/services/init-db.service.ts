@@ -3,7 +3,6 @@ import { IdbService } from './idb.service';
 import { IDataBase, DATA_TYPE, ITable } from 'jsstore';
 import * as JsStore from 'jsstore';
 import { environment } from 'src/environments/environment';
-declare var require: any;
 
 @Injectable({
   providedIn: 'root'

@@ -14,19 +14,6 @@ export class DbFunctionService extends InitDbService {
   constructor() {
     super(); 
   }
-
-/*
-  public restServiceMethodAddVocabulary(voc: IVocabulary) {
-    return this.insertVocabularyJustDb(voc);
-  }
-  
-  public restServiceMethodUpdateVocabulary(voc: IVocabulary) {
-    return this.updateVocabularyJustDb(voc);
-  }
-
-  public restServiceMethodDeleteVocabulary(voc: IVocabulary) {
-    return this.deleteVocabularyJusDb(voc);
-  }*/
   
   public updateVocabularyJustDb(voc: IVocabulary) {
     return this.connection.update({in: this.tableName, set: voc, where: {id: voc.id}});
@@ -69,13 +56,3 @@ export class DbFunctionService extends InitDbService {
   }
 
 }
-
-/*
-export function InitVocabularyService(): () => Promise<any> {
-  return (): Promise<any> => {
-    return new Promise((resolve, reject) => {
-      let vocService = new VocabularyService();
-      vocService.initDatabase().then(() => resolve());      
-    });
-  };
-}*/

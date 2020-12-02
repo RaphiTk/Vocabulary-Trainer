@@ -48,18 +48,22 @@
 </div>
 <br>
 
-<div class="button" *ngIf="!auth.loggedIn" (click)="auth.login()">
-  <span class="buttonText">
-    Login to Sync
-  </span>
-</div>
-<div *ngIf="auth.loggedIn" >
+<a routerLink="/settings/login" *ngIf="userId == null" style="text-decoration:none;">
+  <div class="button">
+    <span class="buttonText">
+      Login to Sync
+    </span>
+  </div>
+</a>
+
+<div *ngIf="userId != null" >
   Logged in as {{userId}}
-  <div class="button" (click)="auth.logout()">
+  <!--  <div class="button" (click)="auth.logout()">
     <span class="buttonText">
       Logout
     </span>
-  </div>
+  </div>-->
+
 </div>
 
 <br>

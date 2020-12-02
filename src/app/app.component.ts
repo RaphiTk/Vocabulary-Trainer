@@ -32,7 +32,7 @@ export class AppComponent {
     this.router.events
     .subscribe((event) => {
       if (event instanceof RoutesRecognized) {
-        if (event.url == "/") {
+        if (event.url == "/" || event.urlAfterRedirects == "/") {
           this.isMainMenu = true;
         } else {
           this.isMainMenu = false;

@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "vokabel-trainer-9e341": {
+      "hosting": {
+        "ngVoc": [
+          "vokabel-trainer-9e341"
+        ]
+      }
+    }
+  }
+}

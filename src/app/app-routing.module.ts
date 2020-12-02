@@ -1,3 +1,4 @@
+import { LoginToSyncComponent } from './sites/login-to-sync/login-to-sync.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SiteSearchComponent } from './sites/search/search.component';
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'search', component: SiteSearchComponent},
   { path: 'change/:clas/:unit', component: SiteChangeComponent},
   { path: 'login-successful', component: LoginSuccessfulComponent },
+  { path: 'settings/login', component: LoginToSyncComponent },
   { path: 'settings', component: SiteSettingsComponent },
   { path: '**', redirectTo: ''}];
 
