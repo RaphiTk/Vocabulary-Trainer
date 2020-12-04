@@ -1,7 +1,7 @@
+import { Vocabulary } from './../../interfaces/vocabulary';
 import { FilteredDataObject } from './../../interfaces/FilteredDataObject';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { IVocabulary, Vocabulary } from '../../interfaces/vocabulary';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
@@ -48,11 +48,7 @@ export class SiteChangeComponent implements OnInit, OnDestroy {
   }
 
   addClicked() {
-    let voc = {} as IVocabulary;
-    voc.unit = this.unit;
-    voc.clas = this.clas;
-    voc.failuresCount = 0;
-    voc.tries = 0;
+    let voc = new Vocabulary(null, 0, 0, this.clas, this.unit, null, null);
     
     const dialogRef = this.dialog.open(DialogAddVocabularyComponent, {
       width: '250px',
@@ -61,7 +57,7 @@ export class SiteChangeComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-        this.vocService.addVocabulary(result).then((newVocs) => this.vocs.push(Vocabulary.createCorrectReference(newVocs[0])));
+        this.vocService.addVocabulary(result);
         this.snackBar.open("Vocabulary successfully added", null, {duration: 2000})
       }
     });
