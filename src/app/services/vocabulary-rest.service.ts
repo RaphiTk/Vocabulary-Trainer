@@ -1,3 +1,4 @@
+import { InternetConnectionService } from './internet-connection.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
@@ -13,17 +14,27 @@ import { DbFunctionService } from './db-function.service';
 })
 export class VocabularyRestService {
 
-  constructor(private httpClient: HttpClient, private auth: AuthService, private dbFunctions: DbFunctionService) { }
+  constructor(private httpClient: HttpClient, private auth: AuthService, private dbFunctions: DbFunctionService, private internetConnection: InternetConnectionService) { }
 
   handleServiceStart() {
     let _this = this;
-    let promise = new Promise(function(resolve, reject) {  
+    return new Promise(function(resolve, reject) {  
       _this.getNewActions().subscribe((result: any) => {
         console.log("result", result);
         if (result.length > 0) {
-          _this.syncLocal(result as IAction[], resolve, reject);
+          _this.syncLocal(result as IAction[]).then(res => 
+            resolve(res)
+          ).catch(err => {
+            console.error(err);
+            reject(err)}
+          );
         } else if (LocalStorageNamespace.getLocalSavedActions().length > 0) {
-          _this.postLocalActions(LocalStorageNamespace.getLocalSavedActions()).then(res => resolve(res)).catch(err => reject(err));
+          _this.postLocalActions(LocalStorageNamespace.getLocalSavedActions()).then(res => 
+            resolve(res)
+          ).catch(err => {
+            console.error(err);
+            reject(err)
+          });
         } else {
           resolve();
         }
@@ -32,82 +43,117 @@ export class VocabularyRestService {
         reject(err);
       });
     });
-    return promise;
   }
 
-  public sync () {
+  sync () {
     return this.handleServiceStart();
   }
 
-  private syncLocal(serverActions: IAction[], resolveIt, rejectIt) {
+  private syncLocal(serverActions: IAction[]): Promise<any> {
     let local: IAction[] = LocalStorageNamespace.getLocalSavedActions();
-    this.performReverseLocalActions(local,serverActions, resolveIt, rejectIt, local.length-1);
+    return this.performReverseLocalActions(local, serverActions);
   }
 
-  private performReverseLocalActions(local, serverActions, resolveIt, rejectIt, index) {
-    console.log(index);
+  private performReverseLocalActions(local: Action[], serverActions: Action[]) : Promise<any> {
+    //console.log(index);
     if (local.length > 0) {
-      const element = local[index];
       let _this = this;
-      this.performReverseAction(element, element.method).finally(function() {
-        if(element === local[local.length-1]) {
-          _this.performServerActions(local, serverActions, resolveIt, rejectIt, 0);
-        } else {
-          _this.performReverseLocalActions(local, serverActions, resolveIt, rejectIt, index-1);
+      return new Promise(function(resolve, reject) {
+        let countFinished = 0;
+        for(let index = local.length -1; index >= 0; index--) {
+          const element = local[index];
+          _this.performReverseAction(element, element.method).finally(function() {
+            countFinished++;
+            if (countFinished == local.length) {
+              _this.performServerActions(local, serverActions).then(res => 
+                resolve(res)
+              ).catch(err => {
+                console.error(err);
+                reject(err)
+              });
+            }
+          })
+
         }
       })
+      
     } else {
-      this.performServerActions(local, serverActions, resolveIt, rejectIt, 0);
+      return this.performServerActions(local, serverActions);
     }
   }
 
-  private performServerActions(local, serverActions, resolveIt, rejectIt, index) {
-    const element = Action.deserializeVocabularies(serverActions[index]);
+  private performServerActions(local: Action[], serverActions: Action[]): Promise<any> {
     let _this = this;
-    this.performAction(element, element.method).finally(function() {
-      if(index === serverActions.length-1) {
-        LocalStorageNamespace.addCountSynchronizedActions(index + 1);
-        LocalStorageNamespace.setNextPrimaryId(Action.findVocabularyId(element)+1);
-        _this.performLocalActionsAndPushThem(local, serverActions, resolveIt, rejectIt, 0, []);
-      } else {
-        _this.performServerActions(local, serverActions, resolveIt, rejectIt, index+1);
-      }
-    });
-  }
-
-  private performLocalActionsAndPushThem(local, serverActions, resolveIt, rejectIt, index, localActionsReadyToPush) {
-    console.log(index);
-    if (local.length > 0) {
-      const element = local[index];
-      let oldId
-      if (element.method == ActionMethod.ADD) {
-        oldId = element.vocabularyAfterAction.id;
-        element.vocabularyAfterAction.id = LocalStorageNamespace.getNextPrimaryId();
-      }
-      this.performAction(element, element.method).then((result: any) => {
-        if (element.method == ActionMethod.ADD && oldId != result[0].id) {
-          for (let innerIndex = index; innerIndex < local.length; innerIndex++) {
-            //TODO: Just change the id when the old id == element.vocabulary.id 
-            const element: IAction = local[innerIndex];
-            if (element.vocabularyAfterAction != null)
-              element.vocabularyAfterAction.id = result[0].id
-            if (element.vocabularyBeforeAction != null)
-              element.vocabularyBeforeAction.id = result[0].id
+    return new Promise((resolve, reject) => {
+      let countFinished = 0;
+      for(let index = 0; index < serverActions.length; index++) {
+        const element = serverActions[index] = Action.deserializeVocabularies(serverActions[index])
+        if (element.method == ActionMethod.DELETE) {
+          let idToDelete = element.vocabularyBeforeAction.id;
+          //Was just created from server
+          let justCreated = false;
+          for(let innerIndex = 0; innerIndex < index; index++) {
+            if (serverActions[innerIndex].method == ActionMethod.ADD && serverActions[innerIndex].vocabularyAfterAction.id == idToDelete) {
+              justCreated = true;
+            }
+          } 
+          if (!justCreated) {
+            for(let innerIndex = 0; innerIndex < local.length; index++) {
+              if (local[innerIndex].vocabularyAfterAction != null && local[innerIndex].vocabularyAfterAction.id == idToDelete) {
+                local.splice(innerIndex, 1);
+              }
+            }  
           }
         }
-        localActionsReadyToPush.push(element);
-        if (element === local[local.length - 1]) {
-          this.postLocalActions(localActionsReadyToPush).then(res => resolveIt(res)).catch(err => rejectIt(err));
-        } else {
-          this.performLocalActionsAndPushThem(local, serverActions, resolveIt, rejectIt, index+1, localActionsReadyToPush);
-        }
-      }).catch(err => {
-        console.log("sdfsdfsdfxc", err);
-      });
-    } else {
-      resolveIt();
-    }
+        this.performAction(element, element.method).finally(function() {
+          countFinished++;
+          if (countFinished == serverActions.length) {
+            LocalStorageNamespace.addCountSynchronizedActions(serverActions.length);
+
+            _this.performLocalActionsAndPushThem(local).then(res => 
+              resolve(res)
+            ).catch(err => {
+              console.error(err);
+              reject(err)
+            });
+          }
+        })
+
+      }
+    })
   }
+
+  private async performLocalActionsAndPushThem(local: Action[]): Promise<any> {
+    let localActionsReadyToPush = [];
+    let newId = (await this.dbFunctions.getHighestId())[0].id;
+    for(let index = 0; index < local.length; index++) {
+      const element = local[index];
+      if (element.method == ActionMethod.ADD) {
+        newId++;
+        element.vocabularyAfterAction.id = newId;
+      }
+      await this.performAction(element, element.method).catch(err => {
+        console.log("sdfsdfsdfxc", err);
+        throw Error(err);
+      });  
+
+      if (element.method == ActionMethod.ADD) {
+        for (let innerIndex = index; innerIndex < local.length; innerIndex++) {
+          const element: IAction = local[innerIndex];
+          if (element.vocabularyAfterAction != null) {
+            element.vocabularyAfterAction.id = newId;
+          }
+          if (element.vocabularyBeforeAction != null) {
+            element.vocabularyBeforeAction.id = newId;
+          }
+        }
+      }
+      localActionsReadyToPush.push(element);
+    }
+    LocalStorageNamespace.setNextPrimaryId(newId+1);
+    return await this.postLocalActions(localActionsReadyToPush);
+  } 
+  
 
   private performAction(element:IAction, method: ActionMethod) {
     switch (method) {
@@ -123,7 +169,7 @@ export class VocabularyRestService {
     }
   }
 
-  private performReverseAction(element:IAction, method: ActionMethod) {
+  private performReverseAction(element:IAction, method: ActionMethod): Promise<any> {
     switch (method) {
       case ActionMethod.ADD:
         return this.dbFunctions.deleteVocabularyJustDb(element.vocabularyAfterAction);
@@ -168,11 +214,15 @@ export class VocabularyRestService {
 
   postAction(method: ActionMethod, vocBeforeAction: IVocabulary, vocAfterAction: IVocabulary) {
     this.saveActionForLaterPush(method, vocBeforeAction, vocAfterAction);
-    if (this.auth.isLoggedIn()) {
+    if (this.auth.isLoggedIn() && this.internetConnection.isConnected()) {
       console.log("authenticated");
       this.sync();
     } else {
-      console.log("Not authenticated");
+      if (this.internetConnection.isConnected() == false) {
+        console.log("No Internet");
+      } else {
+        console.log("Not authenticated");
+      }
     }
   }
 

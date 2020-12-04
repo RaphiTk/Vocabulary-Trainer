@@ -44,6 +44,7 @@ export class SiteSearchComponent implements OnInit {
     if (editable.addEventListener) {
       editable.addEventListener("input", evt => this.filterItems(evt), false);
     }
+    
   }
 
   filterItems(evt): void {

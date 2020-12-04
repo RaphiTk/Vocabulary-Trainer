@@ -1,3 +1,4 @@
+import { InternetConnectionService } from './../../services/internet-connection.service';
 import { DialogConfirmationComponent } from './../../dialogs/dialog-confirmation/dialog-confirmation.component';
 import { Overlay } from '@angular/cdk/overlay';
 import { VocabularyRestService } from 'src/app/services/vocabulary-rest.service';
@@ -22,7 +23,8 @@ export class LoginToSyncComponent implements OnInit {
   @ViewChildren('password') passwordDiv;
   private overlayRef;
 
-  constructor(private auth: AuthService, private router: Router, private vocRest: VocabularyRestService, private overlay: Overlay, public dialog: MatDialog) { }
+  constructor(private auth: AuthService, private router: Router, private vocRest: VocabularyRestService, 
+    private overlay: Overlay, public dialog: MatDialog, private internetConnection: InternetConnectionService) { }
 
   ngOnInit(): void {
     if (this.auth.isLoggedIn()) {
@@ -33,40 +35,45 @@ export class LoginToSyncComponent implements OnInit {
   login() {
     let user: string = this.userDiv.first.nativeElement.innerText;
     let password: string = this.passwordDiv.first.nativeElement.innerText; 
-    let validInput = this.validateInput(user, password);
-    if (validInput) {
-      this.auth.login(user, password).then(() => {
-        this.sync();
-        this.showSuccessDialog("login was successfull", "Welcome back 😀 <br> Your vocabularies are synced at the moment ↺. This can take a bit ⏲");
-
-      }).catch((err: HttpErrorResponse)=> {
-        console.log(err);
-        if (err.error != null && err.error.code == "ERR_0001" && err.status == 404) {
-
-          let dialogRef = this.dialog.open(DialogConfirmationComponent, {
-            disableClose: false
-          });
-          dialogRef.componentInstance.confirmTitle = "User doesn't exist yet"
-          dialogRef.componentInstance.confirmMessage = "Your username doesn't exist yet. Wanna register him?";
-          dialogRef.componentInstance.confirmButton = "Yes";
-          dialogRef.componentInstance.cancelButton = "No";
-        
-          dialogRef.afterClosed().subscribe(result => {
-            if(result) {
-              this.auth.register(user, password).then(() => {
-                this.sync();
-                this.showSuccessDialog("Registration was successfull", "Welcome 😀 <br> You can not restore your account once you lost your password, so please take care of it.");
-              }).catch((err: HttpErrorResponse)=> {
-                console.log(err);
-                this.showErrorDialog("registration was not successfull");
-              })
-            }
-          })
-        } else {
-          this.showErrorDialog("login was not successfull");
-        }
-      })
+    
+    if (!this.validateInput(user, password)) {
+      return;
     }
+    if (!this.internetConnection.isConnected()) {
+      this.showErrorDialog("No internet connection");
+      return;
+    }
+    this.auth.login(user, password).then(() => {
+      this.sync();
+      this.showSuccessDialog("login was successfull", "Welcome back 😀 <br> Your vocabularies are synced at the moment ↺. This can take a bit ⏲");
+
+    }).catch((err: HttpErrorResponse)=> {
+      console.log(err);
+      if (err.error != null && err.error.code == "ERR_0001" && err.status == 404) {
+
+        let dialogRef = this.dialog.open(DialogConfirmationComponent, {
+          disableClose: false
+        });
+        dialogRef.componentInstance.confirmTitle = "User doesn't exist yet"
+        dialogRef.componentInstance.confirmMessage = "Your username doesn't exist yet. Wanna register him?";
+        dialogRef.componentInstance.confirmButton = "Yes";
+        dialogRef.componentInstance.cancelButton = "No";
+      
+        dialogRef.afterClosed().subscribe(result => {
+          if(result) {
+            this.auth.register(user, password).then(() => {
+              this.sync();
+              this.showSuccessDialog("Registration was successfull", "Welcome 😀 <br> You can not restore your account once you lost your password, so please take care of it.");
+            }).catch((err: HttpErrorResponse)=> {
+              console.log(err);
+              this.showErrorDialog("registration was not successfull");
+            })
+          }
+        })
+      } else {
+        this.showErrorDialog("login was not successfull");
+      }
+    })
   }
 
   private validateInput(user: string, password: string) :boolean {

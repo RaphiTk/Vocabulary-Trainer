@@ -65,6 +65,7 @@ export class SiteSettingsComponent implements OnInit {
       fr.onload = function(e) {
         let readVocs:any[] = JSON.parse(<string>fr.result);
         let addVocs: Vocabulary[] = Array();
+        //if old format --> create new instances with new Format --> else it is already fine 😀
         if (readVocs[0].Klasse != null) {
           for(let voc of readVocs) {
             if (voc.Klasse != null) {

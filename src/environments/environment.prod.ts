@@ -4,10 +4,11 @@ export const environment = {
   version: version,
   production: true,
   auth: {
-    LOGIN: "pYn9igA2s1PMicmuGE5jnPyxE8RuCWhx",
-    REGISTER: "vocabulary-trainer.eu.auth0.com",
+    LOGIN: "https://raphael-stellwag.tk/api/voc-trainer/v1/users/login",
+    REGISTER: "https://raphael-stellwag.tk/api/voc-trainer/v1/users/register",
   },
   vocabulary_server: {
-    URL: "https://www.vocabulary-trainer.ml/vocabulary-trainer/v1/actions",
+    URL: "https://raphael-stellwag.tk/api/voc-trainer/v1/actions",
+    //URL: "https://www.vocabulary-trainer.ml/vocabulary-trainer/v1/actions",
   }
 };

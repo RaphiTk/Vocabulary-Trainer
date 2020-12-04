@@ -8,7 +8,12 @@ Live version is accessable under [https://vocabulary-trainer.ml](https://vocabul
  - ng serve --host 0.0.0.0
 Debugging ios device on windows: https://github.com/google/ios-webkit-debug-proxy
 
-## Deploy
+## Deploy via ng deploy to firebase
+
+ - ng build --prod
+ - ng deploy
+
+## Deploy via github CI (to 000webhost) (OLD)
 
  - push your changes to github (main branch)
  - a ci job will be started and your changes will be available after around 5 mins (sometimes doesnt work because of bad ftp server)

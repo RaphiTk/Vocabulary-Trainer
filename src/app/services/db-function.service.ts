@@ -47,6 +47,10 @@ export class DbFunctionService extends InitDbService {
     return this.connection.select({ from: this.tableName});
   }
 
+  getHighestId(): Promise<any> {
+    return this.connection.select({ from: this.tableName, limit: 1, order: {by: this.colId, type: "desc"}});
+  }
+
   getVocsFromOneUnit(clas: string, unit:string): Promise<any> {
     return this.connection.select({from: this.tableName, where: {clas: clas, unit: unit}, order: {by: this.colId, type: "ASC", idbSorting: false}})
   }
@@ -54,5 +58,7 @@ export class DbFunctionService extends InitDbService {
   getVocsFromOneClas(clas: string): Promise<any> {
     return this.connection.select({from: this.tableName, where: {clas: clas}, order: {by: this.colId, type: "ASC", idbSorting: false}})
   }
+
+
 
 }

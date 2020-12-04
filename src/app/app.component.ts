@@ -21,6 +21,8 @@ export class AppComponent {
       e.preventDefault(); 
     }
 
+    restApi.sync();
+
     console.info("App version: " + environment.version);
 
     if(screen.height > 600 && screen.width > 600) {
