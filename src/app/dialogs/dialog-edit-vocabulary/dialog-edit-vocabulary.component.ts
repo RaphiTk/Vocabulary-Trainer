@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Vocabulary } from 'src/app/interfaces/vocabulary';
-import { VocabularyDbService } from 'src/app/services/vocabulary-db.service';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { VocabularyService } from 'src/app/services/vocabulary.service';
 
 @Component({
   selector: 'app-dialog-edit-vocabulary',
@@ -16,7 +16,7 @@ export class DialogEditVocabularyComponent {
   constructor(
     public dialogRef: MatDialogRef<DialogEditVocabularyComponent>,
     @Inject(MAT_DIALOG_DATA) public voc: Vocabulary,
-     private vocService: VocabularyDbService, private snackBar: MatSnackBar) {  
+     private vocService: VocabularyService, private snackBar: MatSnackBar) {  
        this.data = voc.createNewObject();
        dialogRef.beforeClosed().subscribe(res => {
           if (!this.saved)
@@ -31,10 +31,10 @@ export class DialogEditVocabularyComponent {
   editClicked(): void {
     this.saved = true;
     this.vocService.editVocabulary(this.voc).then((obj) => {
-      this.dialogRef.close();
+      this.dialogRef.close(true);
       this.snackBar.open("Vocabulary successfully edited" , null, {duration:2000});
     }).catch(err => {
-      this.dialogRef.close();
+      this.dialogRef.close(false);
       console.log(err)
       this.snackBar.open("Failed to edit Vocabulary" , null, {duration:2000})
     });

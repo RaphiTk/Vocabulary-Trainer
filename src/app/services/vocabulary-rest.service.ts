@@ -16,7 +16,15 @@ export class VocabularyRestService {
 
   constructor(private httpClient: HttpClient, private auth: AuthService, private dbFunctions: DbFunctionService, private internetConnection: InternetConnectionService) { }
 
-  handleServiceStart() {
+  async sync () {
+    if (this.auth.isLoggedIn() && this.internetConnection.isConnected()) {
+      return await this.handleServiceStart();
+    } else {
+      console.log("No internet or not logged in ")
+    }
+  }
+
+  private handleServiceStart() {
     let _this = this;
     return new Promise(function(resolve, reject) {  
       _this.getNewActions().subscribe((result: any) => {
@@ -43,10 +51,6 @@ export class VocabularyRestService {
         reject(err);
       });
     });
-  }
-
-  sync () {
-    return this.handleServiceStart();
   }
 
   private syncLocal(serverActions: IAction[]): Promise<any> {
@@ -153,7 +157,6 @@ export class VocabularyRestService {
     LocalStorageNamespace.setNextPrimaryId(newId+1);
     return await this.postLocalActions(localActionsReadyToPush);
   } 
-  
 
   private performAction(element:IAction, method: ActionMethod) {
     switch (method) {

@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogErrorMessageComponent } from 'src/app/dialogs/dialog-error-message/dialog-error-message.component';
 import { DialogSuccessMessageComponent } from 'src/app/dialogs/dialog-success-message/dialog-success-message.component';
+import { VocabularyService } from 'src/app/services/vocabulary.service';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class LoginToSyncComponent implements OnInit {
   @ViewChildren('password') passwordDiv;
   private overlayRef;
 
-  constructor(private auth: AuthService, private router: Router, private vocRest: VocabularyRestService, 
+  constructor(private auth: AuthService, private router: Router, private vocRest: VocabularyService, 
     private overlay: Overlay, public dialog: MatDialog, private internetConnection: InternetConnectionService) { }
 
   ngOnInit(): void {
@@ -148,7 +149,7 @@ export class LoginToSyncComponent implements OnInit {
       this.overlayRef.attach(userProfilePortal);
     
     let _this = this
-    this.vocRest.handleServiceStart().finally(function () {
+    this.vocRest.sync().finally(function () {
       console.log("REMOVE LOADING SPINNER");
       _this.overlayRef.dispose();
       _this.overlayRef = null;

@@ -1,11 +1,10 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { VocabularyService } from './../../services/vocabulary.service';
+import { Component, Inject } from '@angular/core';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatSnackBar} from '@angular/material/snack-bar'
-import {MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {MatDialog } from '@angular/material/dialog';
 
-import { Vocabulary } from 'src/app/interfaces/vocabulary';
 import { DialogConfirmationComponent } from '../dialog-confirmation/dialog-confirmation.component';
-import { VocabularyDbService } from 'src/app/services/vocabulary-db.service';
 import { DialogEditVocabularyComponent } from '../dialog-edit-vocabulary/dialog-edit-vocabulary.component';
 
 @Component({
@@ -14,14 +13,8 @@ import { DialogEditVocabularyComponent } from '../dialog-edit-vocabulary/dialog-
   styleUrls: ['./dialog-change-remove-bottom-sheet.component.css']
 })
 export class DialogChangeRemoveBottomSheetComponent {
-  public promise;
-  private resolve;
-
-  constructor(public snackBar: MatSnackBar, private bottomSheetRef: MatBottomSheetRef<DialogChangeRemoveBottomSheetComponent>, @Inject(MAT_BOTTOM_SHEET_DATA) public voc: any, public dialog: MatDialog, public vocService: VocabularyDbService) {
-    let _this = this
-    this.promise = new Promise(function(resolve, reject) {  
-      _this.resolve = resolve;
-    });
+  constructor(public snackBar: MatSnackBar, private bottomSheetRef: MatBottomSheetRef<DialogChangeRemoveBottomSheetComponent>, 
+    @Inject(MAT_BOTTOM_SHEET_DATA) public voc: any, public dialog: MatDialog, public vocService: VocabularyService) {
   }
 
   deleteVoc(event: MouseEvent): void {
@@ -30,16 +23,18 @@ export class DialogChangeRemoveBottomSheetComponent {
     });
     dialogRef.componentInstance.confirmMessage = "Are you sure you want to delete?"
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().toPromise().then(result => {
       if(result) {
         this.vocService.deleteVocabulary(this.voc).then((obj) => {
           this.snackBar.open("Vocabulary successfully deleted" , null, {duration:2000});
-          this.resolve(true);
+          this.bottomSheetRef.dismiss(true);
         }).catch(err => this.snackBar.open(JSON.parse(err) , null, {duration:2000}));
       }
       dialogRef = null;
+    }).catch(() => {
+      this.bottomSheetRef.dismiss(false);
     });
-    this.bottomSheetRef.dismiss();
+    
   }
 
   editVoc(event: MouseEvent): void {
@@ -48,11 +43,12 @@ export class DialogChangeRemoveBottomSheetComponent {
       data: this.voc
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.resolve(false);
-      dialogRef = null;
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == true) {
+        this.bottomSheetRef.dismiss();    
+      }
     });
 
-    this.bottomSheetRef.dismiss();    
+    
   }
 }

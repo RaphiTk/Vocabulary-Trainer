@@ -67,7 +67,6 @@ import {DialogChangeRemoveBottomSheetComponent} from './dialogs/dialog-change-re
 import { DialogConfirmationComponent } from './dialogs/dialog-confirmation/dialog-confirmation.component';
 import { DialogEditVocabularyComponent } from './dialogs/dialog-edit-vocabulary/dialog-edit-vocabulary.component'
 import { AuthService } from './services/auth.service';
-import { LoginSuccessfulComponent } from './frames/login-succesful/login-succesful.component';
 import { LoadingSpinnerComponent } from './frames/loading-spinner/loading-spinner.component';
 import { FullscreenOverlayContainer, OverlayContainer} from '@angular/cdk/overlay';
 import { InterceptorService } from './services/interceptor.service';
@@ -145,7 +144,6 @@ import { DialogSuccessMessageComponent } from './dialogs/dialog-success-message/
     DialogChangeRemoveBottomSheetComponent,
     DialogConfirmationComponent,
     DialogEditVocabularyComponent,
-    LoginSuccessfulComponent,
     LoadingSpinnerComponent,
     LoginToSyncComponent,
     DialogErrorMessageComponent,

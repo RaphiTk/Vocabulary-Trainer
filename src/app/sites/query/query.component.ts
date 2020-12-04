@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { VocabularyDbService } from '../../services/vocabulary-db.service';
 import { IVocabulary } from '../../interfaces/vocabulary';
 import {MatDialog} from '@angular/material/dialog';
 import { DialogQueryCheckInputComponent } from 'src/app/dialogs/dialog-query-check-input/dialog-query-check-input.component';
 import { DialogQueryFinalResultComponent } from 'src/app/dialogs/dialog-query-final-result/dialog-query-final-result.component';
+import { VocabularyService } from 'src/app/services/vocabulary.service';
 
 @Component({
   selector: 'app-site-query',
@@ -20,7 +20,7 @@ export class SiteQueryComponent implements OnInit {
   private failures: number = 0;
   public index:number = 0;
 
-  constructor(public vocService: VocabularyDbService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog) { 
+  constructor(public vocService: VocabularyService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog) { 
     this.route.params.forEach((params: Params) => {
       if (params['unit'] !== undefined) {
         this.unit = params['unit'];

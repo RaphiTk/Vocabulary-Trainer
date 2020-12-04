@@ -1,9 +1,9 @@
+import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { environment } from './../../../environments/environment';
 import { VarSecondaryLanguageComponent } from './../../frames/var-secondary-language/var-secondary-language.component';
-import { Component, OnInit, ViewChild, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { VarPrimaryLanguageComponent } from '../../frames/var-primary-language/var-primary-language.component';
 import { LocalStorageNamespace } from '../../services/local-storage.namespace';
-import { VocabularyDbService } from 'src/app/services/vocabulary-db.service';
 import { Vocabulary } from 'src/app/interfaces/vocabulary';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatDialog } from '@angular/material/dialog';
@@ -13,7 +13,6 @@ import { LoadingSpinnerComponent } from 'src/app/frames/loading-spinner/loading-
 import { Overlay} from '@angular/cdk/overlay';
 import { ComponentPortal} from '@angular/cdk/portal';
 import { VocabularyRestService } from 'src/app/services/vocabulary-rest.service';
-import { version } from 'punycode';
 
 
 @Component({
@@ -27,7 +26,8 @@ export class SiteSettingsComponent implements OnInit {
   userId: string = null;
   version: string = null;
 
-  constructor(public snackBar: MatSnackBar, public auth: AuthService, private dialog: MatDialog, private vocService: VocabularyDbService, private overlay: Overlay, private rest: VocabularyRestService ) { }
+  constructor(public snackBar: MatSnackBar, public auth: AuthService, private dialog: MatDialog, 
+    private vocService: VocabularyService, private overlay: Overlay, private rest: VocabularyRestService ) { }
  
   ngOnInit() {
     console.log("Init called");
@@ -94,26 +94,30 @@ export class SiteSettingsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-        if (result.unit === undefined || result.unit === null) {
+        if (result.unit === undefined || result.unit === null || result.unit == "") {
           this.vocService.getVocsFromOneClas(result.clas).then((vocResult:Vocabulary[]) => {
-            this.startDownload(vocResult) 
+            this.startDownload(vocResult, result.clas);
           });
         } else {
           this.vocService.getVocsFromOneUnit(result.clas, result.unit).then((vocResult:Vocabulary[]) => {
-            this.startDownload(vocResult)
+            this.startDownload(vocResult, result.clas + "_" + result.unit);
           });
         }
       }
     });
   }
 
-  startDownload(vocs: Vocabulary[]) {
+  startDownload(vocs: Vocabulary[], name:string) {
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(vocs));
     var downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute("href",     dataStr);
-    downloadAnchorNode.setAttribute("download", vocs[0].clas + ".json");
+    downloadAnchorNode.setAttribute("download", name + ".json");
     document.body.appendChild(downloadAnchorNode); // required for firefox
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
+  }
+
+  sync() {
+    this.vocService.sync();
   }
 }

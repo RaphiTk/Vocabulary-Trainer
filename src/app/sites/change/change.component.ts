@@ -1,25 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { FilteredDataObject } from './../../interfaces/FilteredDataObject';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { VocabularyDbService } from '../../services/vocabulary-db.service';
 import { IVocabulary, Vocabulary } from '../../interfaces/vocabulary';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
-import {MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import { DialogAddVocabularyComponent } from "../../dialogs/dialog-add-vocabulary/dialog-add-vocabulary.component";
 import { DialogChangeRemoveBottomSheetComponent } from "../../dialogs/dialog-change-remove-bottom-sheet/dialog-change-remove-bottom-sheet.component";
+import { VocabularyService } from 'src/app/services/vocabulary.service';
 
 @Component({
   selector: 'app-site-change',
   templateUrl: './change.component.html',
   styleUrls: ['./change.component.css']
 })
-export class SiteChangeComponent implements OnInit {
+export class SiteChangeComponent implements OnInit, OnDestroy {
   unit: string;
   clas: string;
-  vocs: Vocabulary[];
+  vocs: FilteredDataObject = new FilteredDataObject();
 
-  constructor(public vocService: VocabularyDbService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog, public snackBar: MatSnackBar, private bottomSheet: MatBottomSheet) { 
+  constructor(public vocService: VocabularyService, public router: Router, public route: ActivatedRoute, public dialog: MatDialog, public snackBar: MatSnackBar, private bottomSheet: MatBottomSheet) { 
     this.route.params.forEach((params: Params) => {
       if (params['unit'] !== undefined) {
         this.unit = params['unit'];
@@ -32,21 +32,18 @@ export class SiteChangeComponent implements OnInit {
       router.navigate(["../"]);
     }
   }
-
-  ngOnInit() {
-    this.vocService.getVocsFromOneUnit(this.clas, this.unit)
-      .then((vocs)=> this.vocs = Vocabulary.createCorrectReferences(vocs));
+  
+  async ngOnInit() {
+    this.vocs = await this.vocService.getVocsFromOneUnitWithUpdate(this.clas, this.unit);
+  }
+  
+  ngOnDestroy(): void {
+    this.vocService.removeFilteredDataObject(this.vocs);
   }
 
   vocPressed(voc) {
-    const bottomSheetRef = this.bottomSheet.open(DialogChangeRemoveBottomSheetComponent, {
+    this.bottomSheet.open(DialogChangeRemoveBottomSheetComponent, {
       data: voc
-    });
-
-    bottomSheetRef.instance.promise.then(deleted => {
-      if (deleted || (!deleted && (this.clas !== voc.clas || this.unit !== voc.unit)))
-        this.vocs.splice(this.vocs.indexOf(voc), 1);
-
     });
   }
 

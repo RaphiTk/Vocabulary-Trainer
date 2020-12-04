@@ -57,12 +57,12 @@
 </a>
 
 <div *ngIf="userId != null" >
-  Logged in as {{userId}}
-  <!--  <div class="button" (click)="auth.logout()">
+  <span class="buttonHeader">Logged in as {{userId}}</span>
+  <div class="button" (click)="sync()">
     <span class="buttonText">
-      Logout
+      Sync Vocabularies
     </span>
-  </div>-->
+  </div>
 
 </div>
 
