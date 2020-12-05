@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build:prod": "ng build --prod",
-    "sw-build": "ng build --prod --base-href https://vocabulary-trainer.ml/#/ && node build/fix-sw",
+    "sw-build": "ng build --prod --base-href https://vocabulary-trainer.ml/#/",
     "sw-serve": "npm run sw-build && http-server dist -p 8080 -o",
     "test": "ng test",
     "lint": "ng lint",
