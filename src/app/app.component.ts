@@ -5,6 +5,7 @@ import { Router, RoutesRecognized, NavigationEnd } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from './services/auth.service';
 import { environment } from 'src/environments/environment';
+import { VocabularyService } from './services/vocabulary.service';
 
 @Component({
   selector: 'app-root',
@@ -16,12 +17,12 @@ export class AppComponent {
   isMobileUser;
   newUpdate: boolean = false;
 
-  constructor(update: SwUpdate, private restApi: VocabularyRestService, private router: Router, public snackBar: MatSnackBar, private auth: AuthService) {    
+  constructor(update: SwUpdate, private vocabularyService: VocabularyService, private router: Router, public snackBar: MatSnackBar, private auth: AuthService) {    
     document.ontouchstart = function(e){ 
       e.preventDefault(); 
     }
 
-    restApi.sync();
+    vocabularyService.sync();
 
     console.info("App version: " + environment.version);
 

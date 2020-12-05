@@ -92,23 +92,32 @@ export class VocabularyRestService {
       let countFinished = 0;
       for(let index = 0; index < serverActions.length; index++) {
         const element = serverActions[index] = Action.deserializeVocabularies(serverActions[index])
+
+        // After a DELETE no local action is possible on that vocabulary
         if (element.method == ActionMethod.DELETE) {
           let idToDelete = element.vocabularyBeforeAction.id;
           //Was just created from server
           let justCreated = false;
-          for(let innerIndex = 0; innerIndex < index; index++) {
+          for(let innerIndex = 0; innerIndex < index; innerIndex++) {
             if (serverActions[innerIndex].method == ActionMethod.ADD && serverActions[innerIndex].vocabularyAfterAction.id == idToDelete) {
               justCreated = true;
+              innerIndex = index;
             }
           } 
           if (!justCreated) {
-            for(let innerIndex = 0; innerIndex < local.length; index++) {
+            for(let innerIndex = 0; innerIndex < local.length; innerIndex++) {
               if (local[innerIndex].vocabularyAfterAction != null && local[innerIndex].vocabularyAfterAction.id == idToDelete) {
                 local.splice(innerIndex, 1);
+                
+                // Can there be any further actions --> after delete no furter action posssible
+                if (local[innerIndex].method == ActionMethod.DELETE) {
+                  innerIndex = local.length;
+                }
               }
             }  
           }
         }
+        
         this.performAction(element, element.method).finally(function() {
           countFinished++;
           if (countFinished == serverActions.length) {

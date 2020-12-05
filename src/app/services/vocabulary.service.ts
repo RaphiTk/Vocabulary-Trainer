@@ -14,8 +14,13 @@ export class VocabularyService {
 
   constructor(private vocService: VocabularyDbService, private restService: VocabularyRestService) { }
 
-  sync() {
-    return this.restService.sync();
+
+
+
+  async sync() {
+    let result = await this.restService.sync();
+    this.updateCurrentUsedFilteredDataObjects();
+    return result;
   }
 
   addBulkVocabulary(vocs: Vocabulary[]) {
@@ -50,7 +55,7 @@ export class VocabularyService {
     return filteredDataObject;
   }
 
-  async getAllVocs(): Promise<FilteredDataObject> {
+  async getAllVocsWithUpdates(): Promise<FilteredDataObject> {
     let result = await this.vocService.getAllVocs();
     let filteredDataObject = new FilteredDataObject();
     filteredDataObject.data = Vocabulary.createCorrectReferences(result); 
@@ -78,6 +83,18 @@ export class VocabularyService {
   public removeFilteredDataObject(obj: FilteredDataObject) {
     if (this.currentUsedFilteredDataObject.includes(obj)) {
       this.currentUsedFilteredDataObject.splice(this.currentUsedFilteredDataObject.indexOf(obj), 1)
+    }
+  }
+
+  private async updateCurrentUsedFilteredDataObjects() {
+    for (const object of this.currentUsedFilteredDataObject) {
+      if (object.clas == null && object.unit == null) {
+        object.data = await this.vocService.getAllVocs();
+      } else if (object.clas != null && object.unit == null) {
+        object.data = await this.vocService.getVocsFromOneClas(object.clas);
+      } else {
+        object.data = await this.vocService.getVocsFromOneUnit(object.clas, object.unit);
+      }
     }
   }
 
@@ -115,8 +132,8 @@ export class VocabularyService {
   private vocFitsFilterOfDataObject(filteredDataObject: FilteredDataObject, voc: Vocabulary) {
     if (filteredDataObject.clas == null && filteredDataObject.unit == null) {
       return true;
-    } else if (filteredDataObject.clas == null && filteredDataObject.unit != null) {
-      return (filteredDataObject.unit == voc.unit);
+    } else if (filteredDataObject.clas != null && filteredDataObject.unit == null) {
+      return (filteredDataObject.clas == voc.clas);
     } else {
       return (filteredDataObject.clas == voc.clas && filteredDataObject.unit == voc.unit);
     }

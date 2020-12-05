@@ -28,7 +28,7 @@ export class SiteSearchComponent implements OnInit, OnDestroy {
       overlayRef.attach(userProfilePortal);
     });
 
-    this.vocService.getAllVocs().then((result) => {
+    this.vocService.getAllVocsWithUpdates().then((result) => {
       this.vocServiceObject = result;
       this.filteredVocs = [...result.data];
 
