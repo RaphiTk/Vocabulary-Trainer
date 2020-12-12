@@ -33,7 +33,7 @@ export class SiteQueryComponent implements OnInit {
       router.navigate(["../"]);
     }
 
-    if (this.unit === undefined || this.unit === null) {
+    if (this.unit === undefined || this.unit === null || this.unit === "") {
       this.unitSetted = false;
       vocService.getVocsFromOneClas(this.clas).then((result:IVocabulary[]) => {this.vocsToQuery = result; });
     } else {

@@ -1,3 +1,4 @@
+<!-- DESKTOP -->
 <div *ngIf="!isMobileUser">
   <div *ngIf="isMainMenu">
     <div class="divCorner" style="position:absolute; left:0;">
@@ -30,12 +31,12 @@
   
 <div class="OuterBox" [ngClass]="{'blueBackground':!isMainMenu}">
   <div [ngClass]="{'MobileCenterBox':isMobileUser,'CenterBox':!isMobileUser}">
-    <div *ngIf="isMobileUser" style="height: 10%"></div>
-      <base href="/">
-      <router-outlet></router-outlet>
+    <div *ngIf="isMobileUser" style="height: 10%">
+    </div>
+    <base href="/">
+    <router-outlet></router-outlet>
   </div>
 </div>
-<!--<app-menu></app-menu>-->
 
 
 <script>

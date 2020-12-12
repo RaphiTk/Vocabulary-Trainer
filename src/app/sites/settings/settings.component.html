@@ -23,7 +23,7 @@
   </div>
 </div>
 <br>
-<div class="button" (click)="saveButtonPressed()">
+<div class="button" (click)="saveButtonPressed()" (keypress)="saveButtonPressed()" tabindex="0">
   <span class="buttonText">
     Save
   </span>
@@ -32,13 +32,13 @@
 <div class="button" >
   <div style="width: 50%; position: relative; float: left;" (click)="chooseFileToImport()">
     <span class="buttonText">
+      <div style="height: 0px; width: 0px; overflow: hidden;"><input id="importFile" type="file" value="importFile" accept="application/json"></div>
       Import 
       <!--<i class="material-icons" style="line-height: 32px; bottom: 0px">cloud_download</i>-->
-      <div style="height: 0px; width: 0px; overflow: hidden;"><input id="importFile" type="file" value="importFile" accept="application/json"></div>
     </span>
     <div style="width: 1px; height:100%; background-color: white; float: right; position: absolute;"></div>
   </div>
-  <div style="width: 50%; position: relative; float: right;" (click)="chooseVocabularyToExport()">
+  <div style="width: 50%; position: relative; float: right;" (click)="chooseVocabularyToExport()" (keypress)="chooseVocabularyToExport()" tabindex="0">
     <div style="width: 1px; height:100%; background-color: white; float: left; position: absolute;"></div>
     <span class="buttonText">
       Export 
