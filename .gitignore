@@ -40,3 +40,6 @@ Thumbs.db
 
 # zip files
 dist.zip
+
+
+/.firebase
