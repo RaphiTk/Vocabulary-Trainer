@@ -37,6 +37,7 @@ Debugging ios device on windows: https://github.com/google/ios-webkit-debug-prox
 - (check) adding login / signup page for sync over serveral devices
 - (check) Export Unit / class
 - (doing at the moment) adding sync functionality
+    - including the import functionality
 - Refactoring
 - (optional) turning app to an angular universal app
   

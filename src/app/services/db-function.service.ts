@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IVocabulary, Vocabulary } from '../interfaces/vocabulary';
+import { IVocabulary } from '../interfaces/vocabulary';
 import { InitDbService } from './init-db.service';
-//import { query } from '@angular/core/src/render3';
-import { VocabularyRestService } from './vocabulary-rest.service';
-import { ActionMethod } from '../interfaces/action';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +56,8 @@ export class DbFunctionService extends InitDbService {
     return this.connection.select({from: this.tableName, where: {clas: clas}, order: {by: this.colId, type: "ASC", idbSorting: false}})
   }
 
-
+  async getAllVocsCount(): Promise<number> {
+    return await this.connection.count({from: this.tableName});
+  }
 
 }

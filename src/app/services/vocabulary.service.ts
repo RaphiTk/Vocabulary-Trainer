@@ -8,14 +8,9 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class VocabularyService {
-
-
   private currentUsedFilteredDataObject: FilteredDataObject[] = [];
 
   constructor(private vocService: VocabularyDbService, private restService: VocabularyRestService) { }
-
-
-
 
   async sync() {
     let result = await this.restService.sync();
@@ -25,6 +20,10 @@ export class VocabularyService {
 
   addBulkVocabulary(vocs: Vocabulary[]) {
     return this.vocService.addBulkVocabulary(vocs);
+  }
+
+  async getVocabularyCount() {
+    return await this.vocService.getAllVocsCount();
   }
 
   /**

@@ -1,3 +1,5 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { Component, OnInit } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +14,7 @@ import { DialogQueryChooseUnitComponent } from 'src/app/dialogs/dialog-query-cho
 })
 export class SiteMenuComponent {
 
-  constructor(public dialog: MatDialog, public router: Router) { }
+  constructor(public dialog: MatDialog, public router: Router, private vocService: VocabularyService, private snackBar: MatSnackBar) { }
 
   changeButtonPressed() {
     const dialogRef = this.dialog.open(DialogChangeChooseUnitComponent, {
@@ -28,23 +30,30 @@ export class SiteMenuComponent {
     });
   }
 
-  queryButtonPressed() {
-    const dialogRef = this.dialog.open(DialogQueryChooseUnitComponent, {
-      width: '250px',
-      data: { reason: "train" }
-    });
+  async queryButtonPressed() {
+    let count = await this.vocService.getVocabularyCount();
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result != null) {
-        let link;
-        if (result.unit == null) {
-          link = ['../query', result.clas];
-        } else {
-          link = ['../query', result.clas, result.unit];
+    if (count == 0) {
+      this.snackBar.open("You first have to add Vocabularies (under Change)" , null, {duration:5000});
+    } else {
+      const dialogRef = this.dialog.open(DialogQueryChooseUnitComponent, {
+        width: '250px',
+        data: { reason: "train" }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result != null) {
+          let link;
+          if (result.unit == null) {
+            link = ['../query', result.clas];
+          } else {
+            link = ['../query', result.clas, result.unit];
+          }
+          this.router.navigate(link);
         }
-        this.router.navigate(link);
-      }
-    });
+      });
+    }
+
   }
 
 }

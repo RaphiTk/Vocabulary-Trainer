@@ -13,7 +13,6 @@ import { LocalStorageNamespace } from './local-storage.namespace';
 export class VocabularyDbService {
 
   constructor(private vocRestService: VocabularyRestService, private dbFunctions: DbFunctionService) {
-    
   }
 
   addVocabulary(voc: IVocabulary) {
@@ -135,6 +134,10 @@ export class VocabularyDbService {
 
   getVocsFromOneClas(clas: string): Promise<any> {
     return this.dbFunctions.getVocsFromOneClas(clas);
+  }
+
+  getAllVocsCount(): Promise<number> {
+    return this.dbFunctions.getAllVocsCount();
   }
 
 }
