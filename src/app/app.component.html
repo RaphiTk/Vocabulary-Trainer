@@ -27,8 +27,9 @@
   </div>
     
   <app-logo-in-corner></app-logo-in-corner>
+
 </div>
-  
+ 
 <div class="OuterBox" [ngClass]="{'blueBackground':!isMainMenu}">
   <div [ngClass]="{'MobileCenterBox':isMobileUser,'CenterBox':!isMobileUser}">
     <div *ngIf="isMobileUser" style="height: 10%">
@@ -39,50 +40,9 @@
 </div>
 
 
+
 <script>
-    function resizeElements() {
-    var svgLO = document.getElementById("svgLO");
-    var svgRO = document.getElementById("svgRO");
-    var svgLU = document.getElementById("svgLU");
-    var svgRU = document.getElementById("svgRU");
-    resizeSVG(svgLO);
-    resizeSVG(svgRO);
-    resizeSVG(svgLU);
-    resizeSVG(svgRU);
-    }
     
-    function resizeSVG(element) {
-    width = element.getBoundingClientRect().width
-    height = element.getBoundingClientRect().height
-    aspect_ratio = width / height;
-    
-    future_width = getWidth()/10 - 5;
-    future_height = future_width / aspect_ratio;
-    
-    element.setAttribute("height", future_height+"px");
-    element.setAttribute("width", future_width+"px");
-    
-    }
-    
-    function getWidth() {
-    return Math.max(
-    document.body.scrollWidth,
-    document.documentElement.scrollWidth,
-    document.body.offsetWidth,
-    document.documentElement.offsetWidth,
-    document.documentElement.clientWidth
-    );
-    }
-    
-    function getHeight() {
-    return Math.max(
-    document.body.scrollHeight,
-    document.documentElement.scrollHeight,
-    document.body.offsetHeight,
-    document.documentElement.offsetHeight,
-    document.documentElement.clientHeight
-    );
-    }
     
     window.addEventListener('resize', resizeElements());
     </script>
