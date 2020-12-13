@@ -31,6 +31,10 @@ export class AppComponent {
     } else {
       this.isMobileUser = true;
     }
+
+    window.onresize = () => {
+      this.onresize();
+    }
     
     this.router.events
     .subscribe((event) => {
@@ -50,5 +54,57 @@ export class AppComponent {
           window.location.reload();
         });
     })
+  }
+
+  onresize() {
+    if(this.getHeight() > 600 && this.getWidth() > 600) {
+      this.isMobileUser = false;
+      this.resizeElements();
+    } else {
+      this.isMobileUser = true;
+    }
+  }
+
+  resizeElements() {
+    var svgLO = document.getElementById("svgLO");
+    var svgRO = document.getElementById("svgRO");
+    var svgLU = document.getElementById("svgLU");
+    var svgRU = document.getElementById("svgRU");
+    this.resizeSVG(svgLO);
+    this.resizeSVG(svgRO);
+    this.resizeSVG(svgLU);
+    this.resizeSVG(svgRU);
+  }
+    
+  resizeSVG(element) {
+    let width = element.getBoundingClientRect().width
+    let height = element.getBoundingClientRect().height
+    let aspect_ratio = width / height;
+    
+    let future_width = this.getWidth()/5 - 5;
+    let future_height = future_width / aspect_ratio;
+    
+    element.setAttribute("height", future_height+"px");
+    element.setAttribute("width", future_width+"px");
+  }
+    
+  getWidth() {
+    return Math.max(
+    document.body.scrollWidth,
+    document.documentElement.scrollWidth,
+    document.body.offsetWidth,
+    document.documentElement.offsetWidth,
+    document.documentElement.clientWidth
+    );
+  }
+    
+  getHeight() {
+    return Math.max(
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight,
+    document.body.offsetHeight,
+    document.documentElement.offsetHeight,
+    document.documentElement.clientHeight
+    );
   }
 }

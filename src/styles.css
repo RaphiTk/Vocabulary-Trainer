@@ -14,6 +14,8 @@ html *:not(i)
 
 .blueBackground {
 	background: #4596E8;
+	position: absolute;
+	height: 100%;
 }
 
 .button {
@@ -149,6 +151,9 @@ div[data-placeholder]:empty:before {
 	background: #C4C4C4; 
 	text-align: center; 
 	vertical-align: middle;
+	top: 50%;
+	transform: translate(0%, -50%);
+	position: absolute;
 }
 
 .MobileCenterBox {
@@ -160,4 +165,14 @@ div[data-placeholder]:empty:before {
 	background: #C4C4C4; 
 	text-align: center; 
 	vertical-align: middle;
+}
+
+.content-desktop {display: block;}
+.content-mobile {display: none;}
+
+@media screen and (max-width: 600px) {
+
+.content-desktop {display: none;}
+.content-mobile {display: block;}
+
 }
