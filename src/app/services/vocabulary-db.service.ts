@@ -1,6 +1,6 @@
+import { Action } from './../interfaces/action';
 import { Injectable } from '@angular/core';
 import { IVocabulary, Vocabulary } from '../interfaces/vocabulary';
-import { InitDbService } from './init-db.service';
 import { VocabularyRestService } from './vocabulary-rest.service';
 import { ActionMethod } from '../interfaces/action';
 import { DbFunctionService } from '../services/db-function.service';
@@ -12,104 +12,44 @@ import { LocalStorageNamespace } from './local-storage.namespace';
 })
 export class VocabularyDbService {
 
-  constructor(private vocRestService: VocabularyRestService, private dbFunctions: DbFunctionService) {
+  constructor(private dbFunctions: DbFunctionService) {
   }
 
-  addVocabulary(voc: IVocabulary) {
-    let resolveIt;
-    let rejectIt;
-    let promise = new Promise(function(resolve, reject) {  
-      resolveIt = resolve;
-      rejectIt = reject;
-    });
-    
+  async addVocabulary(voc: IVocabulary) {
     voc.id = LocalStorageNamespace.getNextPrimaryId();
-    this.dbFunctions.insertVocabularyJustDb(voc).then(result => {
-      this.vocRestService.postAction(ActionMethod.ADD, null, result[0]);
-      resolveIt(result);
-    }).catch(err => {
-      rejectIt(err);
+    return await this.dbFunctions.insertVocabularyJustDb(voc).catch(err => {
+      console.error(err);
+      throw new Error(err);
     })
-
-    return promise;
   }
 
-  //By Bulk Insert First all Insert and then push the actions with one request to the server
-  private bulkInserVocabulary(voc: IVocabulary) {
-    let resolveIt;
-    let rejectIt;
-    let promise = new Promise(function(resolve, reject) {  
-      resolveIt = resolve;
-      rejectIt = reject;
-    });
-    
-    voc.id = LocalStorageNamespace.getNextPrimaryId();
-    this.dbFunctions.insertVocabularyJustDb(voc).then(result => {
-      this.vocRestService.saveActionForLaterPush(ActionMethod.ADD, null, result[0]);
-      resolveIt(result);
-    }).catch(err => {
-      rejectIt(err);
-    })
-
-    return promise;
-  }
-
-  addBulkVocabulary(vocs: Vocabulary[], index?) {
-    let resolveIt;
-    let promise = new Promise(function(resolve, reject) {  
-      resolveIt = resolve;
-    });
-    if (!index) {
-      index = 0;
-      //TODO: Initial Sync for performance improvements
-    }
-    
-    this.bulkInserVocabulary(vocs[index]).then(result => {
-      if (index + 1 == vocs.length) {
-        this.vocRestService.sync();
-        resolveIt();
-      } else {
-        this.addBulkVocabulary(vocs, index + 1).then(result => resolveIt());
-      }
-    })
-    return promise;
-  }
-
-  editVocabulary(voc: Vocabulary) {
-    let resolveIt, rejectIt;
-    let promise = new Promise(function(resolve, reject) {  
-      resolveIt = resolve;
-      rejectIt = reject;
-    });
-    
-    this.getVocabularybyId(voc.id).then(oldresult => {
-      console.log("oldResult", oldresult[0])
-      this.dbFunctions.updateVocabularyJustDb(voc).then(result => {
-        this.vocRestService.postAction(ActionMethod.UPDATE, oldresult[0] as IVocabulary, voc);
-        resolveIt(result);
-      }).catch(err => {
-        rejectIt(err);
+  //By Bulk Insert First perform all Inserts locally and then push the actions with one request to the server
+  async addBulkVocabulary(vocs: Vocabulary[]) {
+    let dbResults: IVocabulary[] = [];
+    for(let i =0; i < vocs.length; i++) {
+      let voc = vocs[i];
+      voc.id = LocalStorageNamespace.getNextPrimaryId();
+      let result = await this.dbFunctions.insertVocabularyJustDb(voc).catch(err => {
+        console.error("Error at the dbFunctions.insertVocabularyJustDb during bulk insert" , err);
+        throw new Error(err);
       })
-    })
-
-    return promise;
+      dbResults.push(result[0] as IVocabulary);
+    }
+    return dbResults;
   }
 
-  deleteVocabulary(voc: Vocabulary) {
-    let resolveIt, rejectIt;
-    let promise = new Promise(function(resolve, reject) {  
-      resolveIt = resolve;
-      rejectIt = reject;
-    });
-    
-    this.dbFunctions.deleteVocabularyJustDb(voc).then(result => {
-        this.vocRestService.postAction(ActionMethod.DELETE, voc, null);
-        resolveIt(result);
-      }).catch(err => {
-        rejectIt(err);
+  async editVocabulary(voc: Vocabulary): Promise<Action> {
+    let oldresult = await this.getVocabularybyId(voc.id);
+    console.log("oldResult", oldresult[0])
+    this.dbFunctions.updateVocabularyJustDb(voc).catch(err => {
+      console.error(err)
+      throw new Error(err);
     })
+    return new Action(null, ActionMethod.UPDATE, oldresult[0] as IVocabulary, voc);
+  }
 
-    return promise;
+  async deleteVocabulary(voc: Vocabulary) {
+    await this.dbFunctions.deleteVocabularyJustDb(voc);
   }
 
   getClases() {
@@ -120,7 +60,7 @@ export class VocabularyDbService {
     return this.dbFunctions.getUnits(clas);
   }
 
-  getVocabularybyId(id: Number) {
+  getVocabularybyId(id: Number): Promise<unknown[]> {
     return this.dbFunctions.getVocabularybyId(id);
   }
 
@@ -141,13 +81,3 @@ export class VocabularyDbService {
   }
 
 }
-
-/*
-export function InitVocabularyService(): () => Promise<any> {
-  return (): Promise<any> => {
-    return new Promise((resolve, reject) => {
-      let vocService = new VocabularyService();
-      vocService.initDatabase().then(() => resolve());      
-    });
-  };
-}*/

@@ -3,6 +3,7 @@ import { FilteredDataObject } from './../interfaces/FilteredDataObject';
 import { VocabularyDbService } from './vocabulary-db.service';
 import { Vocabulary } from './../interfaces/vocabulary';
 import { Injectable } from '@angular/core';
+import { ActionMethod } from '../interfaces/action';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { Injectable } from '@angular/core';
 export class VocabularyService {
   private currentUsedFilteredDataObject: FilteredDataObject[] = [];
 
-  constructor(private vocService: VocabularyDbService, private restService: VocabularyRestService) { }
+  constructor(private dbService: VocabularyDbService, private restService: VocabularyRestService) { }
 
   async sync() {
     let result = await this.restService.sync();
@@ -18,12 +19,16 @@ export class VocabularyService {
     return result;
   }
 
-  addBulkVocabulary(vocs: Vocabulary[]) {
-    return this.vocService.addBulkVocabulary(vocs);
+  async addBulkVocabulary(vocs: Vocabulary[]) {
+    let dbResults = await this.dbService.addBulkVocabulary(vocs);
+    for (let dbResult of dbResults) {
+      this.restService.saveActionForLaterPush(ActionMethod.ADD, null, dbResult);
+    }
+    this.restService.sync();
   }
 
   async getVocabularyCount() {
-    return await this.vocService.getAllVocsCount();
+    return await this.dbService.getAllVocsCount();
   }
 
   /**
@@ -31,7 +36,7 @@ export class VocabularyService {
    * @param clas Clas to get Vocabularies for
    */
   getVocsFromOneClas(clas: string): Promise<Vocabulary[]> {
-    return this.vocService.getVocsFromOneClas(clas);
+    return this.dbService.getVocsFromOneClas(clas);
   }
 
   /**
@@ -40,22 +45,27 @@ export class VocabularyService {
    * @param unit unit to get Vocabularies for
    */
   getVocsFromOneUnit(clas: string, unit: string): Promise<Vocabulary[]> {
-    return this.vocService.getVocsFromOneUnit(clas, unit);
+    return this.dbService.getVocsFromOneUnit(clas, unit);
   }
 
   async getVocsFromOneUnitWithUpdate(clas: string, unit: string): Promise<FilteredDataObject> {
-    let result = await this.vocService.getVocsFromOneUnit(clas, unit);
+    let result = await this.dbService.getVocsFromOneUnit(clas, unit);
     let filteredDataObject = new FilteredDataObject();
+    console.log(filteredDataObject);
     filteredDataObject.clas = clas;
     filteredDataObject.unit = unit;
     filteredDataObject.data = Vocabulary.createCorrectReferences(result); 
 
+    console.log(filteredDataObject);
+    console.log(filteredDataObject.data);
+
     this.currentUsedFilteredDataObject.push(filteredDataObject);
+    console.log(filteredDataObject);
     return filteredDataObject;
   }
 
   async getAllVocsWithUpdates(): Promise<FilteredDataObject> {
-    let result = await this.vocService.getAllVocs();
+    let result = await this.dbService.getAllVocs();
     let filteredDataObject = new FilteredDataObject();
     filteredDataObject.data = Vocabulary.createCorrectReferences(result); 
     this.currentUsedFilteredDataObject.push(filteredDataObject);
@@ -63,20 +73,22 @@ export class VocabularyService {
   }
 
   async addVocabulary(voc: Vocabulary): Promise<any> {
-    let result = await this.vocService.addVocabulary(voc);
+    let result = await this.dbService.addVocabulary(voc);
+    this.restService.postAction(ActionMethod.ADD, null, result[0]);
     this.addVocToAllFilteredDataObjects(voc);
     return result;
   }
 
   async deleteVocabulary(voc: Vocabulary) {
     this.deleteVocFromFilteredDataObjects(voc);
-    return this.vocService.deleteVocabulary(voc);
+    await this.dbService.deleteVocabulary(voc);
+    this.restService.postAction(ActionMethod.DELETE, voc, null);
   }
 
   async editVocabulary(voc: Vocabulary) {
-    let result = await this.vocService.editVocabulary(voc);
+    let action = await this.dbService.editVocabulary(voc);
+    this.restService.postAction(action.method, action.vocabularyBeforeAction, action.vocabularyAfterAction);  
     this.editVocInAllFilteredDataObjects(voc);
-    return result;
   }
 
   public removeFilteredDataObject(obj: FilteredDataObject) {
@@ -88,11 +100,11 @@ export class VocabularyService {
   private async updateCurrentUsedFilteredDataObjects() {
     for (const object of this.currentUsedFilteredDataObject) {
       if (object.clas == null && object.unit == null) {
-        object.data = await this.vocService.getAllVocs();
+        object.data = await this.dbService.getAllVocs();
       } else if (object.clas != null && object.unit == null) {
-        object.data = await this.vocService.getVocsFromOneClas(object.clas);
+        object.data = await this.dbService.getVocsFromOneClas(object.clas);
       } else {
-        object.data = await this.vocService.getVocsFromOneUnit(object.clas, object.unit);
+        object.data = await this.dbService.getVocsFromOneUnit(object.clas, object.unit);
       }
     }
   }
@@ -118,13 +130,19 @@ export class VocabularyService {
 
   private editVocInAllFilteredDataObjects(voc: Vocabulary) {
     this.currentUsedFilteredDataObject.forEach((object) => {
-      if(this.vocFitsFilterOfDataObject(object, voc)) {
+        let toRemove = null;
         object.data.forEach((oldVocData) => {
           if (oldVocData.id == voc.id) {
-            oldVocData = voc;
+            if (this.vocFitsFilterOfDataObject(object, voc)) {
+              oldVocData = voc;
+            } else {
+              toRemove = oldVocData;
+            }
           }
         })
-      }
+        if (toRemove != null) {
+          object.data.splice(object.data.indexOf(toRemove), 1);
+        }
     })
   }
 

@@ -10,17 +10,22 @@ import { VocabularyService } from 'src/app/services/vocabulary.service';
   styleUrls: ['./dialog-edit-vocabulary.component.css']
 })
 export class DialogEditVocabularyComponent {
-  private data;
+  private data: Vocabulary;
   private saved: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<DialogEditVocabularyComponent>,
     @Inject(MAT_DIALOG_DATA) public voc: Vocabulary,
      private vocService: VocabularyService, private snackBar: MatSnackBar) {  
-       this.data = voc.createNewObject();
+       this.data = Vocabulary.createCorrectReference(voc);
+       let _this = this;
        dialogRef.beforeClosed().subscribe(res => {
-          if (!this.saved)
-            this.voc.setNewValues(this.data)
+          if (res != true) {
+            _this.voc.primaryLanguage = _this.data.primaryLanguage;
+            _this.voc.secondaryLanguage = _this.data.secondaryLanguage;
+            _this.voc.id = _this.data.id;
+            _this.voc.unit = _this.data.unit;
+          }
        })
   }
 
@@ -30,7 +35,7 @@ export class DialogEditVocabularyComponent {
 
   editClicked(): void {
     this.saved = true;
-    this.vocService.editVocabulary(this.voc).then((obj) => {
+    this.vocService.editVocabulary(this.voc).then(() => {
       this.dialogRef.close(true);
       this.snackBar.open("Vocabulary successfully edited" , null, {duration:2000});
     }).catch(err => {

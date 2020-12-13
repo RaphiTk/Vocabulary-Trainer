@@ -70,10 +70,18 @@ export class AppComponent {
     var svgRO = document.getElementById("svgRO");
     var svgLU = document.getElementById("svgLU");
     var svgRU = document.getElementById("svgRU");
-    this.resizeSVG(svgLO);
-    this.resizeSVG(svgRO);
-    this.resizeSVG(svgLU);
-    this.resizeSVG(svgRU);
+    if (svgLO != null) {
+      this.resizeSVG(svgLO);
+    }
+    if (svgRO != null) {
+      this.resizeSVG(svgRO); 
+    }
+    if (svgLU != null) {
+      this.resizeSVG(svgLU);
+    }
+    if (svgRU != null) {
+      this.resizeSVG(svgRU);
+    }
   }
     
   resizeSVG(element) {

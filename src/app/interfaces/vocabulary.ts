@@ -45,9 +45,11 @@ export class Vocabulary implements IVocabulary{
 
     static createCorrectReferences(vocs) {
         let newVocs: Vocabulary[] = new Array();
-        vocs.forEach(element => {
-            newVocs.push(new Vocabulary(element.id, element.tries, element.failuresCount, element.clas, element.unit, element.primaryLanguage, element.secondaryLanguage));
-        });
+        for(let element of vocs) {
+            let newVoc = new Vocabulary(element.id, element.tries, element.failuresCount, element.clas, element.unit, element.primaryLanguage, element.secondaryLanguage);
+            console.log(newVoc);
+            newVocs.push(newVoc);
+        }
         return newVocs;
     }
 

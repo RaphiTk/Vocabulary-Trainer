@@ -35,6 +35,7 @@ export class SiteChangeComponent implements OnInit, OnDestroy {
   
   async ngOnInit() {
     this.vocs = await this.vocService.getVocsFromOneUnitWithUpdate(this.clas, this.unit);
+    console.log(this.vocs);
   }
   
   ngOnDestroy(): void {

@@ -25,7 +25,7 @@ export class DialogChangeRemoveBottomSheetComponent {
 
     dialogRef.afterClosed().toPromise().then(result => {
       if(result) {
-        this.vocService.deleteVocabulary(this.voc).then((obj) => {
+        this.vocService.deleteVocabulary(this.voc).then(() => {
           this.snackBar.open("Vocabulary successfully deleted" , null, {duration:2000});
           this.bottomSheetRef.dismiss(true);
         }).catch(err => this.snackBar.open(JSON.parse(err) , null, {duration:2000}));
