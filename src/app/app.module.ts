@@ -75,6 +75,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginToSyncComponent } from './sites/login-to-sync/login-to-sync.component';
 import { DialogErrorMessageComponent } from './dialogs/dialog-error-message/dialog-error-message.component';
 import { DialogSuccessMessageComponent } from './dialogs/dialog-success-message/dialog-success-message.component';
+import { ImpressumComponent } from './sites/impressum/impressum.component';
 
 @NgModule({
   imports: [
@@ -148,6 +149,7 @@ import { DialogSuccessMessageComponent } from './dialogs/dialog-success-message/
     LoginToSyncComponent,
     DialogErrorMessageComponent,
     DialogSuccessMessageComponent,
+    ImpressumComponent,
   ],
   providers: [
     VocabularyRestService, 

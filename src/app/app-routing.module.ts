@@ -1,3 +1,4 @@
+import { ImpressumComponent } from './sites/impressum/impressum.component';
 import { LoginToSyncComponent } from './sites/login-to-sync/login-to-sync.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'search', component: SiteSearchComponent},
   { path: 'change/:clas/:unit', component: SiteChangeComponent},
   { path: 'settings/login', component: LoginToSyncComponent },
+  { path: 'settings/impressum', component: ImpressumComponent },
   { path: 'settings', component: SiteSettingsComponent },
   { path: '**', redirectTo: ''}];
 
